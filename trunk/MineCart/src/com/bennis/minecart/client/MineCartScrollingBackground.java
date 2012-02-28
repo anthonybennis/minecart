@@ -15,7 +15,7 @@ public class MineCartScrollingBackground extends ScrollingBackground
 	}
 
 	@Override
-	public String getImageTileName() 
+	public String getImageName() 
 	{
 		return "BackgroundTile01.jpg";
 	}
