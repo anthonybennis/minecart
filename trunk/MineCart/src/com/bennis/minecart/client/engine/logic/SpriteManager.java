@@ -63,6 +63,8 @@ public class SpriteManager
 		 */
 		this.removeDisposedSpritesFromLayers();
 		
+		// TODO AB If there are sprites in the scene, we continue...
+		
 		/*
 		 * UPDATE
 		 */
