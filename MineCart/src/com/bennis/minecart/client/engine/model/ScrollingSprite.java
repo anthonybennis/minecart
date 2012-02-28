@@ -26,7 +26,7 @@ abstract public class ScrollingSprite extends BasicSprite
 	@Override
 	public void update() 
 	{
-		if (!this.isDisposed() && this.getImageElement() != null)
+		if (!this.isDisposed() && this.haveAllImagesLoaded())
 		{
 			double x = this.getLocation().x;
 			x = x - SCROLL_SPEED; // TODO AB Move Scroll speeds to GUIConstants class.
@@ -34,7 +34,7 @@ abstract public class ScrollingSprite extends BasicSprite
 			/*
 			 * Dispose Sprite if it's left the screen.
 			 */
-			if (x < (0 - this.getImageElement().getWidth()))
+			if (x < (0 - this.getImageElements()[0].getWidth()))
 			{
 				this.dispose();
 			}
