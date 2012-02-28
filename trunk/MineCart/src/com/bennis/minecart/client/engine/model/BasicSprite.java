@@ -17,7 +17,8 @@ abstract public class BasicSprite implements ISprite
 	private boolean _disposed = false;
 	private Layers _layer;
 	private ImageLoader _imageLoader;
-	private ImageElement _imageElement;
+	private ImageElement[] _imageElements;
+	private int _imageFrame = 0;
 	
 	/**
 	 * Constructor.
@@ -36,12 +37,9 @@ abstract public class BasicSprite implements ISprite
 		return _imageLoader;
 	}
 	
-	/*
-	 * TODO AB Handle animations.
-	 */
-	public ImageElement getImageElement()
+	public ImageElement[] getImageElements()
 	{
-		return _imageElement;
+		return _imageElements;
 	}
 
 	@Override
@@ -88,10 +86,23 @@ abstract public class BasicSprite implements ISprite
 		return _layer;
 	}
 	
-	protected ImageElement loadImage()
+	/**
+	 * Loads all images needed to animate this Sprite.
+	 * @return
+	 */
+	protected ImageElement[] loadImages()
 	{
-		String imageName = this.getImageName();
-		return this.getImageLoader().getImage(imageName);
+		String[] imageNames = this.getImageNames();
+		ImageElement[] images = new ImageElement[imageNames.length];
+		
+		for (int i = 0; i < images.length; i++) 
+		{
+			images[i] =  this.getImageLoader().getImage(imageNames[i]);
+		}
+		
+		_imageElements = images;
+		
+		return images;
 	}
 	
 	@Override
@@ -102,14 +113,24 @@ abstract public class BasicSprite implements ISprite
 			/*
 			 * Ensure image is loaded before painting anything
 			 */
-			if (this.getImageElement() == null) 
+			if (!this.haveAllImagesLoaded()) 
 			{
-				_imageElement = this.loadImage();
+				this.loadImages();
 			}
 			else // Draw Sprite
 			{
 				canvas.getContext2d().save();
-				canvas.getContext2d().drawImage(this.getImageElement(), this.getLocation().x, this.getLocation().y);	
+				
+				if (_imageFrame >= this.getImageElements().length)
+				{
+					_imageFrame = 0; //Reset animation.
+				}
+				
+				ImageElement currentFrame = this.getImageElements()[_imageFrame];
+				canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
+				_imageFrame++;
+				
+				
 				canvas.getContext2d().restore();
 			}
 		}
@@ -119,5 +140,32 @@ abstract public class BasicSprite implements ISprite
 		}
 	}
 	
-	abstract protected String getImageName();
+	/**
+	 * 
+	 * @return
+	 */
+	protected boolean haveAllImagesLoaded()
+	{
+		boolean imagesHaveLoaded = true;
+		
+		if (_imageElements != null)
+		{
+			for (ImageElement image: _imageElements) 
+			{
+				if (image == null)
+				{
+					imagesHaveLoaded = false;
+					break;
+				}
+			}
+		}
+		else
+		{
+			imagesHaveLoaded = false;
+		}
+		
+		return imagesHaveLoaded;
+	}
+	
+	abstract protected String[] getImageNames();
 }

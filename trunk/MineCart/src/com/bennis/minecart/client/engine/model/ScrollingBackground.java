@@ -18,13 +18,12 @@ abstract public class ScrollingBackground extends BasicSprite
 	/*
 	 * TODO AB Refactor out ScrollManager?
 	 */
-	private ImageElement _backgroundImage;
 	private List<LocationImage> _tiledImages;
 	
 	public ScrollingBackground(ImageLoader imageLoader)
 	{
 		super(Layers.BACKGROUND, imageLoader);
-		_backgroundImage = this.loadImage();
+		this.loadImages();
 	}
 	
 	/**
@@ -35,7 +34,8 @@ abstract public class ScrollingBackground extends BasicSprite
 	 */
 	private int calculateNumberOfTilesNeeded()
 	{
-		double numberOfTilesNeeded = GUIConstants.WIDTH/_backgroundImage.getWidth();
+		ImageElement image = this.getImageElements()[0];
+		double numberOfTilesNeeded = GUIConstants.WIDTH/image.getWidth();
 		long numberOfTilesNeededRounded = Math.round(numberOfTilesNeeded);
 		numberOfTilesNeededRounded = numberOfTilesNeededRounded + 2;// Round up to cover full width
 		return (int)numberOfTilesNeededRounded;
@@ -52,12 +52,13 @@ abstract public class ScrollingBackground extends BasicSprite
 		int x = GUIConstants.WIDTH;
 		int y = 0;
 		LocationImage locationImage;
+		ImageElement image = this.getImageElements()[0];
 		for (int i = 0; i < numberOfTiles; i++) 
 		{
-			locationImage = new LocationImage(_backgroundImage);
+			locationImage = new LocationImage(image);
 			locationImage.setLocation(x, y);
 			listOfImages.add(locationImage);
-			x = x - _backgroundImage.getWidth();
+			x = x - image.getWidth();
 		}
 		
 		return listOfImages;
@@ -86,11 +87,11 @@ abstract public class ScrollingBackground extends BasicSprite
 			/*
 			 * Ensure image is loaded before painting anything
 			 */
-			if (_backgroundImage == null) 
+			if (!this.haveAllImagesLoaded()) 
 			{
-				String imageName = this.getImageName();
-				_backgroundImage = this.getImageLoader().getImage(imageName);
-				if (_backgroundImage != null) // Check again... might still not be loaded.
+				this.loadImages();
+				
+				if (this.haveAllImagesLoaded()) // Check again... might still not be loaded.
 				{
 					_tiledImages = this.createImageList();
 				}
@@ -119,6 +120,7 @@ abstract public class ScrollingBackground extends BasicSprite
 		if (_tiledImages != null)
 		{
 			int x;
+			ImageElement backgroundimage = this.getImageElements()[0];
 			for (LocationImage image:_tiledImages) 
 			{
 				x = image.getX();
@@ -127,7 +129,7 @@ abstract public class ScrollingBackground extends BasicSprite
 				/*
 				 * Reset image location if it's scrolled to the end
 				 */
-				if (x < (0 - _backgroundImage.getWidth()))
+				if (x < (0 - backgroundimage.getWidth()))
 				{
 					x = GUIConstants.WIDTH;
 				}
