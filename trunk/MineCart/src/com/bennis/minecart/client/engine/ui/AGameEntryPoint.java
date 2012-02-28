@@ -6,8 +6,6 @@ import com.bennis.minecart.client.engine.model.Scene;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -38,9 +36,10 @@ abstract public class AGameEntryPoint implements EntryPoint
 		}
 		catch (Exception e)
 		{
+			/*
+			 * If there is no support for Canvas, it is handled within the HTML.
+			 */
 			e.printStackTrace();
-			// TODO AB - Handle no canvas
-//			RootPanel.get(game.getContainerName()).add(new Label("Mine Craft is not compatible with your Browser. Try it with Google Chrome."));
 		}
 	}
 	
