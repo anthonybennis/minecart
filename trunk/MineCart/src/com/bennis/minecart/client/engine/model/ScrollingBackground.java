@@ -24,7 +24,7 @@ abstract public class ScrollingBackground extends BasicSprite
 	public ScrollingBackground(ImageLoader imageLoader)
 	{
 		super(Layers.BACKGROUND, imageLoader);
-		this.loadImages();
+		_backgroundImage = this.loadImage();
 	}
 	
 	/**
@@ -62,14 +62,6 @@ abstract public class ScrollingBackground extends BasicSprite
 		
 		return listOfImages;
 	}
-	
-	private void loadImages()
-	{
-		String imageName = this.getImageTileName();
-		_backgroundImage = this.getImageLoader().getImage(imageName);
-	}
-
-
 
 	@Override
 	public void handleCollision(ISprite collisionSprite) 
@@ -96,7 +88,7 @@ abstract public class ScrollingBackground extends BasicSprite
 			 */
 			if (_backgroundImage == null) 
 			{
-				String imageName = this.getImageTileName();
+				String imageName = this.getImageName();
 				_backgroundImage = this.getImageLoader().getImage(imageName);
 				if (_backgroundImage != null) // Check again... might still not be loaded.
 				{
@@ -144,15 +136,4 @@ abstract public class ScrollingBackground extends BasicSprite
 			}
 		}
 	}
-	
-	/**
-	 * Returns a String[] of image names. This class
-	 * assumes they're in the \war directory. 
-	 * 
-	 * This class will then create A LocationImage for each
-	 * tile and scroll it backwards repeatidly.
-	 * 
-	 * @return
-	 */
-	abstract public String getImageTileName();
 }
