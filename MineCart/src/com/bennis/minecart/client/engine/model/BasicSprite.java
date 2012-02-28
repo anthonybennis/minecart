@@ -19,6 +19,12 @@ abstract public class BasicSprite implements ISprite
 	private ImageLoader _imageLoader;
 	private ImageElement _imageElement;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param layer
+	 * @param imageLoader
+	 */
 	public BasicSprite(Layers layer, ImageLoader imageLoader)
 	{
 		_layer = layer;
@@ -30,6 +36,9 @@ abstract public class BasicSprite implements ISprite
 		return _imageLoader;
 	}
 	
+	/*
+	 * TODO AB Handle animations.
+	 */
 	public ImageElement getImageElement()
 	{
 		return _imageElement;
@@ -65,11 +74,14 @@ abstract public class BasicSprite implements ISprite
 		return _disposed;
 	}
 	
-	protected void setDisposed(boolean isDisposed)
-	{
-		_disposed = isDisposed;
-	}
 	
+	
+	@Override
+	public void dispose() 
+	{
+		_disposed = true;	
+	}
+
 	@Override
 	public Layers getLayer() 
 	{
