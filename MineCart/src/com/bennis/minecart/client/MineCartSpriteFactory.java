@@ -1,7 +1,7 @@
 package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.engine.logic.SpriteFactory;
-import com.bennis.minecart.client.engine.model.Background;
+import com.bennis.minecart.client.engine.model.ScrollingBackground;
 import com.bennis.minecart.client.engine.model.Scene;
 
 public class MineCartSpriteFactory extends SpriteFactory 
@@ -20,7 +20,7 @@ public class MineCartSpriteFactory extends SpriteFactory
 	
 	private void createInitialSprites(Scene scene)
 	{
-		Background background = new Background(this.getImageLoader());
+		ScrollingBackground background = new MineCartScrollingBackground(this.getImageLoader());
 		scene.storeSprite(background);
 	}
 }
