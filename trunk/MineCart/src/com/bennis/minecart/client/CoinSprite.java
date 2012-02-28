@@ -26,11 +26,24 @@ public class CoinSprite extends ScrollingSprite
 	}
 
 	@Override
-	protected String getImageName() 
+	protected String[] getImageNames() 
 	{
-		/*
-		 * TODO AB Move images into images folder.
-		 */
-		return "images/SpinningCoin.gif";
+		String[] names = new String[12];
+		names[0] = "images/SpinningCoin01.gif";
+		names[1] = "images/SpinningCoin02.gif";
+		names[2] = "images/SpinningCoin03.gif";
+		names[3] = "images/SpinningCoin04.gif";
+		names[4] = "images/SpinningCoin05.gif";
+		names[5] = "images/SpinningCoin06.gif";
+		names[6] = "images/SpinningCoin07.gif";
+		names[7] = "images/SpinningCoin08.gif";
+		names[8] = "images/SpinningCoin09.gif";
+		names[9] = "images/SpinningCoin10.gif";
+		names[10] = "images/SpinningCoin11.gif";
+		names[11] = "images/SpinningCoin12.gif";
+		
+		
+		// TODO AB - Get all image names of anumation
+		return names;
 	}
 }
