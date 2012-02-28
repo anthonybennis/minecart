@@ -22,13 +22,7 @@ public class CoinSprite extends ScrollingSprite
 	@Override
 	public void handleCollision(ISprite collisionSprite) 
 	{
-		// TODO AB
-	}
-
-	@Override
-	public void dispose() 
-	{
-		// TODO AB
+		// TODO AB - if MineKart, Update Game Points and dispose
 	}
 
 	@Override
@@ -37,6 +31,6 @@ public class CoinSprite extends ScrollingSprite
 		/*
 		 * TODO AB Move images into images folder.
 		 */
-		return "SpinningCoin.gif";
+		return "images/SpinningCoin.gif";
 	}
 }
