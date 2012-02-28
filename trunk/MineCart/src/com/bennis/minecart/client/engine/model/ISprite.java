@@ -14,12 +14,12 @@ public interface ISprite extends IDynamicPart
 	 * Find out the current Position of this Sprite.
 	 * @return Point GWT Point location object.
 	 */
-	public Point getLocation();
+	public Vector getLocation();
 	/**
 	 * Inform the Sprite of it's new location
 	 * @param point
 	 */
-	public void setLocation(Point point);
+	public void setLocation(Vector location);
 	
 	/**
 	 * A flag to determine a Sprites selection state.
@@ -55,4 +55,6 @@ public interface ISprite extends IDynamicPart
 	public void dispose();
 	
 	public boolean isDisposed();
+	
+	
 }
