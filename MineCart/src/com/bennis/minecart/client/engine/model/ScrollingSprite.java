@@ -2,7 +2,6 @@ package com.bennis.minecart.client.engine.model;
 
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
-import com.google.gwt.canvas.client.Canvas;
 
 /**
  * A sprite that scrolls across the scene.
@@ -10,34 +9,37 @@ import com.google.gwt.canvas.client.Canvas;
  * 
  * @author abennis
  */
-public class ScrollingSprite extends BasicSprite
+abstract public class ScrollingSprite extends BasicSprite
 {
+	private static final int SCROLL_SPEED = 4;
+
+	/**
+	 * Contructor
+	 * @param layer
+	 * @param imageLoader
+	 */
 	public ScrollingSprite(Layers layer, ImageLoader imageLoader)
 	{
 		super(layer,imageLoader);
 	}
 
 	@Override
-	public void draw(Canvas canvas) 
-	{
-		// TODO AB
-	}
-
-	@Override
 	public void update() 
 	{
-		// TODO AB
-	}
-
-	@Override
-	public void handleCollision(ISprite collisionSprite) 
-	{
-		// TODO AB
-	}
-
-	@Override
-	public void dispose() 
-	{
-		// TODO AB
+		if (!this.isDisposed() && this.getImageElement() != null)
+		{
+			double x = this.getLocation().x;
+			x = x - SCROLL_SPEED; // TODO AB Move Scroll speeds to GUIConstants class.
+			
+			/*
+			 * Dispose Sprite if it's left the screen.
+			 */
+			if (x < (0 - this.getImageElement().getWidth()))
+			{
+				this.dispose();
+			}
+			
+			this.setLocation(x, this.getLocation().y);
+		}
 	}
 }
