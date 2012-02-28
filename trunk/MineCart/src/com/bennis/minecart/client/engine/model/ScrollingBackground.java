@@ -8,32 +8,23 @@ import com.bennis.minecart.client.engine.logic.LocationImage;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.touch.client.Point;
 
 /**
  * This class represents the background/Map.
  * @author abennis
  */
-public class Background implements ISprite
+abstract public class ScrollingBackground extends BasicSprite
 {
-	private static final int IMAGE_WIDTH = 128;
 	/*
-	 * TODO AB Refactor out BasicSprite class (image loading etc)
-	 * TODO AB Refactor out ScrollManager
+	 * TODO AB Refactor out ScrollManager?
 	 */
-	private Point _location = new Point();
-	private boolean _selected = false;
-	private boolean _disposed = false;
-	private ImageElement _backgroundTile01;
-	private ImageLoader _imageLoader;
+	private ImageElement _backgroundImage;
 	private List<LocationImage> _tiledImages;
 	
-	public Background(ImageLoader imageLoader)
+	public ScrollingBackground(ImageLoader imageLoader)
 	{
-		super();
-		_imageLoader = imageLoader;
-		this.loadImages(imageLoader);
-		
+		super(Layers.BACKGROUND, imageLoader);
+		this.loadImages();
 	}
 	
 	/**
@@ -44,7 +35,7 @@ public class Background implements ISprite
 	 */
 	private int calculateNumberOfTilesNeeded()
 	{
-		double numberOfTilesNeeded = GUIConstants.WIDTH/IMAGE_WIDTH;
+		double numberOfTilesNeeded = GUIConstants.WIDTH/_backgroundImage.getWidth();
 		long numberOfTilesNeededRounded = Math.round(numberOfTilesNeeded);
 		numberOfTilesNeededRounded = numberOfTilesNeededRounded + 2;// Round up to cover full width
 		return (int)numberOfTilesNeededRounded;
@@ -63,26 +54,22 @@ public class Background implements ISprite
 		LocationImage locationImage;
 		for (int i = 0; i < numberOfTiles; i++) 
 		{
-			locationImage = new LocationImage(_backgroundTile01);
+			locationImage = new LocationImage(_backgroundImage);
 			locationImage.setLocation(x, y);
 			listOfImages.add(locationImage);
-			x = x - IMAGE_WIDTH;
+			x = x - _backgroundImage.getWidth();
 		}
 		
 		return listOfImages;
 	}
 	
-	private void loadImages(ImageLoader imageLoader)
+	private void loadImages()
 	{
-
-		_backgroundTile01 = imageLoader.getImage("BackgroundTile01.jpg");
+		String imageName = this.getImageTileName();
+		_backgroundImage = this.getImageLoader().getImage(imageName);
 	}
 
-	@Override
-	public Layers getLayer() 
-	{
-		return Layers.BACKGROUND;
-	}
+
 
 	@Override
 	public void handleCollision(ISprite collisionSprite) 
@@ -98,23 +85,6 @@ public class Background implements ISprite
 		 */
 	}
 	
-	@Override
-	public Point getLocation() 
-	{
-		return _location;
-	}
-
-	@Override
-	public void setLocation(Point point) 
-	{
-		_location = point;
-	}
-
-	@Override
-	public boolean isSelected() 
-	{		
-		return _selected;
-	}
 
 	@Override
 	public void draw(Canvas canvas) 
@@ -124,10 +94,14 @@ public class Background implements ISprite
 			/*
 			 * Ensure image is loaded before painting anything
 			 */
-			if (_backgroundTile01 == null) 
+			if (_backgroundImage == null) 
 			{
-				_backgroundTile01 = _imageLoader.getImage("BackgroundTile01.jpg");
-				_tiledImages = this.createImageList();
+				String imageName = this.getImageTileName();
+				_backgroundImage = this.getImageLoader().getImage(imageName);
+				if (_backgroundImage != null) // Check again... might still not be loaded.
+				{
+					_tiledImages = this.createImageList();
+				}
 			}
 			else // Draw Tile
 			{
@@ -161,7 +135,7 @@ public class Background implements ISprite
 				/*
 				 * Reset image location if it's scrolled to the end
 				 */
-				if (x < (0 - IMAGE_WIDTH))
+				if (x < (0 - _backgroundImage.getWidth()))
 				{
 					x = GUIConstants.WIDTH;
 				}
@@ -170,10 +144,15 @@ public class Background implements ISprite
 			}
 		}
 	}
-
-	@Override
-	public boolean isDisposed() 
-	{
-		return _disposed;
-	}	
+	
+	/**
+	 * Returns a String[] of image names. This class
+	 * assumes they're in the \war directory. 
+	 * 
+	 * This class will then create A LocationImage for each
+	 * tile and scroll it backwards repeatidly.
+	 * 
+	 * @return
+	 */
+	abstract public String getImageTileName();
 }
