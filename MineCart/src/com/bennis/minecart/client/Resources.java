@@ -12,8 +12,5 @@ import com.google.gwt.resources.client.ImageResource;
 	{
 		  @Source("images/BackgroundTile01.jpg")
 		  ImageResource backgroundTile01();
-		  
-		  @Source("images/BackgroundTile02.jpg")
-		  ImageResource backgroundTile02();
 	}
 
