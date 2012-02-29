@@ -23,6 +23,11 @@ public class SpriteManager
 	private SpriteFactory _spriteFactory;
 	private Canvas _canvas;
 	private Canvas _bufferCanvas;
+	/*
+	 * Debug: Frame rate.
+	 */
+	private long _numberOfFrames;
+	private long _starttime;
 	
 	/**
 	 * Constructor
@@ -33,6 +38,7 @@ public class SpriteManager
 	{
 		_bufferCanvas = bufferCanvas;
 		_canvas = canvas;
+		_starttime = System.currentTimeMillis();
 	}
 	
 	/**
@@ -104,7 +110,7 @@ public class SpriteManager
 	private void clearCanvas(Canvas canvas)
 	{
 		canvas.getContext2d().setFillStyle(GUIConstants.BLACK);
-		canvas.getContext2d().fillRect(0, 0, GUIConstants.WIDTH, GUIConstants.HEIGHT); 
+		canvas.getContext2d().fillRect(0, 0, GUIConstants.WIDTH, GUIConstants.HEIGHT);
 	}
 	
 	/**
@@ -200,6 +206,17 @@ public class SpriteManager
 		Context2d backContext = _bufferCanvas.getContext2d();
 		
 		frontContext.drawImage(backContext.getCanvas(), 0, 0);
+		
+		/*
+		 * Debug: Print Frame Rate
+		 */
+		frontContext.save();
+		_numberOfFrames++;
+		long timeRunning = System.currentTimeMillis() - _starttime;
+		long frameRate = timeRunning/_numberOfFrames;
+		frontContext.setFillStyle("white");
+		frontContext.fillText("Frame rate: " + frameRate, 5, 10);
+		frontContext.restore(); // TODO AB - Before deleting, make sure this isn't needed.
 	}
 	
 	private Scene getScene()
