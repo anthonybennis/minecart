@@ -6,6 +6,7 @@ import java.util.Map;
 import com.bennis.minecart.client.engine.logic.SpriteFactory;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.ScrollingBackground;
 
@@ -60,10 +61,22 @@ public class MineCartSpriteFactory extends SpriteFactory
 	 */
 	private void createInitialSprites(Scene scene)
 	{
+		/*
+		 * Background
+		 */
 		ScrollingBackground background = new MineCartScrollingBackground(this.getImageLoader());
 		scene.storeSprite(background);
+		/*
+		 * 1st Platform (Railway)
+		 */
+		Platform platform = new RailwayTrack();
+		scene.storeSprite(platform);
+		
 		// TODO AB - Create MineCart sprite
-		// TODO AB - Create Game Score Sprite 
+		
+		// TODO AB - Create Game Score Sprite
+		
+		// TODO AB Create Game points Sprite
 	}
 	
 	/**
@@ -81,16 +94,29 @@ public class MineCartSpriteFactory extends SpriteFactory
 	{
 		Map<Long, ISprite> spiteMap = new HashMap<Long, ISprite>();
 		
-		
-		spiteMap.put((long)1, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
-		spiteMap.put((long)150, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
-		spiteMap.put((long)160, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
-		spiteMap.put((long)161, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
-		spiteMap.put((long)200, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
-		
-		// TODO AB - Create Scrolling Sprite.
-		// TODO AB - Ensure it's initial location is set.
+		this.addCoin(1, spiteMap);
+		this.addCoin(10, spiteMap);
+		this.addCoin(20, spiteMap);
+		this.addCoin(40, spiteMap);
+		this.addCoin(80, spiteMap);
+		this.addCoin(100, spiteMap);
+		this.addCoin(130, spiteMap);
+		this.addCoin(150, spiteMap);
+		this.addCoin(210, spiteMap);
+		this.addCoin(220, spiteMap);
+		this.addCoin(240, spiteMap);
+		this.addCoin(290, spiteMap);
+		this.addCoin(350, spiteMap);
+		this.addCoin(380, spiteMap);
+		this.addCoin(400, spiteMap);
+		this.addCoin(500, spiteMap);
+		this.addCoin(600, spiteMap);
 		
 		return spiteMap;
+	}
+	
+	private void addCoin(int creationFrame, Map<Long, ISprite> spiteMap)
+	{
+		spiteMap.put((long)creationFrame, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
 	}
 }
