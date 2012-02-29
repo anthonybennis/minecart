@@ -19,6 +19,7 @@ abstract public class BasicSprite implements ISprite
 	private ImageLoader _imageLoader;
 	private ImageElement[] _imageElements;
 	private int _imageFrame = 0;
+	private boolean _updateFrame = false;
 	
 	/**
 	 * Constructor.
@@ -128,7 +129,11 @@ abstract public class BasicSprite implements ISprite
 				
 				ImageElement currentFrame = this.getImageElements()[_imageFrame];
 				canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
-				_imageFrame++;
+				_updateFrame = !_updateFrame; // Update animation every second refresh.
+				if (_updateFrame)
+				{
+					_imageFrame++;
+				}
 				
 				
 				canvas.getContext2d().restore();
