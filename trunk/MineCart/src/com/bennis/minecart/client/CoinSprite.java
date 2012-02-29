@@ -2,8 +2,8 @@ package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.model.ISprite;
-import com.bennis.minecart.client.engine.model.ScrollingSprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.ScrollingSprite;
 
 /**
  * Simple coin sprite that scrolls across the screen
@@ -15,8 +15,8 @@ public class CoinSprite extends ScrollingSprite
 {
 	public CoinSprite(Layers layer, ImageLoader imageLoader)
 	{
-		super(layer, imageLoader);
-		this.setLocation(GUIConstants.WIDTH, 50);
+		super(layer, imageLoader, Type.GOODIE);
+		this.setLocation(GUIConstants.WIDTH, 350);
 	}
 
 	@Override
@@ -24,6 +24,7 @@ public class CoinSprite extends ScrollingSprite
 	{
 		// TODO AB - if MineKart, Update Game Points and dispose
 	}
+	
 
 	@Override
 	protected String[] getImageNames() 
@@ -41,9 +42,7 @@ public class CoinSprite extends ScrollingSprite
 		names[9] = "images/SpinningCoin10.gif";
 		names[10] = "images/SpinningCoin11.gif";
 		names[11] = "images/SpinningCoin12.gif";
-		
-		
-		// TODO AB - Get all image names of anumation
+
 		return names;
 	}
 }
