@@ -15,14 +15,12 @@ import com.google.gwt.dom.client.ImageElement;
  */
 abstract public class ScrollingBackground extends BasicSprite
 {
-	/*
-	 * TODO AB Refactor out ScrollManager?
-	 */
+	private static final int OVERLAP_PIXEL_WIDTH = 2;
 	private List<LocationImage> _tiledImages;
 	
 	public ScrollingBackground(ImageLoader imageLoader)
 	{
-		super(Layers.BACKGROUND, imageLoader);
+		super(Layers.BACKGROUND, imageLoader, Type.DECORATION);
 		this.loadImages();
 	}
 	
@@ -37,7 +35,7 @@ abstract public class ScrollingBackground extends BasicSprite
 		ImageElement image = this.getImageElements()[0];
 		double numberOfTilesNeeded = GUIConstants.WIDTH/image.getWidth();
 		long numberOfTilesNeededRounded = Math.round(numberOfTilesNeeded);
-		numberOfTilesNeededRounded = numberOfTilesNeededRounded + 2;// Round up to cover full width
+		numberOfTilesNeededRounded = numberOfTilesNeededRounded + OVERLAP_PIXEL_WIDTH;
 		return (int)numberOfTilesNeededRounded;
 	}
 	
@@ -98,14 +96,10 @@ abstract public class ScrollingBackground extends BasicSprite
 			}
 			else // Draw Tile
 			{
-				canvas.getContext2d().save();
-				
 				for (LocationImage image: _tiledImages) 
 				{
 					canvas.getContext2d().drawImage(image.getImage(),image.getX(), image.getY());	
 				}
-				
-				canvas.getContext2d().restore();
 			}
 		}
 		catch (Exception e)
@@ -124,7 +118,7 @@ abstract public class ScrollingBackground extends BasicSprite
 			for (LocationImage image:_tiledImages) 
 			{
 				x = image.getX();
-				x = x - 1; // TODO AB Should we base this on time? Use a ScrollManager to synch?
+				x = x - GUIConstants.SLOW_SCROLL_SPEED;
 				
 				/*
 				 * Reset image location if it's scrolled to the end
