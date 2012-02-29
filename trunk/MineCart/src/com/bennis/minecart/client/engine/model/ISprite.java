@@ -1,7 +1,7 @@
 package com.bennis.minecart.client.engine.model;
 
 import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.touch.client.Point;
+
 
 /**
  * Interface for anything that can be any object that appears in a Scene. A Sprite
@@ -10,6 +10,10 @@ import com.google.gwt.touch.client.Point;
  */
 public interface ISprite extends IDynamicPart
 {
+	/*
+	 * By defining types, we hope to optimise collision detection.
+	 */
+	public enum Type{OBSTACLE, GOODIE, USER_MOVEABLE, ENEMY, DECORATION, PLATFORM};
 	/**
 	 * Find out the current Position of this Sprite.
 	 * @return Point GWT Point location object.
@@ -41,9 +45,18 @@ public interface ISprite extends IDynamicPart
 	public void update();
 	
 	/*
-	 * TODO AB - Is this the right object to handle collision?
+	 * Every ISprite type will handle obstacles differently.
+	 * Examples: <Comments here to help design implementation>
+	 * 
+	 * Obstacle: Prevents colliding sprite from moving in one direction.
+	 * Goodie: Increases points, disposes
+	 * Enemy: Removes a life or kills user sprite
+	 * Decoration: Does nothing
+	 * Platform: Sprites falling down wards are stopped. Sprites can jump through (up).
 	 */
 	public void handleCollision(ISprite collisionSprite);	
+	
+	public boolean doSpritesCollide();
 	
 	/**
 	 * A layer dictates a Sprites paint order. Those at the back are painted
@@ -56,5 +69,7 @@ public interface ISprite extends IDynamicPart
 	
 	public boolean isDisposed();
 	
+	public Type getType();
 	
+	public Rectangle getBounds();
 }

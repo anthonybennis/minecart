@@ -20,6 +20,8 @@ abstract public class BasicSprite implements ISprite
 	private ImageElement[] _imageElements;
 	private int _imageFrame = 0;
 	private boolean _updateFrame = false;
+	private Type _type;
+	private Rectangle _bounds;
 	
 	/**
 	 * Constructor.
@@ -27,10 +29,11 @@ abstract public class BasicSprite implements ISprite
 	 * @param layer
 	 * @param imageLoader
 	 */
-	public BasicSprite(Layers layer, ImageLoader imageLoader)
+	public BasicSprite(Layers layer, ImageLoader imageLoader,Type type)
 	{
 		_layer = layer;
 		_imageLoader = imageLoader;
+		this.createBounds();
 	}
 	
 	protected ImageLoader getImageLoader()
@@ -120,8 +123,6 @@ abstract public class BasicSprite implements ISprite
 			}
 			else // Draw Sprite
 			{
-				canvas.getContext2d().save();
-				
 				if (_imageFrame >= this.getImageElements().length)
 				{
 					_imageFrame = 0; //Reset animation.
@@ -134,9 +135,6 @@ abstract public class BasicSprite implements ISprite
 				{
 					_imageFrame++;
 				}
-				
-				
-				canvas.getContext2d().restore();
 			}
 		}
 		catch (Exception e)
@@ -172,5 +170,47 @@ abstract public class BasicSprite implements ISprite
 		return imagesHaveLoaded;
 	}
 	
+	@Override
+	public boolean doSpritesCollide() 
+	{
+		// TODO AB - Need to getBounds I guess?
+		return false;
+	}
+	
+	@Override
+	public Type getType() 
+	{
+		return _type;
+	}
+	
+	private Rectangle createBounds()
+	{
+		_bounds = new Rectangle();
+		_bounds = this.getBounds();
+		
+		return _bounds;
+	}
+
+	/**
+	 * Calcualtes the current bounds of this object.
+	 * @see com.bennis.minecart.client.engine.model.ISprite#getBounds()
+	 */
+	@Override
+	public Rectangle getBounds() 
+	{
+		_bounds.setX(this.getLocation().x);
+		_bounds.setY(this.getLocation().y);
+		ImageElement[] images = this.getImageElements();
+		
+		if (images != null && images.length > 0 && images[0] != null)
+		{
+			ImageElement element = images[0];
+			_bounds.setWidth(element.getWidth());
+			_bounds.setHeight(element.getHeight());
+		}
+		
+		return _bounds;
+	}
+
 	abstract protected String[] getImageNames();
 }
