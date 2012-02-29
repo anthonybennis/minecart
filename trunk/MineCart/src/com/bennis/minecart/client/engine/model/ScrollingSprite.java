@@ -1,5 +1,6 @@
 package com.bennis.minecart.client.engine.model;
 
+import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 
@@ -11,7 +12,8 @@ import com.bennis.minecart.client.engine.model.Layer.Layers;
  */
 abstract public class ScrollingSprite extends BasicSprite
 {
-	private static final int SCROLL_SPEED = 4;
+	// TODO AB - Make speed setable. Faster when levels progress.
+	private static final int SCROLL_SPEED = 3;
 
 	/**
 	 * Contructor
@@ -36,7 +38,11 @@ abstract public class ScrollingSprite extends BasicSprite
 			 */
 			if (x < (0 - this.getImageElements()[0].getWidth()))
 			{
-				this.dispose();
+				/*
+				 * TEMP. This creates an infinite loop of Sprites.
+				 */
+				x = GUIConstants.WIDTH + 10;
+//				this.dispose();
 			}
 			
 			this.setLocation(x, this.getLocation().y);
