@@ -94,29 +94,42 @@ public class MineCartSpriteFactory extends SpriteFactory
 	{
 		Map<Long, ISprite> spiteMap = new HashMap<Long, ISprite>();
 		
-		this.addCoin(1, spiteMap);
-		this.addCoin(10, spiteMap);
-		this.addCoin(20, spiteMap);
-		this.addCoin(40, spiteMap);
-		this.addCoin(80, spiteMap);
-		this.addCoin(100, spiteMap);
-		this.addCoin(130, spiteMap);
-		this.addCoin(150, spiteMap);
-		this.addCoin(210, spiteMap);
-		this.addCoin(220, spiteMap);
-		this.addCoin(240, spiteMap);
-		this.addCoin(290, spiteMap);
-		this.addCoin(350, spiteMap);
-		this.addCoin(380, spiteMap);
-		this.addCoin(400, spiteMap);
-		this.addCoin(500, spiteMap);
-		this.addCoin(600, spiteMap);
+		this.addCoin(1, spiteMap, 4);
+		this.addCoin(200, spiteMap, 3);
+		this.addCoin(400, spiteMap, 3);
+		this.addCoin(600, spiteMap, 5);
+		this.addCoin(800, spiteMap, 3);
+		this.addCoin(1000, spiteMap, 3);
+		this.addCoin(1200, spiteMap, 3);
+		this.addCoin(1400, spiteMap,3);
+		this.addCoin(1600, spiteMap,1);
+		this.addCoin(1800, spiteMap,5);
+		this.addCoin(2000, spiteMap,5);
+		this.addCoin(2200, spiteMap,3);
+		this.addCoin(2400, spiteMap,3);
+		this.addCoin(2600, spiteMap,3);
+		this.addCoin(2800, spiteMap,4);
+		this.addCoin(3000, spiteMap,2);
+		this.addCoin(3200, spiteMap,3);
 		
 		return spiteMap;
 	}
 	
-	private void addCoin(int creationFrame, Map<Long, ISprite> spiteMap)
+	/**
+	 * Creates a number of coins together.
+	 * 
+	 * @param creationFrame
+	 * @param spiteMap
+	 * @param numberOfCoins
+	 */
+	private void addCoin(int creationFrame, Map<Long, ISprite> spiteMap, int numberOfCoins)
 	{
-		spiteMap.put((long)creationFrame, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
+		long frame = (long)creationFrame;
+		
+		for (int i = 0; i < numberOfCoins; i++) 
+		{
+			spiteMap.put(frame, new CoinSprite(Layers.MIDDLE, this.getImageLoader()));
+			frame = frame+20;
+		}
 	}
 }

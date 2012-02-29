@@ -2,6 +2,7 @@ package com.bennis.minecart.client.engine.model;
 
 import java.util.List;
 
+import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
 
@@ -23,6 +24,29 @@ abstract public class Platform implements ISprite
 	public Platform()
 	{
 		_lineSegments = this.createLineSegments();
+		this.setupInitialLocation();
+	}
+	
+	/**
+	 * The initial location of this Sprite is the first x,y
+	 * coordingates of the first line in the line segments.
+	 */
+	private void setupInitialLocation()
+	{
+		Line firstLine = _lineSegments.get(0);
+		this.setLocation(firstLine.getX(), firstLine.getY());
+	}
+	
+	/**
+	 * Gets the end point (x1) of all the lines in
+	 * the line segments List.
+	 * @return
+	 */
+	private int getEndPoint()
+	{
+		int lastLineIndex = _lineSegments.size()-1;
+		Line lastLine = _lineSegments.get(lastLineIndex);
+		return lastLine.getX1();
 	}
 	
 	@Override
@@ -41,6 +65,22 @@ abstract public class Platform implements ISprite
 	{
 		_location.x = x;
 		_location.y = y;
+	}
+	
+	/**
+	 * Scrolls the platform to the left.
+	 */
+	private void scrollLeft(int newXPosition)
+	{
+		int scrollAmount = (int)this.getLocation().x - newXPosition;
+		
+		for (Line line : _lineSegments) 
+		{
+			line.setX(line.getX() - scrollAmount);
+			line.setX1(line.getX1() - scrollAmount);
+		}
+		
+		this.setLocation(newXPosition, this.getLocation().y);
 	}
 
 	@Override
@@ -79,7 +119,31 @@ abstract public class Platform implements ISprite
 	@Override
 	public void update() 
 	{
-		// TODO AB - Update it's location.
+		/*
+		 * TODO AB
+		 * X position should be managed by one ScrollingController, that
+		 * updates all speeds. 
+		 * This way, we can implement automatic scrolling, as in MineCart,
+		 * Or scrolling based on Sprites position, user movements.
+		 */
+		if (!this.isDisposed() && _lineSegments != null)
+		{
+			double x = this.getLocation().x;
+			// TODO AB - Make speed setable. Faster when levels progress.
+			x = x - GUIConstants.MEDIUM_SCROLL_SPEED;
+			
+			/*
+			 * Dispose Sprite if it's left the screen.
+			 */
+			if (x < (0 - this.getEndPoint()))
+			{
+//				this.dispose();
+			}
+			else
+			{
+				this.scrollLeft((int)x);
+			}
+		}
 	}
 
 	@Override

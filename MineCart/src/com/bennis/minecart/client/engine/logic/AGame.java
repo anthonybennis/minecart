@@ -19,6 +19,11 @@ public abstract class AGame
 	{
 		_spriteManager = this.createSpriteManager(bufferCanvas, canvas);
 		this.setSpriteFactory(this.getInitialSpriteFactory(scene));
+		/*
+		 * TODO AB Is this the right place for Audio?
+		 */
+		AudioPlayer audioPlayer = new AudioPlayer();
+		audioPlayer.playAudioTag();
 	}
 	
 	public SpriteManager createSpriteManager(Canvas bufferCanvas, Canvas canvas) 
@@ -43,4 +48,5 @@ public abstract class AGame
 	{
 		_spriteManager.setSpriteFactory(factory);
 	}
+	
 }
