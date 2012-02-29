@@ -12,37 +12,38 @@ import com.bennis.minecart.client.engine.model.Layer.Layers;
  */
 abstract public class ScrollingSprite extends BasicSprite
 {
-	// TODO AB - Make speed setable. Faster when levels progress.
-	private static final int SCROLL_SPEED = 3;
-
 	/**
 	 * Contructor
 	 * @param layer
 	 * @param imageLoader
 	 */
-	public ScrollingSprite(Layers layer, ImageLoader imageLoader)
+	public ScrollingSprite(Layers layer, ImageLoader imageLoader, Type type)
 	{
-		super(layer,imageLoader);
+		super(layer,imageLoader,type);
 	}
 
 	@Override
 	public void update() 
 	{
+		/*
+		 * TODO AB
+		 * X position should be managed by one ScrollingController, that
+		 * updates all speeds. 
+		 * This way, we can implement automatic scrolling, as in MineCart,
+		 * Or scrolling based on Sprites position, user movements.
+		 */
 		if (!this.isDisposed() && this.haveAllImagesLoaded())
 		{
 			double x = this.getLocation().x;
-			x = x - SCROLL_SPEED; // TODO AB Move Scroll speeds to GUIConstants class.
+			// TODO AB - Make speed setable. Faster when levels progress.
+			x = x - GUIConstants.MEDIUM_SCROLL_SPEED;
 			
 			/*
 			 * Dispose Sprite if it's left the screen.
 			 */
 			if (x < (0 - this.getImageElements()[0].getWidth()))
 			{
-				/*
-				 * TEMP. This creates an infinite loop of Sprites.
-				 */
-				x = GUIConstants.WIDTH + 10;
-//				this.dispose();
+				this.dispose();
 			}
 			
 			this.setLocation(x, this.getLocation().y);
