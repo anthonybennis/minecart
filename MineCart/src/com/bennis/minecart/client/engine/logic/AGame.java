@@ -15,15 +15,15 @@ public abstract class AGame
 {
 	private SpriteManager _spriteManager;
 	
-	public AGame(Canvas bufferCanvas, Canvas canvas, Scene scene)
+	public AGame(Canvas bufferCanvas, Canvas canvas, Scene scene, Playlist playlist)
 	{
 		_spriteManager = this.createSpriteManager(bufferCanvas, canvas);
 		this.setSpriteFactory(this.getInitialSpriteFactory(scene));
 		/*
 		 * TODO AB Is this the right place for Audio?
 		 */
-		AudioPlayer audioPlayer = new AudioPlayer();
-		audioPlayer.playAudioTag();
+		Audio audio = new Audio(playlist);
+		audio.playBackingTrack();
 	}
 	
 	public SpriteManager createSpriteManager(Canvas bufferCanvas, Canvas canvas) 
