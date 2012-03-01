@@ -1,0 +1,45 @@
+package com.bennis.minecart.client;
+
+import com.bennis.minecart.client.engine.logic.ImageLoader;
+import com.bennis.minecart.client.engine.model.BasicSprite;
+import com.bennis.minecart.client.engine.model.ISprite;
+import com.bennis.minecart.client.engine.model.Layer.Layers;
+
+/**
+ * This enemy flies around the screen for a set amount of time.
+ * Contact with the mine cart will take a life.
+ * @author Anthony
+ *
+ */
+public class BlimpSprite extends BasicSprite 
+{
+	/**
+	 * Constructor
+	 */
+	public BlimpSprite(Layers layer, ImageLoader imageloader)
+	{
+		super(layer,imageloader, Type.ENEMY);
+	}
+
+	@Override
+	public void update() 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleCollision(ISprite collisionSprite) 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected String[] getImageNames() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
