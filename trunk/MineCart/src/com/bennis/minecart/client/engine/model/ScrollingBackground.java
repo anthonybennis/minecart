@@ -48,7 +48,7 @@ abstract public class ScrollingBackground extends BasicSprite
 		List<LocationImage> listOfImages = new ArrayList<LocationImage>();
 		int numberOfTiles = this.calculateNumberOfTilesNeeded();
 		int x = GUIConstants.WIDTH;
-		int y = 0;
+		int y = this.getStartingYPosition();
 		LocationImage locationImage;
 		ImageElement image = this.getImageElements()[0];
 		for (int i = 0; i < numberOfTiles; i++) 
@@ -118,7 +118,7 @@ abstract public class ScrollingBackground extends BasicSprite
 			for (LocationImage image:_tiledImages) 
 			{
 				x = image.getX();
-				x = x - GUIConstants.SLOW_SCROLL_SPEED;
+				x = x - this.getScrollingSpeed();
 				
 				/*
 				 * Reset image location if it's scrolled to the end
@@ -132,4 +132,8 @@ abstract public class ScrollingBackground extends BasicSprite
 			}
 		}
 	}
+	
+	abstract public int getScrollingSpeed();
+	
+	abstract public int getStartingYPosition();
 }
