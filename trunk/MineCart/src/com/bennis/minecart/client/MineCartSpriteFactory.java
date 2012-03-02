@@ -67,6 +67,11 @@ public class MineCartSpriteFactory extends SpriteFactory
 		ScrollingBackground background = new MineCartScrollingBackground(this.getImageLoader());
 		scene.storeSprite(background);
 		/*
+		 * Foreground
+		 */
+		ScrollingBackground foreGround = new MineCardScrollingForeground(this.getImageLoader());
+		scene.storeSprite(foreGround);
+		/*
 		 * 1st Platform (Railway)
 		 */
 		Platform platform = new RailwayTrack();
