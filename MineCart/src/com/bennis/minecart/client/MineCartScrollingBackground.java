@@ -21,4 +21,17 @@ public class MineCartScrollingBackground extends ScrollingBackground
 		names[0] = "images/BackgroundTile01.jpg"; 
 		return names;
 	}
+	
+	@Override
+	public int getScrollingSpeed() 
+	{
+		return GUIConstants.SLOW_SCROLL_SPEED;
+	}
+	
+	@Override
+	public int getStartingYPosition() 
+	{
+		return 0;
+	}
+	
 }
