@@ -28,20 +28,21 @@ public class Audio
 	
 	public void playBackingTrack()
 	{
-		this.play(_playlist.getBackingTrack(0), true);
+		this.play(_playlist.getBackingTrack(0), true, 15);
 	}
 	
 	/**
 	 * 
 	 * @param audio
 	 */
-	public void play(String audiotrack, final boolean loop)
+	public void play(String audiotrack, final boolean loop, int volume)
 	{
 		SoundController soundController = new SoundController();
 	    final Sound sound = soundController.createSound(Sound.MIME_TYPE_AUDIO_OGG_VORBIS,
 	        audiotrack);
 	    
 //	    sound.setLooping(loop); // Currently does not work on Firefox.
+	    sound.setVolume(volume);
 	    
 	    /*
 	     * Manually enable looping...
