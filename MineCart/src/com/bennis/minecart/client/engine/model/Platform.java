@@ -3,6 +3,7 @@ package com.bennis.minecart.client.engine.model;
 import java.util.List;
 
 import com.bennis.minecart.client.GUIConstants;
+import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
 
@@ -117,7 +118,7 @@ abstract public class Platform implements ISprite
 	}
 
 	@Override
-	public void update() 
+	public void update(InputEvent event) 
 	{
 		/*
 		 * TODO AB

@@ -41,4 +41,10 @@ public class MineCartEntryPoint extends AGameEntryPoint
 	{
 		return "loading";
 	}
+
+	@Override
+	public void createPanels(AGame game) 
+	{
+		new ButtonPanel(game);
+	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
+import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.LocationImage;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
@@ -109,7 +110,7 @@ abstract public class ScrollingBackground extends BasicSprite
 	}
 
 	@Override
-	public void update() 
+	public void update(InputEvent event) 
 	{
 		if (_tiledImages != null)
 		{

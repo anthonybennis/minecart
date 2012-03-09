@@ -14,6 +14,7 @@ import com.google.gwt.canvas.client.Canvas;
 public abstract class AGame
 {
 	private SpriteManager _spriteManager;
+	private InputEvent _inputEvent;
 	
 	public AGame(Canvas bufferCanvas, Canvas canvas, Scene scene, Playlist playlist)
 	{
@@ -33,7 +34,8 @@ public abstract class AGame
 	
 	public void update()
 	{
-		_spriteManager.update();
+		_spriteManager.update(_inputEvent);
+		_inputEvent = null; // We don't want to use the same event twice
 	}
 	
 	public abstract SpriteFactory getInitialSpriteFactory(Scene scene);
@@ -49,4 +51,13 @@ public abstract class AGame
 		_spriteManager.setSpriteFactory(factory);
 	}
 	
+	public void setInput(InputEvent event)
+	{
+		_inputEvent = event;
+	}
+	
+	public ImageLoader getImageLoader()
+	{
+		return this._spriteManager.getSpriteFactory().getImageLoader();
+	}
 }

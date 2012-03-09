@@ -1,6 +1,7 @@
 package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.engine.logic.ImageLoader;
+import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
@@ -21,7 +22,7 @@ public class MineCartSprite extends BasicSprite
 	}
 
 	@Override
-	public void update() 
+	public void update(InputEvent event) 
 	{
 		/*
 		 * User Input + Current State + Collision will decide
