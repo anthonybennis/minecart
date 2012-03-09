@@ -57,7 +57,7 @@ public class SpriteManager
 	 * @param back
 	 * @param front
 	 */
-	public void update()
+	public void update(InputEvent event)
 	{
 		if (_spriteFactory != null)
 		{
@@ -69,16 +69,19 @@ public class SpriteManager
 		 */
 		this.removeDisposedSpritesFromLayers();
 		
-		// TODO AB If there are sprites in the scene, we continue...
+		/*
+		 * TODO AB If there are sprites in the scene, we continue...
+		 * Or is there a different way to end game?
+		 */
 		
 		/*
 		 * UPDATE
 		 */
-		this.updateLayer(this.getScene().getBackgroundLayer());
-		this.updateLayer(this.getScene().getBackLayer());
-		this.updateLayer(this.getScene().getMiddleLayer());
-		this.updateLayer(this.getScene().getFrontLayer());
-		this.updateLayer(this.getScene().getGlassLayer());
+		this.updateLayer(event, this.getScene().getBackgroundLayer());
+		this.updateLayer(event,this.getScene().getBackLayer());
+		this.updateLayer(event,this.getScene().getMiddleLayer());
+		this.updateLayer(event,this.getScene().getFrontLayer());
+		this.updateLayer(event,this.getScene().getGlassLayer());
 		/*
 		 * DRAW
 		 */
@@ -164,11 +167,11 @@ public class SpriteManager
 		}
 	}
 	
-	private void updateLayer(List<ISprite> layer)
+	private void updateLayer(InputEvent event, List<ISprite> layer)
 	{
 		for (ISprite iSprite : layer) 
 		{
-			iSprite.update();
+			iSprite.update(event);
 		}
 	}
 	
@@ -227,5 +230,10 @@ public class SpriteManager
 			scene = _spriteFactory.getScene();
 		}
 		return scene;
+	}
+	
+	public SpriteFactory getSpriteFactory()
+	{
+		return _spriteFactory;
 	}
 }

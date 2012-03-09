@@ -10,7 +10,16 @@ import com.google.gwt.resources.client.ImageResource;
  */
 	public interface Resources extends ClientBundle
 	{
-		  @Source("images/BackgroundTile01.jpg")
-		  ImageResource backgroundTile01();
+		  @Source("images/Left.png")
+		  ImageResource leftButton();
+		  
+		  @Source("images/Right.png")
+		  ImageResource rightButton();
+		  
+		  @Source("images/Jump.png")
+		  ImageResource jumpButton();
+		  
+		  @Source("images/Pause.png")
+		  ImageResource pauseButton();
 	}
 

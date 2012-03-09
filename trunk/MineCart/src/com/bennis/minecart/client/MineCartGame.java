@@ -14,6 +14,7 @@ import com.google.gwt.canvas.client.Canvas;
 public class MineCartGame extends AGame 
 {
 	private String _containerName;
+	
 	public MineCartGame(Canvas bufferCanvas, Canvas canvas,Scene scene, String containerName, Playlist playlist)	
 	{
 		super(bufferCanvas, canvas, scene, playlist);

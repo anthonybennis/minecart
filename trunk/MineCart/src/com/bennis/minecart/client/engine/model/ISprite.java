@@ -1,5 +1,6 @@
 package com.bennis.minecart.client.engine.model;
 
+import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.google.gwt.canvas.client.Canvas;
 
 
@@ -8,7 +9,7 @@ import com.google.gwt.canvas.client.Canvas;
  * can be manipulated by a user or AI control.
  * @author ABennis
  */
-public interface ISprite extends IDynamicPart
+public interface ISprite
 {
 	/*
 	 * By defining types, we hope to optimise collision detection.
@@ -42,7 +43,7 @@ public interface ISprite extends IDynamicPart
 	/**
 	 * Update this Sprites model data.
 	 */
-	public void update();
+	public void update(InputEvent event);
 	
 	/*
 	 * Every ISprite type will handle obstacles differently.

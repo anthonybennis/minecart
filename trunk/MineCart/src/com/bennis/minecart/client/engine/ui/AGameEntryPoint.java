@@ -6,6 +6,7 @@ import com.bennis.minecart.client.engine.model.Scene;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -27,9 +28,18 @@ abstract public class AGameEntryPoint implements EntryPoint
 	{
 		try
 		{
+			/*
+			 * Remove Splash Screen
+			 */
+			// DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("splashScreen"));
+			
+			/*
+			 * Create Game
+			 */
 			Scene scene = new Scene();
 			Canvas[] canvases = this.createCanves();
-			AGame game = this.createGame(canvases[0], canvases[1],scene);	
+			AGame game = this.createGame(canvases[0], canvases[1],scene);
+			this.createPanels(game);
 			this.removeSplashScreen(getSplashScreenContainerName());
 			GameLoop gameLoop = new GameLoop(game);
 			gameLoop.startLoop();
@@ -119,6 +129,12 @@ abstract public class AGameEntryPoint implements EntryPoint
 	 */
 	public abstract String getSplashScreenContainerName();
 	
+	/**
+	 * Allows any sub class the opportunity to 
+	 * create and add panels to the Root, once
+	 * the Canvas has been created.
+	 */
+	public abstract void createPanels(AGame game);
 	
 	public abstract int[] getCanvasSize();
 	

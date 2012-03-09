@@ -2,6 +2,7 @@ package com.bennis.minecart.client.engine.model;
 
 import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
+import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 
 /**
@@ -23,7 +24,7 @@ abstract public class ScrollingSprite extends BasicSprite
 	}
 
 	@Override
-	public void update() 
+	public void update(InputEvent event) 
 	{
 		/*
 		 * TODO AB
