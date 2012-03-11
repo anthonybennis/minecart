@@ -34,8 +34,15 @@ public abstract class AGame
 	
 	public void update()
 	{
-		_spriteManager.update(_inputEvent);
-		_inputEvent = null; // We don't want to use the same event twice
+		if (_inputEvent != null && _inputEvent.isConsumed())
+		{
+			_inputEvent = null; // We don't want to use the same event twice	
+		}
+		else
+		{
+			_spriteManager.update(_inputEvent);
+			_inputEvent.consume();
+		}
 	}
 	
 	public abstract SpriteFactory getInitialSpriteFactory(Scene scene);
