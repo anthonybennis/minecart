@@ -77,7 +77,11 @@ public class MineCartSpriteFactory extends SpriteFactory
 		Platform platform = new RailwayTrack();
 		scene.storeSprite(platform);
 		
-		// TODO AB - Create MineCart sprite
+		/*
+		 * Main sprite - The Mine Cart
+		 */
+		MineCartSprite mineCart = new MineCartSprite(this.getImageLoader());
+		scene.storeSprite(mineCart);
 		
 		// TODO AB - Create Game Score Sprite
 		
