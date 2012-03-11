@@ -14,6 +14,7 @@ public class InputEvent
 	 */
 	private String _eventID;
 	private ClickEvent _event;
+	private boolean _consumed = false;
 	
 	public InputEvent(ClickEvent event, String eventID)
 	{
@@ -34,5 +35,15 @@ public class InputEvent
 	public ClickEvent getClickEvent()
 	{
 		return _event;
+	}
+	
+	public void consume()
+	{
+		_consumed = true;
+	}
+	
+	public boolean isConsumed()
+	{
+		return _consumed;
 	}
 }
