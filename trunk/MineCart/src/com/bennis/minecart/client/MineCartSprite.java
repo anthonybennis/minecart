@@ -6,6 +6,7 @@ import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.dom.client.ImageElement;
 
 /**
  * Main Sprite.
@@ -13,6 +14,12 @@ import com.google.gwt.canvas.client.Canvas;
  */
 public class MineCartSprite extends BasicSprite 
 {
+	/*
+	 * Temp
+	 */
+	private String _input = "Not set yet";
+	
+	
 	/**
 	 * Constructor
 	 */
@@ -24,6 +31,16 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void update(InputEvent event) 
 	{
+		if (event != null)
+		{
+			_input = event.getEventID();
+		}
+		else
+		{
+			_input = "RESET";
+		}
+			
+		
 		/*
 		 * User Input + Current State + Collision will decide
 		 * what this Sprite will do.
@@ -76,7 +93,17 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void draw(Canvas canvas) 
 	{
-		super.draw(canvas); // TODO AB Remove
+		/*
+		 * Draw wheels
+		 */
+		
+		/*
+		 * Draw 
+		 */
+//		_input
+		canvas.getContext2d().setFillStyle("white");
+		canvas.getContext2d().fillText(_input, 10, 120);
+//		canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
 		
 		/*
 		 * TODO AB -  Draw the current imagesequence at the
