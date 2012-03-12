@@ -41,7 +41,10 @@ public abstract class AGame
 		else
 		{
 			_spriteManager.update(_inputEvent);
-			_inputEvent.consume();
+			if (_inputEvent != null)
+			{
+				_inputEvent.consume();
+			}
 		}
 	}
 	
