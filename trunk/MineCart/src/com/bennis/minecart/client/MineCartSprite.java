@@ -18,6 +18,7 @@ public class MineCartSprite extends BasicSprite
 	 * Temp
 	 */
 	private String _input = "Not set yet";
+	private ImageElement _image;
 	
 	
 	/**
@@ -26,6 +27,7 @@ public class MineCartSprite extends BasicSprite
 	public MineCartSprite(ImageLoader imageLoader)
 	{
 		super(Layers.FRONT,imageLoader, Type.USER_MOVEABLE);
+		_image = imageLoader.getImage("images/MineCart.png");
 	}
 
 	@Override
@@ -39,6 +41,11 @@ public class MineCartSprite extends BasicSprite
 		{
 			_input = "RESET";
 		}
+		
+		/*
+		 * Temp
+		 */
+		this.setLocation(150, 377);
 			
 		
 		/*
@@ -94,21 +101,29 @@ public class MineCartSprite extends BasicSprite
 	public void draw(Canvas canvas) 
 	{
 		/*
-		 * Draw wheels
+		 * Calculate Rotation
+		 */
+		
+		/*
+		 * TODO AB -  Get the appropriate image from the current image sequence
 		 */
 		
 		/*
 		 * Draw 
 		 */
-//		_input
-		canvas.getContext2d().setFillStyle("white");
-		canvas.getContext2d().fillText(_input, 10, 120);
-//		canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
+		if (_image == null)
+		{
+			_image = this.getImageLoader().getImage("images/MineCart.png");	
+		}
+		else
+		{
+			canvas.getContext2d().drawImage(_image, this.getLocation().x, this.getLocation().y);
+		}
 		
 		/*
-		 * TODO AB -  Draw the current imagesequence at the
-		 * current location.
+		 * End rotation
 		 */
+
 	}
 	
 	//////////// Everything above this line should be generic, so we can refactor to base class.
