@@ -193,4 +193,13 @@ public class Rectangle
         	(tw < tx || tw > rx) &&
         	(th < ty || th > ry));
         }
+        
+        public Vector getCenter()
+        {
+        	Vector center = new Vector();
+        	double centerX = (this.getX() + (this.getWidth()/2));
+        	double centerY = (this.getY() + (this.getHeight()/2));
+        	
+        	return center;
+        }
 }
