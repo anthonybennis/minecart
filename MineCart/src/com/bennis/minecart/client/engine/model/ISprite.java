@@ -15,6 +15,7 @@ public interface ISprite
 	 * By defining types, we hope to optimise collision detection.
 	 */
 	public enum Type{OBSTACLE, GOODIE, USER_MOVEABLE, ENEMY, DECORATION, PLATFORM};
+	public enum Collision{LEFT, RIGHT, TOP, BOTTOM,NONE};
 	/**
 	 * Find out the current Position of this Sprite.
 	 * @return Point GWT Point location object.
@@ -55,9 +56,18 @@ public interface ISprite
 	 * Decoration: Does nothing
 	 * Platform: Sprites falling down wards are stopped. Sprites can jump through (up).
 	 */
-	public void handleCollision(ISprite collisionSprite);	
+	public void handleCollision(ISprite collisionSprite, Collision collisionType);	
 	
-	public boolean doSpritesCollide(ISprite sprite);
+	/**
+	 * Checks if the two sprites collide. 
+	 * The return value describes the direction of
+	 * the collision. Collision.NONE means there
+	 * was no collision detected.
+	 * 
+	 * @param sprite
+	 * @return Collision.LEFT, Collision.RIGHT etc...
+	 */
+	public Collision getCollisionType(ISprite sprite);
 	
 	/**
 	 * A layer dictates a Sprites paint order. Those at the back are painted

@@ -30,10 +30,9 @@ public class BlimpSprite extends BasicSprite
 	}
 
 	@Override
-	public void handleCollision(ISprite collisionSprite) 
+	public void handleCollision(ISprite collisionSprite, Collision collisionType) 
 	{
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

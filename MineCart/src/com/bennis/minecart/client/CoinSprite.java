@@ -20,7 +20,7 @@ public class CoinSprite extends ScrollingSprite
 	}
 
 	@Override
-	public void handleCollision(ISprite collisionSprite) 
+	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
 		// TODO AB - if MineKart, Update Game Points and dispose
 	}

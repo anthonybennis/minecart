@@ -182,10 +182,22 @@ abstract public class BasicSprite implements ISprite
 	}
 	
 	@Override
-	public boolean doSpritesCollide(ISprite sprite) 
+	public Collision getCollisionType(ISprite sprite) 
 	{
+		Collision collision = Collision.NONE;
+		
 		Rectangle rectangle = this.getBounds();
-		return rectangle.intersects(sprite.getBounds());
+		boolean collides = rectangle.intersects(sprite.getBounds());
+		
+		if (collides)
+		{
+			/*
+			 * TODO AB - Calculate Collision direction.
+			 */
+			collision = Collision.RIGHT;
+		}
+		
+		return collision;
 	}
 	
 	@Override

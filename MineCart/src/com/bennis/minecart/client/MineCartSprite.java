@@ -1,5 +1,6 @@
 package com.bennis.minecart.client;
 
+import com.bennis.minecart.client.ButtonPanel.BUTTON_TYPE;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.BasicSprite;
@@ -13,24 +14,23 @@ import com.google.gwt.dom.client.ImageElement;
  * @author abennis
  */
 public class MineCartSprite extends BasicSprite 
-{
-	/*
-	 * Temp
-	 */
-	private String _input = "Not set yet";
-	private ImageElement _image;
-	// END TEMP
+{	
+	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, NONE};
+	private enum SpriteState{NORMAL, COLLIDE, FALLING};
 	
-	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP};
-	private enum SpriteState{NORMAL, COLLIDE};
 	private ImageElement[] _currentAnmationSequence;
 	private ImageElement[] _movingRightAnmationSequence;
 	private ImageElement[] _movingLeftAnmationSequence;
 	private ImageElement[] _collidingAnmationSequence;
 	private int _currentAnimationFrame = 0;
 	private SpriteState _spriteState = SpriteState.NORMAL;
-	private Movement _movement = Movement.RIGHT;
+	private Movement _movement = Movement.NONE;
 	private boolean _updateFrame;
+	/*
+	 * Collision
+	 */
+	private ISprite _collidingSprite;
+	private Collision _collisionType = Collision.NONE;
 	
 	/**
 	 * Constructor
@@ -38,12 +38,15 @@ public class MineCartSprite extends BasicSprite
 	public MineCartSprite(ImageLoader imageLoader)
 	{
 		super(Layers.FRONT,imageLoader, Type.USER_MOVEABLE);
-		_image = imageLoader.getImage("images/MineCart.png");
+		
 		this.loadAllImageSequences();
 		this.setLocation(150, 377); // Starting position
 		_currentAnmationSequence = _movingRightAnmationSequence;
 	}
 	
+	/**
+	 * 
+	 */
 	private void loadAllImageSequences()
 	{
 		_movingRightAnmationSequence = this.createMovingRightAnimationSequence();
@@ -67,13 +70,17 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private ImageElement[] createMovingLeftAnimationSequence()
 	{
-		String[] imageNames = new String[5];
-		imageNames[0] = "images/minecart/left00.png";
-		imageNames[1] = "images/minecart/left01.png";
-		imageNames[2] = "images/minecart/left02.png";
-		imageNames[3] = "images/minecart/left03.png";
-		imageNames[4] = "images/minecart/left04.png";
-		return this.createAnimationSequence(imageNames);
+//		String[] imageNames = new String[5];
+//		imageNames[0] = "images/minecart/left00.png";
+//		imageNames[1] = "images/minecart/left01.png";
+//		imageNames[2] = "images/minecart/left02.png";
+//		imageNames[3] = "images/minecart/left03.png";
+//		imageNames[4] = "images/minecart/left04.png";
+//		return this.createAnimationSequence(imageNames);
+		/*
+		 * TEMP
+		 */
+		return this.createMovingRightAnimationSequence();
 	}
 	
 	/**
@@ -82,13 +89,17 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private ImageElement[] createCollidingAnimationSequence()
 	{
-		String[] imageNames = new String[5];
-		imageNames[0] = "images/minecart/collide00.png";
-		imageNames[1] = "images/minecart/collide01.png";
-		imageNames[2] = "images/minecart/collide02.png";
-		imageNames[3] = "images/minecart/collide03.png";
-		imageNames[4] = "images/minecart/collide04.png";
-		return this.createAnimationSequence(imageNames);
+//		String[] imageNames = new String[5];
+//		imageNames[0] = "images/minecart/collide00.png";
+//		imageNames[1] = "images/minecart/collide01.png";
+//		imageNames[2] = "images/minecart/collide02.png";
+//		imageNames[3] = "images/minecart/collide03.png";
+//		imageNames[4] = "images/minecart/collide04.png";
+//		return this.createAnimationSequence(imageNames);
+		/*
+		 * TEMP
+		 */
+		return this.createMovingRightAnimationSequence();
 	}
 	
 	/**
@@ -106,56 +117,103 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void update(InputEvent event) 
 	{
+		this.setLocation(150, 377); 
+		
 		if (event != null)
 		{
-			_input = event.getEventID();
+			/*
+			 * User Input + Current State + Collision will decide
+			 * what this Sprite will do.
+			 * 
+			 * SET MOVEMENT DIRECTION: 
+			 * MOVING_LEFT - Obstacles and start of canvas will prevent this. Check collisions.
+			 * MOVING_RIGHT - Obstacles and end of canvas will prevent this. Check collisions.
+			 * FALLING_DOWN - Can collide with enemies and platform stops falling movement.
+			 * JUMPING (DON'T COLLIDE WITH PLATFORM) - Hitting obstacle from below and enemies.
+			 * DONT_MOVE - No input from user, just stay where you are.
+			 */
+			
+			/*
+			 * Check to see if we're moving already. If we
+			 * are then we just ignore any new instructions to move.
+			 */
+			if (_movement == Movement.NONE)
+			{
+				_movement = this.convertInputEventToMovement(event);
+				/*
+				 * New Animation sequence is set by the current movement of the sprite.
+				 */
+				_currentAnmationSequence = this.getAppropriateAnimationSequence(_movement, _spriteState);
+				_currentAnimationFrame = 0; 
+			}
+			
+			boolean endofScreen = this.isSpriteAtEndOfScreen();
+			boolean startofScreen = this.isSpriteAtStartOfScreen();
+			
+			switch (_movement) 
+			{
+				case LEFT:
+				{
+					_spriteState = this.moveLeft(endofScreen, startofScreen);
+					break;
+				}
+				case LEFT_JUMP:
+				{
+					_spriteState = this.jumpLeft(endofScreen, startofScreen);
+					break;
+				}
+				case RIGHT_JUMP:
+				{
+					_spriteState = this.jumpRight(endofScreen, startofScreen);
+					break;
+				}
+				default: // RIGHT
+				{
+					_spriteState = this.moveRight(endofScreen, startofScreen);
+					break;
+				}
+			}
+			
+			/*
+			 * TODO AB When a movement is complete, set Movement to NONE
+			 */
 		}
-		else
-		{
-			_input = "RESET";
-		}
-		
-		/*
-		 * User Input + Current State + Collision will decide
-		 * what this Sprite will do.
-		 * At the moment, I'm thinking the states are:
-		 * 
-		 * A movement controller (which in turn is either controlled
-		 * by user inputs or AI) informs us what direction to go
-		 * in and whether to jump or not.
-		 * 
-		 * Question? Do we allow movement of left/right during a jump? Yes.
-		 * 
-		 * 
-		 * TODO AB consider refactoring out to moveableSprite upper class,
-		 * so Blimp and bad guys can re use this.
-		 * 
-		 * TODO AB We want to be able to shoot enemies eventually?
-		 * 
-		 * SET MOVEMENT DIRECTION: 
-		 * MOVING_LEFT - Obstacles and start of canvas will prevent this. Check collisions.
-		 * MOVING_RIGHT - Obstacles and end of canvas will prevent this. Check collisions.
-		 * FALLING_DOWN - Can collide with enemies and platform stops falling movement.
-		 * JUMPING (DON'T COLLIDE WITH PLATFORM) - Hitting obstacle from below and enemies.
-		 * DONT_MOVE - No input from user, just stay where you are.
-		 * 
-		 * SET STATES:
-		 * NORMAL - NO EFFECT
-		 * LOOSING LIFE - FLASHING - Inform Game Life Counter
-		 * DEAD - EXPLODE? - Inform Game to End.
-		 * 
-		 * SET ANIMATIONS:
-		 * The combination of states above will dictate the Image sequence we'll use.
-		 * Image sequences:
-		 * ImageElement[] MOVING_RIGHT & JUMPING
-		 * ImageElement[] MOVING_LEFT & JUMPING
-		 * ImageElement[] MOVING_LEFT & JUMPING
-		 */
 	}
-
-	@Override
-	public void handleCollision(ISprite collisionSprite) 
+	
+	private SpriteState moveLeft(boolean endofScreen, boolean startofScreen)
 	{
+//		if (!startofScreen && )
+		// When movement is complete, set to NONE
+		return _spriteState;
+	}
+	
+	private SpriteState jumpLeft(boolean endofScreen, boolean startofScreen)
+	{
+		// TODO AB - Falling is part of Jump cycle
+		// When movement is complete, set to NONE
+		return _spriteState;
+	}
+	
+	private SpriteState moveRight(boolean endofScreen, boolean startofScreen)
+	{
+		// When movement is complete, set to NONE
+		return _spriteState;
+	}
+	
+	private SpriteState jumpRight(boolean endofScreen, boolean startofScreen)
+	{
+		// TODO AB - Falling is part of Jump cycle
+		// When movement is complete, set to NONE
+		// How do we cycle through a JUMP????
+		return _spriteState;
+	}
+	
+	
+	@Override
+	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
+	{
+		_collidingSprite = collisionSprite; // TODO AB - This needs to be set to NULL after collision.
+		_collisionType = collisionType;// TODO AB - This needs to be set to NONE after collision.
 	}
 
 	@Override
@@ -167,11 +225,10 @@ public class MineCartSprite extends BasicSprite
 		 * examine extending BasicSprite to handle this.
 		 */
 		String[] imageNames = new String[5];
-		imageNames[0] = "images/minecart/right00.png";
-		imageNames[1] = "images/minecart/right01.png";
-		imageNames[2] = "images/minecart/right02.png";
-		imageNames[3] = "images/minecart/right03.png";
-		imageNames[4] = "images/minecart/right04.png";
+		imageNames[0] = "images/minecart/MineCartRight00.png";
+		imageNames[1] = "images/minecart/MineCartRight01.png";
+		imageNames[2] = "images/minecart/MineCartRight02.png";
+		imageNames[3] = "images/minecart/MineCartRight03.png";
 		
 		return imageNames;
 	}
@@ -179,10 +236,6 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void draw(Canvas canvas) 
 	{
-		double rotationAngle = this.calculateRotationAngle();
-		
-		_currentAnmationSequence = this.getAppropriateAnimationSequence(_movement, _spriteState);
-		
 		/*
 		 * Ensure current images are loaded.
 		 */
@@ -192,6 +245,8 @@ public class MineCartSprite extends BasicSprite
 		}
 		else
 		{
+			double rotationAngle = this.calculateRotationAngle();
+			
 			/*
 			 * Draw 
 			 * (Drawing Style depends on SpriteState)
@@ -202,6 +257,7 @@ public class MineCartSprite extends BasicSprite
 			}
 			
 			ImageElement currentFrame = _currentAnmationSequence[_currentAnimationFrame];
+			canvas.getContext2d().rotate(rotationAngle);
 			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
 			
 			// Update animation every second refresh.
@@ -218,10 +274,14 @@ public class MineCartSprite extends BasicSprite
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private double calculateRotationAngle()
 	{
 		/*
-		 * TODO AB
+		 * TODO AB (Needed when track moves)
 		 */
 		return 0;
 	}
@@ -264,7 +324,11 @@ public class MineCartSprite extends BasicSprite
 				}
 				default:
 				{
-					imageSequence = _movingRightAnmationSequence;
+					/*
+					 * Don't change the current animation sequence if
+					 * we don't know what to do.
+					 */
+					imageSequence = _currentAnmationSequence;
 					break;
 				}
 			}
@@ -275,6 +339,56 @@ public class MineCartSprite extends BasicSprite
 		}
 		
 		return imageSequence;
+	}
+	
+	private Movement convertInputEventToMovement(InputEvent event)
+	{
+		Movement movement = Movement.RIGHT;
+		
+		if (event.getEventID() == BUTTON_TYPE.LEFT.name())
+		{
+			movement = Movement.LEFT;
+		}
+		else if (event.getEventID() == BUTTON_TYPE.RIGHT.name())
+		{
+			movement = Movement.RIGHT;
+		}
+		else if (event.getEventID() == BUTTON_TYPE.LEFT_JUMP.name())
+		{
+			movement = Movement.LEFT_JUMP;
+		}
+		else if (event.getEventID() == BUTTON_TYPE.RIGHT_JUMP.name())
+		{
+			movement = Movement.RIGHT_JUMP;
+		}
+
+		return movement;		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private boolean isSpriteAtEndOfScreen()
+	{
+		/*
+		 * TODO AB
+		 * Do we need to add buffer of image width?
+		 */
+		return (this.getLocation().x > GUIConstants.WIDTH);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private boolean isSpriteAtStartOfScreen()
+	{
+		/*
+		 * TODO AB
+		 * Do we need to add buffer of image width?
+		 */
+		return (this.getLocation().x <= 0);
 	}
 	
 	

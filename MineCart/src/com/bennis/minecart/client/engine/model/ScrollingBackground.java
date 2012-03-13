@@ -64,7 +64,7 @@ abstract public class ScrollingBackground extends BasicSprite
 	}
 
 	@Override
-	public void handleCollision(ISprite collisionSprite) 
+	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
 		// Nothing to do here. Background doesn't collide with anything.
 	}
