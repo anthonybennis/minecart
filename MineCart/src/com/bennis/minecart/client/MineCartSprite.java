@@ -6,6 +6,7 @@ import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Vector;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
 
@@ -15,22 +16,36 @@ import com.google.gwt.dom.client.ImageElement;
  */
 public class MineCartSprite extends BasicSprite 
 {	
-	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, NONE};
+	/*
+	 * States
+	 */
+	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, FALL, NONE};
 	private enum SpriteState{NORMAL, COLLIDE, FALLING};
 	
+	/*
+	 * Animation
+	 */
 	private ImageElement[] _currentAnmationSequence;
 	private ImageElement[] _movingRightAnmationSequence;
 	private ImageElement[] _movingLeftAnmationSequence;
 	private ImageElement[] _collidingAnmationSequence;
 	private int _currentAnimationFrame = 0;
 	private SpriteState _spriteState = SpriteState.NORMAL;
-	private Movement _movement = Movement.NONE;
 	private boolean _updateFrame;
 	/*
 	 * Collision
 	 */
 	private ISprite _collidingSprite;
 	private Collision _collisionType = Collision.NONE;
+	/*
+	 * Movement
+	 */
+	private Movement _movement = Movement.NONE;
+	private double _startX;
+	private double _startY;
+	private double _endX;
+	private double _endY;
+	
 	
 	/**
 	 * Constructor
@@ -138,27 +153,42 @@ public class MineCartSprite extends BasicSprite
 			 * DONT_MOVE - No input from user, just stay where you are.
 			 */
 			
+			
 			/*
-			 * Check to see if we're moving already. If we
-			 * are then we just ignore any new instructions to move.
+			 * Check to see if we're moving already. 
+			 * If we are then we just ignore any new instructions to move.
+			 * Only a collision can change a movement that's in progress.
 			 */
-			if (_movement == Movement.NONE)
+			if (_movement == Movement.NONE) // MineCart isn't in the middle of something, so we'll accept new movement.
 			{
-				_movement = this.convertInputEventToMovement(event);
-				/*
-				 * New Animation sequence is set by the current movement of the sprite.
-				 */
-				_currentAnmationSequence = this.getAppropriateAnimationSequence(_movement, _spriteState);
-				_currentAnimationFrame = 0; 
+				_movement = this.convertInputEventToMovement(event); // Find out what movement to do.
+				
+				if (_movement != Movement.NONE) // If there's a movement, start it.
+				{
+					this.startNewMovement(event);
+				}
+				else
+				{
+					/*
+					 * NO MOVEMENT, SO WE DON'T CONTINUE UPDATE
+					 */
+					return;
+				}
 			}
+	
 			
 			boolean endofScreen = this.isSpriteAtEndOfScreen();
 			boolean startofScreen = this.isSpriteAtStartOfScreen();
 			
+			/*
+			 * TODO AB - 
+			 * 1. Is SpriteState right here? Should this be done in handleCollision.
+			 * 2. Collisions can interrupt a movement in progress!!!
+			 */
 			switch (_movement) 
 			{
 				case LEFT:
-				{
+				{	
 					_spriteState = this.moveLeft(endofScreen, startofScreen);
 					break;
 				}
@@ -172,19 +202,71 @@ public class MineCartSprite extends BasicSprite
 					_spriteState = this.jumpRight(endofScreen, startofScreen);
 					break;
 				}
-				default: // RIGHT
+				case FALL: // TODO A Jump movement ends transforms to a Fall movement
+				{
+					_spriteState = this.fall(endofScreen, startofScreen);
+					break;
+				}
+				case RIGHT:
 				{
 					_spriteState = this.moveRight(endofScreen, startofScreen);
 					break;
 				}
+				default: // NONE
+				{
+					break;
+				}
 			}
 			
-			/*
-			 * TODO AB When a movement is complete, set Movement to NONE
-			 */
+			if (this.getLocation().x == _endX
+					&& this.getLocation().y == _endY)
+			{
+				this.endMovement();
+			}
 		}
 	}
 	
+	/**
+	 * Set up variables for a new movement.
+	 * @param event
+	 */
+	private void startNewMovement(InputEvent event)
+	{
+		
+		/*
+		 * New Animation sequence is set by the current movement of the sprite.
+		 */
+		_currentAnmationSequence = this.getAppropriateAnimationSequence(_movement, _spriteState);
+		_currentAnimationFrame = 0; 
+		_startX = this.getLocation().x;
+		_startY = this.getLocation().y;
+		Vector endPosition = this.calculateEndPosition(_movement);
+		_endX = endPosition.x;
+		_endY = endPosition.y;
+	}
+	
+	/**
+	 * 
+	 */
+	private void endMovement()
+	{
+		_movement = Movement.NONE;
+	}
+	
+	
+	private Vector calculateEndPosition(Movement movement)
+	{
+		Vector vector = new Vector();
+		
+		return vector;
+	}
+	
+	/**
+	 * Move left a few paces.
+	 * @param endofScreen
+	 * @param startofScreen
+	 * @return
+	 */
 	private SpriteState moveLeft(boolean endofScreen, boolean startofScreen)
 	{
 //		if (!startofScreen && )
@@ -192,6 +274,12 @@ public class MineCartSprite extends BasicSprite
 		return _spriteState;
 	}
 	
+	/**
+	 * 
+	 * @param endofScreen
+	 * @param startofScreen
+	 * @return
+	 */
 	private SpriteState jumpLeft(boolean endofScreen, boolean startofScreen)
 	{
 		// TODO AB - Falling is part of Jump cycle
@@ -199,12 +287,21 @@ public class MineCartSprite extends BasicSprite
 		return _spriteState;
 	}
 	
+	/**
+	 * Move right a few paces
+	 * @param endofScreen
+	 * @param startofScreen
+	 * @return
+	 */
 	private SpriteState moveRight(boolean endofScreen, boolean startofScreen)
 	{
 		// When movement is complete, set to NONE
 		return _spriteState;
 	}
 	
+	/**
+	 * Jump to the Right
+	 */
 	private SpriteState jumpRight(boolean endofScreen, boolean startofScreen)
 	{
 		// TODO AB - Falling is part of Jump cycle
@@ -213,12 +310,47 @@ public class MineCartSprite extends BasicSprite
 		return _spriteState;
 	}
 	
+	private SpriteState fall(boolean endofScreen, boolean startofScreen)
+	{
+		return _spriteState;
+	}
 	
 	@Override
 	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
 		_collidingSprite = collisionSprite; // TODO AB - This needs to be set to NULL after collision.
 		_collisionType = collisionType;// TODO AB - This needs to be set to NONE after collision.
+		
+		
+		switch (collisionSprite.getType()) 
+		{
+			case GOODIE:
+			{	
+				// TODO Increase counter and destroy Sprite.
+				break;
+			}
+			case ENEMY:
+			{	
+				// TODO Decrease Life, and change movement to fall.
+				break;
+			}
+			case OBSTACLE:
+			{	
+				// Movement will be prevented in move methods.
+				// What happens if Sprite lands on top of Obstacle??
+				break;
+			}
+			case PLATFORM:
+			{	
+				// Change movement to None and ensure location of MineCart is on top of Platrform.
+				break;
+			}
+			default:
+			{
+				// We don't care about other types.
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -330,8 +462,7 @@ public class MineCartSprite extends BasicSprite
 				default:
 				{
 					/*
-					 * Don't change the current animation sequence if
-					 * we don't know what to do.
+					 * FALL, NONE
 					 */
 					imageSequence = _currentAnmationSequence;
 					break;
