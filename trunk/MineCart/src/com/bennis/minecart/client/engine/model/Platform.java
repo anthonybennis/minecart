@@ -172,7 +172,7 @@ abstract public class Platform implements ISprite
 	abstract public List<Line> createLineSegments();
 
 	@Override
-	public boolean doSpritesCollide() 
+	public boolean doSpritesCollide(ISprite sprite) 
 	{
 		// TODO AB
 		return false;
