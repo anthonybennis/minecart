@@ -57,7 +57,7 @@ public interface ISprite
 	 */
 	public void handleCollision(ISprite collisionSprite);	
 	
-	public boolean doSpritesCollide();
+	public boolean doSpritesCollide(ISprite sprite);
 	
 	/**
 	 * A layer dictates a Sprites paint order. Those at the back are painted
