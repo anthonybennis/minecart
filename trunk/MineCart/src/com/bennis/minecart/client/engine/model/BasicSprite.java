@@ -191,9 +191,15 @@ abstract public class BasicSprite implements ISprite
 		
 		if (collides)
 		{
-			/*
-			 * TODO AB - Calculate Collision direction.
-			 */
+			Vector thisSpritesCenter = rectangle.getCenter();
+			Vector collidingSpritesCenter = sprite.getBounds().getCenter();
+			
+			if (thisSpritesCenter.x > collidingSpritesCenter.x
+					&& thisSpritesCenter.y > collidingSpritesCenter.y)
+			{
+				
+			}
+			
 			collision = Collision.RIGHT;
 		}
 		
