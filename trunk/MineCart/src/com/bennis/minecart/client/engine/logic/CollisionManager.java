@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bennis.minecart.client.engine.model.ISprite;
+import com.bennis.minecart.client.engine.model.ISprite.Collision;
 import com.bennis.minecart.client.engine.model.ISprite.Type;
 import com.bennis.minecart.client.engine.model.Scene;
 
@@ -20,6 +21,7 @@ public class CollisionManager
 	public void handleCollisions(Scene scene)
 	{
 		List<ISprite> sprites = this.getCollidableSprites(scene);
+		Collision collision;
 		/*
 		 * Check every sprite against every other sprite to see if they
 		 * collide.
@@ -30,9 +32,10 @@ public class CollisionManager
 			{
 				if (iSprite != sprite)
 				{
-					if (iSprite.doSpritesCollide(sprite))
+					collision = iSprite.getCollisionType(sprite); 
+					if (collision != Collision.NONE)
 					{
-						iSprite.handleCollision(sprite);
+						iSprite.handleCollision(sprite,collision);
 					}
 				}
 			}

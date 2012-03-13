@@ -148,7 +148,7 @@ abstract public class Platform implements ISprite
 	}
 
 	@Override
-	public void handleCollision(ISprite collisionSprite) 
+	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
 		/*
 		 * Nothing to do here. Platform doesn't collide with anything,
@@ -172,10 +172,9 @@ abstract public class Platform implements ISprite
 	abstract public List<Line> createLineSegments();
 
 	@Override
-	public boolean doSpritesCollide(ISprite sprite) 
+	public Collision getCollisionType(ISprite sprite) 
 	{
-		// TODO AB
-		return false;
+		return Collision.NONE;
 	}
 	
 	@Override

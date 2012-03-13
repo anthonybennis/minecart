@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class ButtonPanel 
 {
-	private enum BUTTON_TYPE{LEFT, LEFT_JUMP,RIGHT, RIGHT_JUMP, PAUSE, EXIT};
+	public enum BUTTON_TYPE{LEFT, LEFT_JUMP,RIGHT, RIGHT_JUMP, PAUSE, EXIT};
 	private final String BUTTON_WIDTH = "100px"; 
 	private final AGame _game;
 	
