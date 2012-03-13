@@ -23,6 +23,7 @@ public class SpriteManager
 	private SpriteFactory _spriteFactory;
 	private Canvas _canvas;
 	private Canvas _bufferCanvas;
+	private CollisionManager _collisionManager;
 	/*
 	 * Debug: Frame rate.
 	 */
@@ -39,6 +40,7 @@ public class SpriteManager
 		_bufferCanvas = bufferCanvas;
 		_canvas = canvas;
 		_starttime = System.currentTimeMillis();
+		_collisionManager = new CollisionManager();
 	}
 	
 	/**
@@ -82,12 +84,21 @@ public class SpriteManager
 		this.updateLayer(event,this.getScene().getMiddleLayer());
 		this.updateLayer(event,this.getScene().getFrontLayer());
 		this.updateLayer(event,this.getScene().getGlassLayer());
+		
+		/*
+		 * Handle collisions
+		 */
+		_collisionManager.handleCollisions(getScene());
+		
 		/*
 		 * DRAW
 		 */
 		this.draw();
 	}
 	
+	/**
+	 * 
+	 */
 	public void draw()
 	{	
 		/*
@@ -110,6 +121,10 @@ public class SpriteManager
 		this.renderToCanvas();
 	}
 	
+	/**
+	 * 
+	 * @param canvas
+	 */
 	private void clearCanvas(Canvas canvas)
 	{
 		canvas.getContext2d().setFillStyle(GUIConstants.BLACK);
@@ -145,6 +160,10 @@ public class SpriteManager
 		this.disposeSprite(this.getScene().getGlassLayer());
 	}
 	
+	/**
+	 * 
+	 * @param layer
+	 */
 	private void disposeSprite(List<ISprite> layer)
 	{
 		List<ISprite> spritesToRemove = new ArrayList<ISprite>();
@@ -167,6 +186,11 @@ public class SpriteManager
 		}
 	}
 	
+	/**
+	 * 
+	 * @param event
+	 * @param layer
+	 */
 	private void updateLayer(InputEvent event, List<ISprite> layer)
 	{
 		for (ISprite iSprite : layer) 
@@ -189,6 +213,11 @@ public class SpriteManager
 		layer.clear();
 	}
 	
+	/**
+	 * 
+	 * @param layer
+	 * @param bufferCanvas
+	 */
 	private void drawLayer(List<ISprite> layer, Canvas bufferCanvas)
 	{
 		for (ISprite iSprite : layer) 
@@ -222,6 +251,10 @@ public class SpriteManager
 		frontContext.restore(); // TODO AB - Before deleting, make sure this isn't needed.
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Scene getScene()
 	{
 		Scene scene = null;
@@ -232,6 +265,10 @@ public class SpriteManager
 		return scene;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public SpriteFactory getSpriteFactory()
 	{
 		return _spriteFactory;
