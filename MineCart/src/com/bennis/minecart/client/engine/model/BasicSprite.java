@@ -144,37 +144,48 @@ abstract public class BasicSprite implements ISprite
 	}
 	
 	/**
-	 * 
+	 * Checks the basic sprites Image array.
 	 * @return
 	 */
 	protected boolean haveAllImagesLoaded()
 	{
+		return this.haveAllImagesLoaded(_imageElements);
+	}
+
+	/**
+	 * Allows you to check any image array to see if the images
+	 * are loaded.
+	 * @param images
+	 * @return
+	 */
+	protected boolean haveAllImagesLoaded(ImageElement[] images)
+	{
 		boolean imagesHaveLoaded = true;
-		
-		if (_imageElements != null)
-		{
-			for (ImageElement image: _imageElements) 
+			
+			if (_imageElements != null)
 			{
-				if (image == null)
+				for (ImageElement image: _imageElements) 
 				{
-					imagesHaveLoaded = false;
-					break;
+					if (image == null)
+					{
+						imagesHaveLoaded = false;
+						break;
+					}
 				}
 			}
-		}
-		else
-		{
-			imagesHaveLoaded = false;
-		}
-		
-		return imagesHaveLoaded;
+			else
+			{
+				imagesHaveLoaded = false;
+			}
+			
+			return imagesHaveLoaded;
 	}
 	
 	@Override
-	public boolean doSpritesCollide() 
+	public boolean doSpritesCollide(ISprite sprite) 
 	{
-		// TODO AB - Need to getBounds I guess?
-		return false;
+		Rectangle rectangle = this.getBounds();
+		return rectangle.intersects(sprite.getBounds());
 	}
 	
 	@Override
