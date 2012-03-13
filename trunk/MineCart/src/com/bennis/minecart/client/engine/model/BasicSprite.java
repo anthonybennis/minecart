@@ -162,9 +162,9 @@ abstract public class BasicSprite implements ISprite
 	{
 		boolean imagesHaveLoaded = true;
 			
-			if (_imageElements != null)
+			if (images != null && images.length > 0)
 			{
-				for (ImageElement image: _imageElements) 
+				for (ImageElement image: images) 
 				{
 					if (image == null)
 					{

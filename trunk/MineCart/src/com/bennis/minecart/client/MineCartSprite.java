@@ -41,7 +41,6 @@ public class MineCartSprite extends BasicSprite
 		
 		this.loadAllImageSequences();
 		this.setLocation(150, 377); // Starting position
-		_currentAnmationSequence = _movingRightAnmationSequence;
 	}
 	
 	/**
@@ -52,6 +51,8 @@ public class MineCartSprite extends BasicSprite
 		_movingRightAnmationSequence = this.createMovingRightAnimationSequence();
 		_movingLeftAnmationSequence = this.createMovingLeftAnimationSequence();
 		_collidingAnmationSequence = this.createCollidingAnimationSequence();
+		
+		_currentAnmationSequence = _movingRightAnmationSequence;
 	}
 	
 	/**
@@ -110,15 +111,19 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private ImageElement[] createAnimationSequence(String[] imageNames)
 	{
-		ImageElement[] normalSequence = new ImageElement[0];
-		return normalSequence;
+		ImageElement[] animationSequence = new ImageElement[imageNames.length];
+		
+		for (int i = 0; i < imageNames.length; i++) 
+		{
+			animationSequence[i] = this.getImageLoader().getImage(imageNames[i]);
+		}
+		
+		return animationSequence;
 	}
 
 	@Override
 	public void update(InputEvent event) 
-	{
-		this.setLocation(150, 377); 
-		
+	{		
 		if (event != null)
 		{
 			/*
@@ -224,7 +229,7 @@ public class MineCartSprite extends BasicSprite
 		 * This is a multi animation Sprite. We should
 		 * examine extending BasicSprite to handle this.
 		 */
-		String[] imageNames = new String[5];
+		String[] imageNames = new String[4];
 		imageNames[0] = "images/minecart/MineCartRight00.png";
 		imageNames[1] = "images/minecart/MineCartRight01.png";
 		imageNames[2] = "images/minecart/MineCartRight02.png";
@@ -257,7 +262,7 @@ public class MineCartSprite extends BasicSprite
 			}
 			
 			ImageElement currentFrame = _currentAnmationSequence[_currentAnimationFrame];
-			canvas.getContext2d().rotate(rotationAngle);
+//			canvas.getContext2d().rotate(rotationAngle);
 			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
 			
 			// Update animation every second refresh.
@@ -270,7 +275,7 @@ public class MineCartSprite extends BasicSprite
 			/*
 			 * End rotation
 			 */
-			canvas.getContext2d().rotate(-rotationAngle);
+//			canvas.getContext2d().rotate(-rotationAngle);
 		}
 	}
 	
