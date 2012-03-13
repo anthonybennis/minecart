@@ -11,11 +11,11 @@ import java.util.List;
  */
 public class Scene 
 {
-	private List<ISprite> _glassLayer = new ArrayList<ISprite>();
+	private List<ISprite> _glassLayer = new ArrayList<ISprite>(); // No collision detection in this layer.
 	private List<ISprite> _frontLayer = new ArrayList<ISprite>();
 	private List<ISprite> _middleLayer = new ArrayList<ISprite>();
 	private List<ISprite> _backLayer = new ArrayList<ISprite>();
-	private List<ISprite> _backgroundLayer = new ArrayList<ISprite>();
+	private List<ISprite> _backgroundLayer = new ArrayList<ISprite>(); // No collision detection in this layer.
 	
 	public List<ISprite> getGlassLayer()
 	{
