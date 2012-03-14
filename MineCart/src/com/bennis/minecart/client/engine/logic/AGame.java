@@ -2,7 +2,6 @@ package com.bennis.minecart.client.engine.logic;
 
 import com.bennis.minecart.client.engine.model.Scene;
 import com.google.gwt.canvas.client.Canvas;
-
 /**
  * This class brings the game altogther. Here you
  * create your own sprites, background and handle the

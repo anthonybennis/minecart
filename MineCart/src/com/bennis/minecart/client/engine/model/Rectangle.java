@@ -194,12 +194,41 @@ public class Rectangle
         	(th < ty || th > ry));
         }
         
+        /**
+         * 
+         * @return
+         */
         public Vector getCenter()
         {
         	Vector center = new Vector();
-        	double centerX = (this.getX() + (this.getWidth()/2));
-        	double centerY = (this.getY() + (this.getHeight()/2));
+        	center.x = (this.getX() + (this.getWidth()/2));
+        	center.y = (this.getY() + (this.getHeight()/2));
         	
         	return center;
+        }
+        
+        public boolean contains(double xPos, double yPos) 
+        {
+        	if(xPos < x)
+        	{
+        	  return false;
+        	}
+        	 
+        	if(xPos > x + this.getWidth())
+        	{
+        	  return false;
+        	}
+        	
+        	if(yPos < y)
+        	{
+        	  return false;
+        	}
+        	
+        	if(yPos > y + this.getHeight())
+        	{
+        	  return false;
+        	}
+        	 
+        	 return true;
         }
 }

@@ -17,15 +17,18 @@ import com.google.gwt.canvas.client.Canvas;
  */
 abstract public class Platform implements ISprite 
 {
+	private static final int LINE_THICKNESS = 3;
 	private Vector _location = new Vector();
 	private boolean _selected = false;
 	private boolean _disposed = false;
+	private double _width = 0;
 	List<Line> _lineSegments; // TODO AB Use 2D int array instead of objs.
 	
 	public Platform()
 	{
 		_lineSegments = this.createLineSegments();
 		this.setupInitialLocation();
+		_width = this.calculateWidth();
 	}
 	
 	/**
@@ -36,6 +39,22 @@ abstract public class Platform implements ISprite
 	{
 		Line firstLine = _lineSegments.get(0);
 		this.setLocation(firstLine.getX(), firstLine.getY());
+	}
+	
+	/**
+	 * Calculates the entire width of all segments
+	 * @return
+	 */
+	private double calculateWidth()
+	{
+		double width = 0;
+		
+		for (Line line : _lineSegments) 
+		{
+			width = width + (line.getX1() - line.getX());
+		}
+		
+		return width;
 	}
 	
 	/**
@@ -109,7 +128,7 @@ abstract public class Platform implements ISprite
 		{
 			canvas.getContext2d().beginPath();
 			canvas.getContext2d().setStrokeStyle("white");
-			canvas.getContext2d().setLineWidth(3);
+			canvas.getContext2d().setLineWidth(LINE_THICKNESS);
 			canvas.getContext2d().moveTo(line.getX(), line.getY());
 			canvas.getContext2d().lineTo(line.getX1(), line.getY1());
 			canvas.getContext2d().closePath();
@@ -186,9 +205,6 @@ abstract public class Platform implements ISprite
 	@Override
 	public Rectangle getBounds() 
 	{
-		/*
-		 * A Platform does not have any bounds
-		 */
-		return new Rectangle();
+		return new Rectangle(this.getLocation().x, this.getLocation().y, _width,1);
 	}
 }
