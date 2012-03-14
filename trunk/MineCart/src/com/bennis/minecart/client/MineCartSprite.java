@@ -47,8 +47,8 @@ public class MineCartSprite extends BasicSprite
 	private Movement _movement = Movement.NONE;
 	private double _endX;
 	private double _endY;
-	private final double MOVE_DISTANCE = 20;
-	private final double MOVE_SPEED = 5;
+	private final double MOVE_DISTANCE = 50; 
+	private final double MOVE_SPEED = 3;
 	
 	
 	/**
@@ -72,6 +72,7 @@ public class MineCartSprite extends BasicSprite
 		_collidingAnmationSequence = this.createCollidingAnimationSequence();
 		
 		_currentAnmationSequence = _movingRightAnmationSequence;
+		this.setImageElements(_currentAnmationSequence); // Super class needs this to calculate bounds.
 	}
 	
 	/**
@@ -214,11 +215,7 @@ public class MineCartSprite extends BasicSprite
 				}
 			}
 			
-			if (this.getLocation().x == _endX
-					&& this.getLocation().y == _endY)
-			{
-				this.endMovement();
-			}
+			
 		
 	}
 	
@@ -256,12 +253,11 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private void calculateEndPosition(Movement movement)
 	{
-		Vector alignedVector;
+		Vector alignedVector = this.alignVectorToNearestPlatform(this.getLocation());
 		switch (movement) 
 		{
 			case LEFT:
 			{
-				alignedVector = this.alignVectorToNearestPlatform(this.getLocation());
 				if (alignedVector != null)
 				{
 					_endX = alignedVector.x - MOVE_DISTANCE;
@@ -281,6 +277,17 @@ public class MineCartSprite extends BasicSprite
 			}
 			case RIGHT:
 			{
+				if (alignedVector != null)
+				{
+					_endX = alignedVector.x + MOVE_DISTANCE;
+					_endY = alignedVector.y;
+				}
+				else
+				{
+					// TODO AB - There's no platform to move to! 
+					this.endMovement();
+				}
+				
 				break;
 			}
 			case RIGHT_JUMP:
@@ -322,6 +329,14 @@ public class MineCartSprite extends BasicSprite
 			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
 		}
 		
+		/*
+		 * Conditions to end  movement 
+		 */
+		if (this.getLocation().x <= _endX)
+		{
+			this.endMovement();
+		}
+		
 		return _spriteState;
 	}
 	
@@ -346,7 +361,30 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState moveRight(boolean endofScreen, boolean startofScreen)
 	{
-		// When movement is complete, set to NONE
+		/*
+		 * We can move LEFT if we're not at the start of the screen,
+		 * and there isn't any obstacle or enemy in our way.
+		 */
+		boolean canMoveRight = (_collidingSprite == null) || (_collidingSprite != null && _collidingSprite.getBounds().getCenter().x <=
+				this.getBounds().getCenter().x);
+		
+		if (!endofScreen && canMoveRight)
+		{			
+			/*
+			 * Move a few steps towards the end x
+			 * We only move horizontally
+			 */
+			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
+		}
+		
+		/*
+		 * Conditions to end  movement 
+		 */
+		if (this.getLocation().x >= _endX)
+		{
+			this.endMovement();
+		}
+		
 		return _spriteState;
 	}
 	
@@ -607,7 +645,7 @@ public class MineCartSprite extends BasicSprite
 		 * TODO AB
 		 * Do we need to add buffer of image width?
 		 */
-		return (this.getLocation().x > GUIConstants.WIDTH);
+		return ((this.getLocation().x + this.getBounds().getWidth()) > GUIConstants.WIDTH);
 	}
 	
 	/**
