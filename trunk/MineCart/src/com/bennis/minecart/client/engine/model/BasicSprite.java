@@ -45,6 +45,11 @@ abstract public class BasicSprite implements ISprite
 	{
 		return _imageElements;
 	}
+	
+	public void setImageElements(ImageElement[] imageElements)
+	{
+		_imageElements = imageElements;
+	}
 
 	@Override
 	public Vector getLocation() 
