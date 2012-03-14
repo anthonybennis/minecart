@@ -80,7 +80,7 @@ public class MineCartSpriteFactory extends SpriteFactory
 		/*
 		 * Main sprite - The Mine Cart
 		 */
-		MineCartSprite mineCart = new MineCartSprite(this.getImageLoader());
+		MineCartSprite mineCart = new MineCartSprite(this.getImageLoader(), scene);
 		scene.storeSprite(mineCart);
 		
 		// TODO AB - Create Game Score Sprite

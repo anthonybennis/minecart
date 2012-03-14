@@ -3,6 +3,8 @@ package com.bennis.minecart.client.engine.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bennis.minecart.client.engine.model.Layer.Layers;
+
 /**
  * Data store for all ISprites. The Scene is aware of layers,
  * and stores ISprites in their appropriate layer.
@@ -40,6 +42,44 @@ public class Scene
 	public List<ISprite> getBackgroundLayer()
 	{
 		return _backgroundLayer;
+	}
+	
+	public List<ISprite> getLayer(Layers layer)
+	{
+		List<ISprite> list = null;
+				
+		switch (layer) 
+		{
+			case BACKGROUND:
+			{
+				list = this.getBackgroundLayer();
+				break;
+			}
+			case BACK:
+			{
+				list = this.getBackLayer();
+				break;
+			}
+			case MIDDLE:
+			{
+				list = this.getMiddleLayer();
+				break;
+			}
+			case FRONT:
+			{
+				list = this.getFrontLayer();
+				break;
+			}
+			case GLASS:
+			{
+				list = this.getLayer(layer);
+				break;
+			}
+			default:
+				break;
+		}
+		
+		return list;
 	}
 	
 	/**

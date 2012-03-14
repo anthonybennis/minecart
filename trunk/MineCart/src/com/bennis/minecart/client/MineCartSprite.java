@@ -3,9 +3,12 @@ package com.bennis.minecart.client;
 import com.bennis.minecart.client.ButtonPanel.BUTTON_TYPE;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
+import com.bennis.minecart.client.engine.logic.PlatformUtility;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
+import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
@@ -16,6 +19,7 @@ import com.google.gwt.dom.client.ImageElement;
  */
 public class MineCartSprite extends BasicSprite 
 {	
+	private Scene _scene;
 	/*
 	 * States
 	 */
@@ -41,19 +45,19 @@ public class MineCartSprite extends BasicSprite
 	 * Movement
 	 */
 	private Movement _movement = Movement.NONE;
-	private double _startX;
-	private double _startY;
 	private double _endX;
 	private double _endY;
+	private final double MOVE_DISTANCE = 20;
+	private final double MOVE_SPEED = 5;
 	
 	
 	/**
 	 * Constructor
 	 */
-	public MineCartSprite(ImageLoader imageLoader)
+	public MineCartSprite(ImageLoader imageLoader,Scene scene)
 	{
 		super(Layers.FRONT,imageLoader, Type.USER_MOVEABLE);
-		
+		_scene = scene;
 		this.loadAllImageSequences();
 		this.setLocation(150, 377); // Starting position
 	}
@@ -139,21 +143,12 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void update(InputEvent event) 
 	{		
+		/*
+		 * User Input + Current State + Collision will decide
+		 * what this Sprite will do.
+		 */
 		if (event != null)
 		{
-			/*
-			 * User Input + Current State + Collision will decide
-			 * what this Sprite will do.
-			 * 
-			 * SET MOVEMENT DIRECTION: 
-			 * MOVING_LEFT - Obstacles and start of canvas will prevent this. Check collisions.
-			 * MOVING_RIGHT - Obstacles and end of canvas will prevent this. Check collisions.
-			 * FALLING_DOWN - Can collide with enemies and platform stops falling movement.
-			 * JUMPING (DON'T COLLIDE WITH PLATFORM) - Hitting obstacle from below and enemies.
-			 * DONT_MOVE - No input from user, just stay where you are.
-			 */
-			
-			
 			/*
 			 * Check to see if we're moving already. 
 			 * If we are then we just ignore any new instructions to move.
@@ -165,7 +160,7 @@ public class MineCartSprite extends BasicSprite
 				
 				if (_movement != Movement.NONE) // If there's a movement, start it.
 				{
-					this.startNewMovement(event);
+					this.startNewMovement(_movement, _spriteState);
 				}
 				else
 				{
@@ -175,6 +170,7 @@ public class MineCartSprite extends BasicSprite
 					return;
 				}
 			}
+		}
 	
 			
 			boolean endofScreen = this.isSpriteAtEndOfScreen();
@@ -223,26 +219,22 @@ public class MineCartSprite extends BasicSprite
 			{
 				this.endMovement();
 			}
-		}
+		
 	}
 	
 	/**
 	 * Set up variables for a new movement.
 	 * @param event
 	 */
-	private void startNewMovement(InputEvent event)
+	private void startNewMovement(Movement movement, SpriteState state)
 	{
-		
 		/*
 		 * New Animation sequence is set by the current movement of the sprite.
 		 */
-		_currentAnmationSequence = this.getAppropriateAnimationSequence(_movement, _spriteState);
+		_currentAnmationSequence = this.getAppropriateAnimationSequence(movement, state);
 		_currentAnimationFrame = 0; 
-		_startX = this.getLocation().x;
-		_startY = this.getLocation().y;
-		Vector endPosition = this.calculateEndPosition(_movement);
-		_endX = endPosition.x;
-		_endY = endPosition.y;
+		this.calculateEndPosition(_movement);
+		
 	}
 	
 	/**
@@ -253,12 +245,57 @@ public class MineCartSprite extends BasicSprite
 		_movement = Movement.NONE;
 	}
 	
-	
-	private Vector calculateEndPosition(Movement movement)
+	/**
+	 * Every movement results in the Sprite ending up
+	 * in a new position. We need to know this position
+	 * before we start the movement, as the movement action
+	 * just iteratively moves the sprite in that direction.
+	 * 
+	 * @param movement
+	 * @return
+	 */
+	private void calculateEndPosition(Movement movement)
 	{
-		Vector vector = new Vector();
-		
-		return vector;
+		Vector alignedVector;
+		switch (movement) 
+		{
+			case LEFT:
+			{
+				alignedVector = this.alignVectorToNearestPlatform(this.getLocation());
+				if (alignedVector != null)
+				{
+					_endX = alignedVector.x - MOVE_DISTANCE;
+					_endY = alignedVector.y;
+				}
+				else
+				{
+					// TODO AB - There's no platform to move to! 
+					this.endMovement();
+				}
+				
+				break;
+			}
+			case LEFT_JUMP:
+			{
+				break;
+			}
+			case RIGHT:
+			{
+				break;
+			}
+			case RIGHT_JUMP:
+			{
+				break;
+			}
+			case FALL:
+			{
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -269,8 +306,22 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState moveLeft(boolean endofScreen, boolean startofScreen)
 	{
-//		if (!startofScreen && )
-		// When movement is complete, set to NONE
+		/*
+		 * We can move LEFT if we're not at the start of the screen,
+		 * and there isn't any obstacle or enemy in our way.
+		 */
+		boolean canMoveLeft = (_collidingSprite == null) || (_collidingSprite != null && _collidingSprite.getBounds().getCenter().x >=
+				this.getBounds().getCenter().x);
+		
+		if (!startofScreen && canMoveLeft)
+		{			
+			/*
+			 * Move a few steps towards the end x
+			 * We only move horizontally
+			 */
+			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
+		}
+		
 		return _spriteState;
 	}
 	
@@ -318,39 +369,83 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
-		_collidingSprite = collisionSprite; // TODO AB - This needs to be set to NULL after collision.
-		_collisionType = collisionType;// TODO AB - This needs to be set to NONE after collision.
-		
+		/*
+		 * Not used.
+		 * TODO AB Remove from API?
+		 */
+		_collisionType = collisionType;
 		
 		switch (collisionSprite.getType()) 
 		{
 			case GOODIE:
 			{	
-				// TODO Increase counter and destroy Sprite.
+				// TODO Increase counter
+				collisionSprite.dispose();
+				_collidingSprite = null;
 				break;
 			}
 			case ENEMY:
 			{	
-				// TODO Decrease Life, and change movement to fall.
+				// TODO Decrease Life
+				_collidingSprite = collisionSprite;
+				this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
 				break;
 			}
 			case OBSTACLE:
 			{	
-				// Movement will be prevented in move methods.
-				// What happens if Sprite lands on top of Obstacle??
+				_collidingSprite = collisionSprite;
+				_collidingSprite = null;
 				break;
 			}
 			case PLATFORM:
 			{	
-				// Change movement to None and ensure location of MineCart is on top of Platrform.
+				Platform platform = (Platform)collisionSprite;
+				this.alignVectorToPlatform(this.getLocation(),platform);
+				_collidingSprite = null;
 				break;
 			}
 			default:
 			{
-				// We don't care about other types.
+				/*
+				 * We only set the colliding sprite if it's a Sprite
+				 * that will affect movement of this sprite.
+				 */
+				_collidingSprite = null;
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * 
+	 * @param vector
+	 * @param platform
+	 * @return
+	 */
+	private Vector alignVectorToNearestPlatform(Vector vector)
+	{
+		Vector aligendVector = null;
+		
+		Platform endPositionPlatform = PlatformUtility.getNearestPlatform(_scene, vector.x, vector.y, Layers.MIDDLE);
+		if (endPositionPlatform != null)
+		{
+			aligendVector = this.alignVectorToPlatform(vector, endPositionPlatform);
+		}
+		
+		return aligendVector;
+	}
+	
+	/**
+	 * 
+	 * @param vector
+	 * @param platform
+	 * @return
+	 */
+	private Vector alignVectorToPlatform(Vector vector, Platform platform)
+	{
+		Vector aligendVector = new Vector(vector.x, vector.y);
+		aligendVector.y = platform.getBounds().getY();
+		return aligendVector;
 	}
 
 	@Override
@@ -476,6 +571,7 @@ public class MineCartSprite extends BasicSprite
 		
 		return imageSequence;
 	}
+	
 	
 	private Movement convertInputEventToMovement(InputEvent event)
 	{
