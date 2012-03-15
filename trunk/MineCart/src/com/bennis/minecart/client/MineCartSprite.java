@@ -1,6 +1,6 @@
 package com.bennis.minecart.client;
 
-import com.bennis.minecart.client.ButtonPanel.BUTTON_TYPE;
+import com.bennis.minecart.client.ButtonPanel.TYPE;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.PlatformUtility;
@@ -615,19 +615,19 @@ public class MineCartSprite extends BasicSprite
 	{
 		Movement movement = Movement.RIGHT;
 		
-		if (event.getEventID() == BUTTON_TYPE.LEFT.name())
+		if (event.getEventID() == TYPE.LEFT.name())
 		{
 			movement = Movement.LEFT;
 		}
-		else if (event.getEventID() == BUTTON_TYPE.RIGHT.name())
+		else if (event.getEventID() == TYPE.RIGHT.name())
 		{
 			movement = Movement.RIGHT;
 		}
-		else if (event.getEventID() == BUTTON_TYPE.LEFT_JUMP.name())
+		else if (event.getEventID() == TYPE.LEFT_JUMP.name())
 		{
 			movement = Movement.LEFT_JUMP;
 		}
-		else if (event.getEventID() == BUTTON_TYPE.RIGHT_JUMP.name())
+		else if (event.getEventID() == TYPE.RIGHT_JUMP.name())
 		{
 			movement = Movement.RIGHT_JUMP;
 		}
