@@ -17,7 +17,7 @@ public class GameLoop
      //should we cap the frame rate?
      private static boolean _capFrameRate;
      //frame rate cap amount (ms)
-     private static int _capAmount = 42;
+     private static int _capAmount = 32;
      //the game timer
      private static Timer _gameTicker;
 	 
@@ -82,7 +82,8 @@ public class GameLoop
 	
 	  public static void capFrameRate()
 	  {
-          _capFrameRate = (System.currentTimeMillis() - _timeStamp)<_capAmount;
+		  long frameRate = (System.currentTimeMillis() - _timeStamp);
+          _capFrameRate = frameRate>_capAmount;
           _timeStamp = System.currentTimeMillis();
 	  }
 }

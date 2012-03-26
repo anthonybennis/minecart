@@ -3,6 +3,7 @@ package com.bennis.minecart.client.engine.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bennis.minecart.client.RailwayTrack;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.ISprite.Collision;
 import com.bennis.minecart.client.engine.model.ISprite.Type;
@@ -32,6 +33,11 @@ public class CollisionManager
 			{
 				if (iSprite != sprite)
 				{
+					if (sprite instanceof RailwayTrack)
+					{
+//						int a = 2;
+						collision = iSprite.getCollisionType(sprite); 
+					}
 					collision = iSprite.getCollisionType(sprite); 
 					if (collision != Collision.NONE)
 					{

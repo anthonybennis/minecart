@@ -6,7 +6,6 @@ import com.bennis.minecart.client.engine.model.Scene;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**

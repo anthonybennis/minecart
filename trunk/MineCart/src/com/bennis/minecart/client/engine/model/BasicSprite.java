@@ -33,6 +33,7 @@ abstract public class BasicSprite implements ISprite
 	{
 		_layer = layer;
 		_imageLoader = imageLoader;
+		_type = type;
 		this.createBounds();
 	}
 	
