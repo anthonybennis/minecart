@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.RootPanel;
  */
 public class ButtonPanel 
 {
-	public enum TYPE{LEFT, LEFT_JUMP,RIGHT, RIGHT_JUMP, PAUSE, EXIT, MOUSE_UP};
+	public enum ButtonClickEventType{LEFT, LEFT_JUMP,RIGHT, RIGHT_JUMP, PAUSE, EXIT, MOUSE_UP};
 	private final String BUTTON_WIDTH = "100px"; 
 	private final AGame _game;
 	
@@ -39,40 +39,41 @@ public class ButtonPanel
 		/*
 		 * Create LEFT button
 		 */
-		this.createButton(resources.leftButton(), TYPE.LEFT, flowPanel);
+		this.createButton(resources.leftButton(), ButtonClickEventType.LEFT, flowPanel);
 		
 		/*
 		 * Create LEFT Jump button
 		 */
-		this.createButton(resources.jumpButton(), TYPE.LEFT_JUMP, flowPanel);
+		this.createButton(resources.jumpButton(), ButtonClickEventType.LEFT_JUMP, flowPanel);
 		
 		/*
 		 * Create Pause Button
 		 */
-		this.createButton(resources.pauseButton(), TYPE.PAUSE, flowPanel);
+		this.createButton(resources.pauseButton(), ButtonClickEventType.PAUSE, flowPanel);
 		
 		/*
 		 * Create Exit button
 		 */
-		this.createButton(resources.pauseButton(), TYPE.EXIT, flowPanel);
+		this.createButton(resources.pauseButton(), ButtonClickEventType.EXIT, flowPanel);
 		
 		/*
 		 * Create RIGHT JUMP button
 		 */
-		this.createButton(resources.jumpButton(), TYPE.RIGHT_JUMP, flowPanel);
+		this.createButton(resources.jumpButton(), ButtonClickEventType.RIGHT_JUMP, flowPanel);
 		
 		/*
 		 * Create RIGHT button
 		 */	
-		this.createButton(resources.rightButton(), TYPE.RIGHT, flowPanel);
+		this.createButton(resources.rightButton(), ButtonClickEventType.RIGHT, flowPanel);
 	}
 	
-	private void createButton(ImageResource imageResource, TYPE type, HorizontalPanel panel)
+	private void createButton(ImageResource imageResource, ButtonClickEventType type, HorizontalPanel panel)
 	{
 		Image image = new Image(imageResource);
 		PushButton button = new PushButton(image);
 		button.setWidth(BUTTON_WIDTH);
 		button.addMouseDownHandler(new MineCardMouseDownHandler(type));
+		button.addMouseUpHandler(new MineCartMouseUpHandler());
 		// TODO AB - Add Mouse up handler!
 		// TODO AB - Add TouchHandler
 		// TODO AB - Movement now lasts as long as button is pressed down.
@@ -81,9 +82,9 @@ public class ButtonPanel
 	
 	class MineCartButtonListener implements ClickHandler
 	{
-		private TYPE _type;
+		private ButtonClickEventType _type;
 		
-		private MineCartButtonListener(TYPE type)
+		private MineCartButtonListener(ButtonClickEventType type)
 		{
 			_type = type;
 		}
@@ -91,7 +92,7 @@ public class ButtonPanel
 		@Override
 		public void onClick(ClickEvent event) 
 		{			
-			InputEvent inputEvent = new InputEvent(event, _type.name());
+			InputEvent inputEvent = new InputEvent(_type.name());
 			_game.setInput(inputEvent);
 		}
 	}
@@ -103,9 +104,9 @@ public class ButtonPanel
 	 */
 	class MineCardMouseDownHandler implements MouseDownHandler
 	{
-		private TYPE _type;
+		private ButtonClickEventType _type;
 		
-		private MineCardMouseDownHandler(TYPE type)
+		private MineCardMouseDownHandler(ButtonClickEventType type)
 		{
 			_type = type;
 		}
@@ -113,7 +114,8 @@ public class ButtonPanel
 		@Override
 		public void onMouseDown(MouseDownEvent event) 
 		{
-			
+			InputEvent inputEvent = new InputEvent(_type.name());
+			_game.setInput(inputEvent);
 		}
 	}
 	
@@ -127,7 +129,8 @@ public class ButtonPanel
 		@Override
 		public void onMouseUp(MouseUpEvent event) 
 		{
-			
+			InputEvent inputEvent = new InputEvent(ButtonClickEventType.MOUSE_UP.name());
+			_game.setInput(inputEvent);
 		}
 	}
 }

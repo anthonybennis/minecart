@@ -1,6 +1,5 @@
 package com.bennis.minecart.client.engine.logic;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 
 /**
  * Generic class for wrapping user input events
@@ -13,13 +12,11 @@ public class InputEvent
 	 * Use enum names for event IDs.
 	 */
 	private String _eventID;
-	private ClickEvent _event;
 	private boolean _consumed = false;
 	
-	public InputEvent(ClickEvent event, String eventID)
+	public InputEvent(String eventID)
 	{
 		_eventID = eventID;
-		_event = event; 
 	}
 	
 	public String getEventID()
@@ -30,11 +27,6 @@ public class InputEvent
 	public void setEventID(String eventID)
 	{
 		_eventID = eventID;
-	}
-	
-	public ClickEvent getClickEvent()
-	{
-		return _event;
 	}
 	
 	public void consume()

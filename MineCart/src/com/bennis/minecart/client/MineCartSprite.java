@@ -1,13 +1,13 @@
 package com.bennis.minecart.client;
 
-import com.bennis.minecart.client.ButtonPanel.TYPE;
+import com.bennis.minecart.client.ButtonPanel.ButtonClickEventType;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.PlatformUtility;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
-import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
 import com.google.gwt.canvas.client.Canvas;
@@ -23,7 +23,7 @@ public class MineCartSprite extends BasicSprite
 	/*
 	 * States
 	 */
-	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, FALL, NONE};
+	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, FALL, NONE, STOP};
 	private enum SpriteState{NORMAL, COLLIDE, FALLING};
 	
 	/*
@@ -155,12 +155,13 @@ public class MineCartSprite extends BasicSprite
 			 * If we are then we just ignore any new instructions to move.
 			 * Only a collision can change a movement that's in progress.
 			 */
-			if (_movement == Movement.NONE) // MineCart isn't in the middle of something, so we'll accept new movement.
+			Movement newMovement = this.convertInputEventToMovement(event); // Find out what movement to do.
+			
+			if (_movement == Movement.NONE || _movement == Movement.LEFT ||  _movement == _movement.RIGHT) 
 			{
-				_movement = this.convertInputEventToMovement(event); // Find out what movement to do.
-				
-				if (_movement != Movement.NONE) // If there's a movement, start it.
+				if (_movement != newMovement) // If there's a movement, start it.
 				{
+					_movement = newMovement;
 					this.startNewMovement(_movement, _spriteState);
 				}
 				else
@@ -171,6 +172,12 @@ public class MineCartSprite extends BasicSprite
 					return;
 				}
 			}
+			// Movement has been interrupted (Mouse Up/Collision
+			else if (newMovement == Movement.STOP)
+			{
+				this.startNewMovement(Movement.FALL, _spriteState);
+			}
+			
 		}
 	
 			
@@ -331,11 +338,13 @@ public class MineCartSprite extends BasicSprite
 		
 		/*
 		 * Conditions to end  movement 
+		 * UP event is detected on Button,
+		 * Or collision changes course.
 		 */
-		if (this.getLocation().x <= _endX)
-		{
-			this.endMovement();
-		}
+//		if (this.getLocation().x <= _endX)
+//		{
+//			this.endMovement();
+//		}
 		
 		return _spriteState;
 	}
@@ -376,14 +385,18 @@ public class MineCartSprite extends BasicSprite
 			 */
 			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
 		}
+		else
+		{
+			this.endMovement();
+		}
 		
 		/*
 		 * Conditions to end  movement 
 		 */
-		if (this.getLocation().x >= _endX)
-		{
-			this.endMovement();
-		}
+//		if (this.getLocation().x >= _endX)
+//		{
+//			this.endMovement();
+//		}
 		
 		return _spriteState;
 	}
@@ -401,6 +414,10 @@ public class MineCartSprite extends BasicSprite
 	
 	private SpriteState fall(boolean endofScreen, boolean startofScreen)
 	{
+		/*
+		 * TODO AB Keep moving down until we hit a Platform.
+		 */
+		_movement = Movement.NONE; // TEMP
 		return _spriteState;
 	}
 	
@@ -413,43 +430,46 @@ public class MineCartSprite extends BasicSprite
 		 */
 		_collisionType = collisionType;
 		
-		switch (collisionSprite.getType()) 
+		if (collisionSprite != null)
 		{
-			case GOODIE:
-			{	
-				// TODO Increase counter
-				collisionSprite.dispose();
-				_collidingSprite = null;
-				break;
-			}
-			case ENEMY:
-			{	
-				// TODO Decrease Life
-				_collidingSprite = collisionSprite;
-				this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
-				break;
-			}
-			case OBSTACLE:
-			{	
-				_collidingSprite = collisionSprite;
-				_collidingSprite = null;
-				break;
-			}
-			case PLATFORM:
-			{	
-				Platform platform = (Platform)collisionSprite;
-				this.alignVectorToPlatform(this.getLocation(),platform);
-				_collidingSprite = null;
-				break;
-			}
-			default:
+			switch (collisionSprite.getType()) 
 			{
-				/*
-				 * We only set the colliding sprite if it's a Sprite
-				 * that will affect movement of this sprite.
-				 */
-				_collidingSprite = null;
-				break;
+				case GOODIE:
+				{	
+					// TODO Increase counter
+					collisionSprite.dispose();
+					_collidingSprite = null;
+					break;
+				}
+				case ENEMY:
+				{	
+					// TODO Decrease Life
+					_collidingSprite = collisionSprite;
+					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
+					break;
+				}
+				case OBSTACLE:
+				{	
+					_collidingSprite = collisionSprite;
+					_collidingSprite = null;
+					break;
+				}
+				case PLATFORM:
+				{	
+					Platform platform = (Platform)collisionSprite;
+					this.alignVectorToPlatform(this.getLocation(),platform);
+					_collidingSprite = null;
+					break;
+				}
+				default:
+				{
+					/*
+					 * We only set the colliding sprite if it's a Sprite
+					 * that will affect movement of this sprite.
+					 */
+					_collidingSprite = null;
+					break;
+				}
 			}
 		}
 	}
@@ -482,7 +502,7 @@ public class MineCartSprite extends BasicSprite
 	private Vector alignVectorToPlatform(Vector vector, Platform platform)
 	{
 		Vector aligendVector = new Vector(vector.x, vector.y);
-		aligendVector.y = platform.getBounds().getY();
+		aligendVector.y = platform.getBounds().getY() - 1;
 		return aligendVector;
 	}
 
@@ -615,22 +635,30 @@ public class MineCartSprite extends BasicSprite
 	{
 		Movement movement = Movement.RIGHT;
 		
-		if (event.getEventID() == TYPE.LEFT.name())
+		if (event.getEventID() == ButtonClickEventType.LEFT.name())
 		{
 			movement = Movement.LEFT;
 		}
-		else if (event.getEventID() == TYPE.RIGHT.name())
+		else if (event.getEventID() == ButtonClickEventType.RIGHT.name())
 		{
 			movement = Movement.RIGHT;
 		}
-		else if (event.getEventID() == TYPE.LEFT_JUMP.name())
+		else if (event.getEventID() == ButtonClickEventType.LEFT_JUMP.name())
 		{
 			movement = Movement.LEFT_JUMP;
 		}
-		else if (event.getEventID() == TYPE.RIGHT_JUMP.name())
+		else if (event.getEventID() == ButtonClickEventType.RIGHT_JUMP.name())
 		{
 			movement = Movement.RIGHT_JUMP;
 		}
+		else if (event.getEventID() == ButtonClickEventType.MOUSE_UP.name())
+		{
+			/*
+			 * Current movement should be stopped.
+			 */
+			movement = Movement.NONE;
+		}
+
 
 		return movement;		
 	}

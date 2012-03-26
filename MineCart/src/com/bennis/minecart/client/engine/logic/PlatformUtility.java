@@ -2,7 +2,6 @@ package com.bennis.minecart.client.engine.logic;
 
 import java.util.List;
 
-import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.Platform;

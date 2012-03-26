@@ -29,6 +29,7 @@ public class SpriteManager
 	 */
 	private long _numberOfFrames;
 	private long _starttime;
+	private long _frameRate;
 	
 	/**
 	 * Constructor
@@ -245,10 +246,18 @@ public class SpriteManager
 		frontContext.save();
 		_numberOfFrames++;
 		long timeRunning = System.currentTimeMillis() - _starttime;
-		long frameRate = timeRunning/_numberOfFrames;
+		
+		if (timeRunning > 1000)
+		{
+			_frameRate = timeRunning/_numberOfFrames;
+			_starttime = System.currentTimeMillis(); // Reset
+			_numberOfFrames = 0;
+		}
+		
 		frontContext.setFillStyle("white");
-		frontContext.fillText("Frame rate: " + frameRate, 5, 10);
-		frontContext.restore(); // TODO AB - Before deleting, make sure this isn't needed.
+		frontContext.fillText("Frame rate: " + _frameRate, 5, 10);
+//		frontContext.restore(); // TODO AB - Before deleting, make sure this isn't needed.
+		
 	}
 	
 	/**
