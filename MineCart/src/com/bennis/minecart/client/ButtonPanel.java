@@ -74,9 +74,8 @@ public class ButtonPanel
 		button.setWidth(BUTTON_WIDTH);
 		button.addMouseDownHandler(new MineCardMouseDownHandler(type));
 		button.addMouseUpHandler(new MineCartMouseUpHandler());
-		// TODO AB - Add Mouse up handler!
-		// TODO AB - Add TouchHandler
-		// TODO AB - Movement now lasts as long as button is pressed down.
+		// TODO AB - Add TouchHandler (Swipe Left, Swipe Right, Swipe Up)
+		
 		panel.add(button); 
 	}
 	

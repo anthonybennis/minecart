@@ -49,7 +49,9 @@ public class MineCartSprite extends BasicSprite
 	private double _endY;
 	private final double MOVE_DISTANCE = 50; 
 	private final double MOVE_SPEED = 3;
-	
+	private final double JUMP_VERTICAL_DISTANCE = 50;
+	private final double JUMP_HORIZONTAL_DISTANCE = 20;
+	private final double FALL_SPEED = MOVE_SPEED*2;
 	
 	/**
 	 * Constructor
@@ -100,6 +102,7 @@ public class MineCartSprite extends BasicSprite
 //		return this.createAnimationSequence(imageNames);
 		/*
 		 * TEMP
+		 * TODO AB - Use Correct Sprite Image
 		 */
 		return this.createMovingRightAnimationSequence();
 	}
@@ -119,6 +122,7 @@ public class MineCartSprite extends BasicSprite
 //		return this.createAnimationSequence(imageNames);
 		/*
 		 * TEMP
+		 * TODO AB - Use Correct Sprite Image
 		 */
 		return this.createMovingRightAnimationSequence();
 	}
@@ -157,12 +161,11 @@ public class MineCartSprite extends BasicSprite
 			 */
 			Movement newMovement = this.convertInputEventToMovement(event); // Find out what movement to do.
 			
-			if (_movement == Movement.NONE || _movement == Movement.LEFT ||  _movement == _movement.RIGHT) 
+			if (_movement == Movement.NONE || _movement == Movement.LEFT ||  _movement == Movement.RIGHT) 
 			{
 				if (_movement != newMovement) // If there's a movement, start it.
 				{
-					_movement = newMovement;
-					this.startNewMovement(_movement, _spriteState);
+					this.startNewMovement(newMovement, _spriteState);
 				}
 				else
 				{
@@ -172,7 +175,7 @@ public class MineCartSprite extends BasicSprite
 					return;
 				}
 			}
-			// Movement has been interrupted (Mouse Up/Collision
+			// Movement has been interrupted (Mouse Up/Collision)
 			else if (newMovement == Movement.STOP)
 			{
 				this.startNewMovement(Movement.FALL, _spriteState);
@@ -206,7 +209,7 @@ public class MineCartSprite extends BasicSprite
 					_spriteState = this.jumpRight(endofScreen, startofScreen);
 					break;
 				}
-				case FALL: // TODO A Jump movement ends transforms to a Fall movement
+				case FALL:
 				{
 					_spriteState = this.fall(endofScreen, startofScreen);
 					break;
@@ -235,18 +238,10 @@ public class MineCartSprite extends BasicSprite
 		/*
 		 * New Animation sequence is set by the current movement of the sprite.
 		 */
+		_movement = movement;
 		_currentAnmationSequence = this.getAppropriateAnimationSequence(movement, state);
 		_currentAnimationFrame = 0; 
-		this.calculateEndPosition(_movement);
-		
-	}
-	
-	/**
-	 * 
-	 */
-	private void endMovement()
-	{
-		_movement = Movement.NONE;
+		this.calculateEndPosition(movement);
 	}
 	
 	/**
@@ -272,14 +267,25 @@ public class MineCartSprite extends BasicSprite
 				}
 				else
 				{
-					// TODO AB - There's no platform to move to! 
-					this.endMovement();
+					// There's no platform to move to! 
+					this.startNewMovement(Movement.NONE, _spriteState);
 				}
 				
 				break;
 			}
 			case LEFT_JUMP:
 			{
+				if (alignedVector != null)
+				{
+					_endX = alignedVector.x - JUMP_HORIZONTAL_DISTANCE;
+					_endY = alignedVector.y - JUMP_VERTICAL_DISTANCE;
+				}
+				else
+				{
+					// There's no platform to move to! 
+					this.startNewMovement(Movement.NONE, _spriteState);
+				}
+				
 				break;
 			}
 			case RIGHT:
@@ -292,17 +298,39 @@ public class MineCartSprite extends BasicSprite
 				else
 				{
 					// TODO AB - There's no platform to move to! 
-					this.endMovement();
+					this.startNewMovement(Movement.NONE, _spriteState);
 				}
 				
 				break;
 			}
 			case RIGHT_JUMP:
 			{
+				if (alignedVector != null)
+				{
+					_endX = alignedVector.x + JUMP_HORIZONTAL_DISTANCE;
+					_endY = alignedVector.y - JUMP_VERTICAL_DISTANCE;
+				}
+				else
+				{
+					// There's no platform to move to! 
+					this.startNewMovement(Movement.NONE, _spriteState);
+				}
+				
 				break;
 			}
 			case FALL:
 			{
+				if (alignedVector != null)
+				{
+					_endX = alignedVector.x;
+					_endY = alignedVector.y;
+				}
+				else
+				{
+					// There's no platform to move to! 
+					this.startNewMovement(Movement.NONE, _spriteState);
+				}
+				
 				break;
 			}
 			default:
@@ -324,10 +352,7 @@ public class MineCartSprite extends BasicSprite
 		 * We can move LEFT if we're not at the start of the screen,
 		 * and there isn't any obstacle or enemy in our way.
 		 */
-		boolean canMoveLeft = (_collidingSprite == null) || (_collidingSprite != null && _collidingSprite.getBounds().getCenter().x >=
-				this.getBounds().getCenter().x);
-		
-		if (!startofScreen && canMoveLeft)
+		if (!startofScreen)
 		{			
 			/*
 			 * Move a few steps towards the end x
@@ -335,16 +360,10 @@ public class MineCartSprite extends BasicSprite
 			 */
 			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
 		}
-		
-		/*
-		 * Conditions to end  movement 
-		 * UP event is detected on Button,
-		 * Or collision changes course.
-		 */
-//		if (this.getLocation().x <= _endX)
-//		{
-//			this.endMovement();
-//		}
+		else
+		{
+			this.startNewMovement(Movement.NONE, _spriteState);
+		}
 		
 		return _spriteState;
 	}
@@ -357,8 +376,32 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState jumpLeft(boolean endofScreen, boolean startofScreen)
 	{
-		// TODO AB - Falling is part of Jump cycle
-		// When movement is complete, set to NONE
+		if (!startofScreen)
+		{			
+			/*
+			 * Move a few steps towards the end x
+			 * We only move horizontally
+			 */
+			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
+			this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+		}
+		else
+		{
+			/*
+			 * Start of screen. Just fall now.
+			 */
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
+		/*
+		 * Conditions to end  movement 
+		 */
+		if (this.getLocation().x <= _endX
+				&& this.getLocation().y >= _endY)
+		{
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
 		return _spriteState;
 	}
 	
@@ -371,13 +414,9 @@ public class MineCartSprite extends BasicSprite
 	private SpriteState moveRight(boolean endofScreen, boolean startofScreen)
 	{
 		/*
-		 * We can move LEFT if we're not at the start of the screen,
-		 * and there isn't any obstacle or enemy in our way.
+		 * We can move LEFT if we're not at the start of the screen
 		 */
-		boolean canMoveRight = (_collidingSprite == null) || (_collidingSprite != null && _collidingSprite.getBounds().getCenter().x <=
-				this.getBounds().getCenter().x);
-		
-		if (!endofScreen && canMoveRight)
+		if (!endofScreen)
 		{			
 			/*
 			 * Move a few steps towards the end x
@@ -387,16 +426,8 @@ public class MineCartSprite extends BasicSprite
 		}
 		else
 		{
-			this.endMovement();
+			this.startNewMovement(Movement.NONE, _spriteState);
 		}
-		
-		/*
-		 * Conditions to end  movement 
-		 */
-//		if (this.getLocation().x >= _endX)
-//		{
-//			this.endMovement();
-//		}
 		
 		return _spriteState;
 	}
@@ -406,18 +437,54 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState jumpRight(boolean endofScreen, boolean startofScreen)
 	{
-		// TODO AB - Falling is part of Jump cycle
-		// When movement is complete, set to NONE
-		// How do we cycle through a JUMP????
+		if (!endofScreen)
+		{			
+			/*
+			 * Move a few steps towards the end x
+			 * We only move horizontally
+			 */
+			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
+			this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+		}
+		else
+		{
+			/*
+			 * Reached end of screen. Just fall down.
+			 */
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
+		/*
+		 * Conditions to end  movement 
+		 */
+		if (this.getLocation().x >= _endX
+				&& this.getLocation().y <= _endY)
+		{
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
 		return _spriteState;
 	}
 	
+	/**
+	 * Drags Sprite down at fast speed until it hits a Platform.
+	 * 
+	 * @param endofScreen
+	 * @param startofScreen
+	 * @return
+	 */
 	private SpriteState fall(boolean endofScreen, boolean startofScreen)
-	{
+	{		
+		this.getLocation().y = this.getLocation().y + FALL_SPEED; 
+
 		/*
-		 * TODO AB Keep moving down until we hit a Platform.
+		 * Conditions to end  movement 
 		 */
-		_movement = Movement.NONE; // TEMP
+		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
+		{
+			this.startNewMovement(Movement.NONE, _spriteState);
+		}
+		
 		return _spriteState;
 	}
 	
@@ -436,14 +503,14 @@ public class MineCartSprite extends BasicSprite
 			{
 				case GOODIE:
 				{	
-					// TODO Increase counter
+					// TODO AB Increase counter
 					collisionSprite.dispose();
 					_collidingSprite = null;
 					break;
 				}
 				case ENEMY:
 				{	
-					// TODO Decrease Life
+					// TODO AB Decrease Life
 					_collidingSprite = collisionSprite;
 					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
 					break;
@@ -451,7 +518,8 @@ public class MineCartSprite extends BasicSprite
 				case OBSTACLE:
 				{	
 					_collidingSprite = collisionSprite;
-					_collidingSprite = null;
+					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
+					
 					break;
 				}
 				case PLATFORM:
@@ -669,10 +737,6 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private boolean isSpriteAtEndOfScreen()
 	{
-		/*
-		 * TODO AB
-		 * Do we need to add buffer of image width?
-		 */
 		return ((this.getLocation().x + this.getBounds().getWidth()) > GUIConstants.WIDTH);
 	}
 	
@@ -682,13 +746,6 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private boolean isSpriteAtStartOfScreen()
 	{
-		/*
-		 * TODO AB
-		 * Do we need to add buffer of image width?
-		 */
 		return (this.getLocation().x <= 0);
 	}
-	
-	
-	//////////// Everything above this line should be generic, so we can refactor to base class.
 }
