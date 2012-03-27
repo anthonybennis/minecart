@@ -36,6 +36,11 @@ public class MineCartSpriteFactory extends SpriteFactory
 		
 		if (sprite != null)
 		{
+			if (sprite instanceof LavaSprite)
+			{
+				
+			}
+			
 			/*
 			 * New sprite to add on screen.
 			 */
@@ -106,6 +111,7 @@ public class MineCartSpriteFactory extends SpriteFactory
 		this.addCoin(1, spiteMap, 4);
 		this.addCoin(200, spiteMap, 3);
 		this.addCoin(400, spiteMap, 3);
+		spiteMap.put((long)2, new LavaSprite(Layers.FRONT, this.getImageLoader()));
 		this.addCoin(600, spiteMap, 5);
 		this.addCoin(800, spiteMap, 3);
 		this.addCoin(1000, spiteMap, 3);

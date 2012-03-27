@@ -49,8 +49,8 @@ public class MineCartSprite extends BasicSprite
 	private double _endY;
 	private final double MOVE_DISTANCE = 50; 
 	private final double MOVE_SPEED = 3;
-	private final double JUMP_VERTICAL_DISTANCE = 50;
-	private final double JUMP_HORIZONTAL_DISTANCE = 20;
+	private final double JUMP_VERTICAL_DISTANCE = 150;
+	private final double JUMP_HORIZONTAL_DISTANCE = 100;
 	private final double FALL_SPEED = MOVE_SPEED*2;
 	
 	/**
@@ -397,7 +397,7 @@ public class MineCartSprite extends BasicSprite
 		 * Conditions to end  movement 
 		 */
 		if (this.getLocation().x <= _endX
-				&& this.getLocation().y >= _endY)
+				&& this.getLocation().y <= _endY)
 		{
 			this.startNewMovement(Movement.FALL, _spriteState);
 		}

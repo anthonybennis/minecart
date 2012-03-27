@@ -15,16 +15,15 @@ public class CoinSprite extends ScrollingSprite
 {
 	public CoinSprite(Layers layer, ImageLoader imageLoader)
 	{
-		super(layer, imageLoader, Type.GOODIE);
-		this.setLocation(GUIConstants.WIDTH, 350);
+		super(layer, imageLoader, Type.GOODIE, 350);
+		
 	}
 
 	@Override
 	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
-		// TODO AB - if MineKart, Update Game Points and dispose
+		// Nothing to do here. All collision handled by MineSprite
 	}
-	
 
 	@Override
 	protected String[] getImageNames() 
