@@ -18,8 +18,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * Creates Button Panel for user input to game.
  *
- * TODO AB - Add listener to canvas and catch left/right inputs easier. Double press for jump?
- *
  * @author abennis
  */
 public class ButtonPanel 
