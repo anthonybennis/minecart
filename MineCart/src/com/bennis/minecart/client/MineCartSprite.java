@@ -38,11 +38,7 @@ public class MineCartSprite extends BasicSprite
 	private int _currentAnimationFrame = 0;
 	private SpriteState _spriteState = SpriteState.NORMAL;
 	private boolean _updateFrame;
-	/*
-	 * Collision
-	 */
-	private ISprite _collidingSprite;
-	private Collision _collisionType = Collision.NONE;
+	
 	/*
 	 * Movement
 	 */
@@ -181,11 +177,6 @@ public class MineCartSprite extends BasicSprite
 			boolean endofScreen = this.isSpriteAtEndOfScreen();
 			boolean startofScreen = this.isSpriteAtStartOfScreen();
 			
-			/*
-			 * TODO AB - 
-			 * 1. Is SpriteState right here? Should this be done in handleCollision.
-			 * 2. Collisions can interrupt a movement in progress!!!
-			 */
 			switch (_movement) 
 			{
 				case LEFT:
@@ -476,7 +467,6 @@ public class MineCartSprite extends BasicSprite
 		/*
 		 * Conditions to end  movement 
 		 */
-		System.out.println("Starting Y point is: " + this.getLocation().y + this.getBounds().getHeight());
 		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
 		{
 			this.startNewMovement(Movement.NONE, _spriteState);
@@ -510,11 +500,6 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
-		/*
-		 * Not used.
-		 * TODO AB Remove from API?
-		 */
-		_collisionType = collisionType;
 		
 		if (collisionSprite != null)
 		{
@@ -524,19 +509,26 @@ public class MineCartSprite extends BasicSprite
 				{	
 					_scoreCounter.incrementValue(1); // All Goodies currently have the same value.
 					collisionSprite.dispose();
-					_collidingSprite = null;
 					break;
 				}
 				case ENEMY:
 				{	
-					// TODO AB Decrease Life
-					_collidingSprite = collisionSprite;
-					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
+					_livesCounter.decrementValue(1);
+					
+					if (_livesCounter.getValue() <= 0)
+					{
+						// TODO AB End Game.
+					}
+					else
+					{
+						this.collide(_movement);
+					}
+					
+					
 					break;
 				}
 				case OBSTACLE:
 				{	
-					_collidingSprite = collisionSprite;
 					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
 					
 					break;
@@ -545,20 +537,88 @@ public class MineCartSprite extends BasicSprite
 				{	
 					Platform platform = (Platform)collisionSprite;
 					this.alignVectorToPlatform(this.getLocation(),platform);
-					_collidingSprite = null;
+					
 					break;
 				}
 				default:
 				{
-					/*
-					 * We only set the colliding sprite if it's a Sprite
-					 * that will affect movement of this sprite.
-					 */
-					_collidingSprite = null;
+					// Nothing else to do.
 					break;
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Collide with MineCark when you hit an ENEMY
+	 * or OBSTACLE.
+	 * 
+	 * Hitting these sprites affect the current movement of the Mine Cart.
+	 * This is handled here.
+	 * 
+	 * For example, if the cart was moving right, hitting an obstacle would cause it
+	 * to bounce back to the left.
+	 * 
+	 * Note: MineCart will FALL once it's new movement is set.
+	 * 
+	 * @param movement
+	 */
+	private void collide(Movement movement)
+	{
+		
+		double x = this.getLocation().x;
+		double y = this.getLocation().y;
+		
+		final double BUMP_HEIGHT = 60;
+		
+		/*
+		 * TODO AB 
+		 * If we make the scroll speed changeable, this needs to be updated.
+		 * For example: 
+		 * this.setLocation(x + GUIConstants.MEDIUM_SCROLL_SPEED*2, y - BUMP_HEIGHT);
+		 * should become:
+		 * this.setLocation(x + scrollSpeed*2, y - BUMP_HEIGHT);
+		 * or something like that.
+		 */
+		switch (_movement) 
+		{
+			case NONE:
+			{
+				this.setLocation(x, y + 20); // TODO AB Test this
+				break;
+			}
+			case LEFT:
+			{
+				this.setLocation((x + GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
+				break;
+			}
+			case LEFT_JUMP:
+			{
+				this.setLocation((x + GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
+				break;
+			}
+			case RIGHT:
+			{
+				this.setLocation((x - GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
+				break;
+			}
+			case RIGHT_JUMP:
+			{
+				this.setLocation((x - GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+		
+		/*
+		 * TODO AB Check if Sprite is now crushed against the start of the screen.
+		 * If so, he must die.
+		 */
+		
+		this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
 	}
 	
 	/**
