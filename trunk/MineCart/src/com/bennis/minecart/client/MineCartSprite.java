@@ -1,12 +1,14 @@
 package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.ButtonPanel.ButtonClickEventType;
+import com.bennis.minecart.client.engine.logic.CounterManager;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.PlatformUtility;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
 import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
@@ -53,6 +55,11 @@ public class MineCartSprite extends BasicSprite
 	private final double MOVE_SPEED = 3;
 	private final double JUMP_HORIZONTAL_DISTANCE = 150;
 	private final double FALL_SPEED = MOVE_SPEED*2;
+	/*
+	 * Game counters
+	 */
+	GamePointCounterSprite _livesCounter;
+	GamePointCounterSprite _scoreCounter;
 	
 	/**
 	 * Constructor
@@ -62,7 +69,9 @@ public class MineCartSprite extends BasicSprite
 		super(Layers.FRONT,imageLoader, Type.USER_MOVEABLE);
 		_scene = scene;
 		this.loadAllImageSequences();
-		this.setLocation(150, 371.01); // Starting position
+		this.setLocation(150, 372); // Starting position
+		_scoreCounter = CounterManager.getInstance().getCounter(GUIConstants.GAME_POINTS_COUNTER_NAME);
+		_livesCounter = CounterManager.getInstance().getCounter(GUIConstants.GAME_LIVES_COUNTER_NAME);
 	}
 	
 	/**
@@ -128,23 +137,7 @@ public class MineCartSprite extends BasicSprite
 		return this.createMovingRightAnimationSequence();
 	}
 	
-	/**
-	 * Generic ImageSequence method.
-	 * TODO Move to Basic Sprite.
-	 * @param imageNames
-	 * @return
-	 */
-	private ImageElement[] createAnimationSequence(String[] imageNames)
-	{
-		ImageElement[] animationSequence = new ImageElement[imageNames.length];
-		
-		for (int i = 0; i < imageNames.length; i++) 
-		{
-			animationSequence[i] = this.getImageLoader().getImage(imageNames[i]);
-		}
-		
-		return animationSequence;
-	}
+
 
 	@Override
 	public void update(InputEvent event) 
@@ -300,7 +293,7 @@ public class MineCartSprite extends BasicSprite
 				}
 				else
 				{
-					// TODO AB - There's no platform to move to! 
+					// There's no platform to move to! 
 					this.startNewMovement(Movement.NONE, _spriteState);
 				}
 				
@@ -529,7 +522,7 @@ public class MineCartSprite extends BasicSprite
 			{
 				case GOODIE:
 				{	
-					// TODO AB Increase counter
+					_scoreCounter.incrementValue(1); // All Goodies currently have the same value.
 					collisionSprite.dispose();
 					_collidingSprite = null;
 					break;
