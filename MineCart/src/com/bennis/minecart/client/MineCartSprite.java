@@ -47,10 +47,11 @@ public class MineCartSprite extends BasicSprite
 	private Movement _movement = Movement.NONE;
 	private double _endX;
 	private double _endY;
+	private double _startX;
+	private double _startY;
 	private final double MOVE_DISTANCE = 50; 
 	private final double MOVE_SPEED = 3;
-	private final double JUMP_VERTICAL_DISTANCE = 150;
-	private final double JUMP_HORIZONTAL_DISTANCE = 100;
+	private final double JUMP_HORIZONTAL_DISTANCE = 150;
 	private final double FALL_SPEED = MOVE_SPEED*2;
 	
 	/**
@@ -61,7 +62,7 @@ public class MineCartSprite extends BasicSprite
 		super(Layers.FRONT,imageLoader, Type.USER_MOVEABLE);
 		_scene = scene;
 		this.loadAllImageSequences();
-		this.setLocation(150, 377); // Starting position
+		this.setLocation(150, 371.01); // Starting position
 	}
 	
 	/**
@@ -241,6 +242,8 @@ public class MineCartSprite extends BasicSprite
 		_movement = movement;
 		_currentAnmationSequence = this.getAppropriateAnimationSequence(movement, state);
 		_currentAnimationFrame = 0; 
+		_startX = this.getLocation().x;
+		_startY = this.getLocation().y;
 		this.calculateEndPosition(movement);
 	}
 	
@@ -278,7 +281,7 @@ public class MineCartSprite extends BasicSprite
 				if (alignedVector != null)
 				{
 					_endX = alignedVector.x - JUMP_HORIZONTAL_DISTANCE;
-					_endY = alignedVector.y - JUMP_VERTICAL_DISTANCE;
+					_endY = alignedVector.y;
 				}
 				else
 				{
@@ -308,7 +311,7 @@ public class MineCartSprite extends BasicSprite
 				if (alignedVector != null)
 				{
 					_endX = alignedVector.x + JUMP_HORIZONTAL_DISTANCE;
-					_endY = alignedVector.y - JUMP_VERTICAL_DISTANCE;
+					_endY = alignedVector.y;
 				}
 				else
 				{
@@ -378,12 +381,24 @@ public class MineCartSprite extends BasicSprite
 	{
 		if (!startofScreen)
 		{			
-			/*
-			 * Move a few steps towards the end x
-			 * We only move horizontally
-			 */
 			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
-			this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+			
+			double distanceTravelled = this._startX - this.getLocation().x;
+			
+			if (distanceTravelled < JUMP_HORIZONTAL_DISTANCE/2)
+			{
+				/*
+				 * Jump up
+				 */
+				this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+			}
+			else
+			{
+				/*
+				 * Fall back down
+				 */
+				this.getLocation().y = this.getLocation().y + MOVE_SPEED;
+			}
 		}
 		else
 		{
@@ -396,10 +411,9 @@ public class MineCartSprite extends BasicSprite
 		/*
 		 * Conditions to end  movement 
 		 */
-		if (this.getLocation().x <= _endX
-				&& this.getLocation().y <= _endY)
+		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
 		{
-			this.startNewMovement(Movement.FALL, _spriteState);
+			this.startNewMovement(Movement.NONE, _spriteState);
 		}
 		
 		return _spriteState;
@@ -439,12 +453,24 @@ public class MineCartSprite extends BasicSprite
 	{
 		if (!endofScreen)
 		{			
-			/*
-			 * Move a few steps towards the end x
-			 * We only move horizontally
-			 */
 			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
-			this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+			
+			double distanceTravelled = this.getLocation().x - this._startX;
+			
+			if (distanceTravelled < JUMP_HORIZONTAL_DISTANCE/2)
+			{
+				/*
+				 * Jump up
+				 */
+				this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+			}
+			else
+			{
+				/*
+				 * Fall back down
+				 */
+				this.getLocation().y = this.getLocation().y + MOVE_SPEED;
+			}
 		}
 		else
 		{
@@ -457,10 +483,10 @@ public class MineCartSprite extends BasicSprite
 		/*
 		 * Conditions to end  movement 
 		 */
-		if (this.getLocation().x >= _endX
-				&& this.getLocation().y <= _endY)
+		System.out.println("Starting Y point is: " + this.getLocation().y + this.getBounds().getHeight());
+		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
 		{
-			this.startNewMovement(Movement.FALL, _spriteState);
+			this.startNewMovement(Movement.NONE, _spriteState);
 		}
 		
 		return _spriteState;
