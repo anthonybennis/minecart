@@ -1,11 +1,14 @@
 package com.bennis.minecart.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.bennis.minecart.client.engine.logic.CounterManager;
 import com.bennis.minecart.client.engine.logic.SpriteFactory;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
 import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.ScrollingBackground;
@@ -88,9 +91,16 @@ public class MineCartSpriteFactory extends SpriteFactory
 		MineCartSprite mineCart = new MineCartSprite(this.getImageLoader(), scene);
 		scene.storeSprite(mineCart);
 		
-		// TODO AB - Create Game Score Sprite
-		
-		// TODO AB Create Game points Sprite
+		/*
+		 * Add Game counters to scene
+		 * Note: These are not created in this factory as we may want to add the same counters to a number
+		 * of Levels.
+		 */
+		ArrayList<GamePointCounterSprite> counters = CounterManager.getInstance().getAllCounters();
+		for (GamePointCounterSprite gamePointCounterSprite : counters) 
+		{
+			scene.storeSprite(gamePointCounterSprite);
+		}
 	}
 	
 	/**
@@ -111,7 +121,7 @@ public class MineCartSpriteFactory extends SpriteFactory
 		this.addCoin(1, spiteMap, 4);
 		this.addCoin(200, spiteMap, 3);
 		this.addCoin(400, spiteMap, 3);
-		spiteMap.put((long)2, new LavaSprite(Layers.FRONT, this.getImageLoader()));
+		spiteMap.put((long)450, new LavaSprite(Layers.FRONT, this.getImageLoader()));
 		this.addCoin(600, spiteMap, 5);
 		this.addCoin(800, spiteMap, 3);
 		this.addCoin(1000, spiteMap, 3);
