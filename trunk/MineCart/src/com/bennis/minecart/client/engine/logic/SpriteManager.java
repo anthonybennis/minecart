@@ -256,8 +256,6 @@ public class SpriteManager
 		
 		frontContext.setFillStyle("white");
 		frontContext.fillText("Frame rate: " + _frameRate, 5, 10);
-//		frontContext.restore(); // TODO AB - Before deleting, make sure this isn't needed.
-		
 	}
 	
 	/**
