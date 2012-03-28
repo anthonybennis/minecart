@@ -59,7 +59,7 @@ public class PlatformUtility
 				{
 					/*
 					 * TODO AB - Optimise. There may be multiple Platforms that pass this test. One below, 
-					 * or one above, for example. We want to get the nearest platform. This is a TODO
+					 * or one above, for example. We want to get the nearest platform.
 					 */
 					platform = tempPlatform;
 					break FIND_PLATFORM;
