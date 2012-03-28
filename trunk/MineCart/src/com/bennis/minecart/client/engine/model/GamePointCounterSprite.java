@@ -121,8 +121,18 @@ public class GamePointCounterSprite implements ISprite
 		_value = _value + increment;
 	}
 	
+	public void decrementValue(double decreaseValue)
+	{
+		_value = _value - decreaseValue;
+	}
+	
 	public String getName()
 	{
 		return _counterName;
+	}
+	
+	public double getValue()
+	{
+		return _value;
 	}
 }
