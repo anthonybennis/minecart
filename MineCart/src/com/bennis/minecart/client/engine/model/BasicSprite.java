@@ -150,6 +150,24 @@ abstract public class BasicSprite implements ISprite
 	}
 	
 	/**
+	 * Generic ImageSequence method.
+	 * 
+	 * @param imageNames
+	 * @return
+	 */
+	protected ImageElement[] createAnimationSequence(String[] imageNames)
+	{
+		ImageElement[] animationSequence = new ImageElement[imageNames.length];
+		
+		for (int i = 0; i < imageNames.length; i++) 
+		{
+			animationSequence[i] = this.getImageLoader().getImage(imageNames[i]);
+		}
+		
+		return animationSequence;
+	}
+	
+	/**
 	 * Checks the basic sprites Image array.
 	 * @return
 	 */
@@ -237,8 +255,8 @@ abstract public class BasicSprite implements ISprite
 		 * Optimisation.
 		 * Bounds only calculated once. Sub classes can be more dynamic if needed.
 		 */
-		if (_bounds.getWidth() == 0.0) 
-		{
+//		if (_bounds.getWidth() < 1) 
+//		{
 			_bounds.setX(this.getLocation().x);
 			_bounds.setY(this.getLocation().y);
 			ImageElement[] images = this.getImageElements();
@@ -249,7 +267,7 @@ abstract public class BasicSprite implements ISprite
 				_bounds.setWidth(element.getWidth());
 				_bounds.setHeight(element.getHeight());
 			}
-		}
+//		}
 		
 		return _bounds;
 	}
