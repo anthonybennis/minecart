@@ -1,7 +1,6 @@
 package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.engine.logic.ImageLoader;
-import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.ScrollingSprite;
@@ -22,14 +21,7 @@ public class LavaSprite extends ScrollingSprite
 	 */
 	public LavaSprite(Layers layer, ImageLoader imageLoader)
 	{
-		super(layer, imageLoader, Type.ENEMY, 100);
-	}
-
-	@Override
-	public void update(InputEvent event) 
-	{
-		// Nothing to do here.
-		this.haveAllImagesLoaded();
+		super(layer, imageLoader, Type.ENEMY, 372);
 	}
 
 	@Override
