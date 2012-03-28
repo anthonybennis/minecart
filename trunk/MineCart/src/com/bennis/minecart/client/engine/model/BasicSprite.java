@@ -233,15 +233,22 @@ abstract public class BasicSprite implements ISprite
 	@Override
 	public Rectangle getBounds() 
 	{
-		_bounds.setX(this.getLocation().x);
-		_bounds.setY(this.getLocation().y);
-		ImageElement[] images = this.getImageElements();
-		
-		if (images != null && images.length > 0 && images[0] != null)
+		/*
+		 * Optimisation.
+		 * Bounds only calculated once. Sub classes can be more dynamic if needed.
+		 */
+		if (_bounds.getWidth() == 0.0) 
 		{
-			ImageElement element = images[0];
-			_bounds.setWidth(element.getWidth());
-			_bounds.setHeight(element.getHeight());
+			_bounds.setX(this.getLocation().x);
+			_bounds.setY(this.getLocation().y);
+			ImageElement[] images = this.getImageElements();
+			
+			if (images != null && images.length > 0 && images[0] != null)
+			{
+				ImageElement element = images[0];
+				_bounds.setWidth(element.getWidth());
+				_bounds.setHeight(element.getHeight());
+			}
 		}
 		
 		return _bounds;
