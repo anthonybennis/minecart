@@ -1,5 +1,6 @@
 package com.bennis.minecart.client.engine.logic;
 
+import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.google.gwt.canvas.client.Canvas;
 /**
@@ -18,9 +19,11 @@ public abstract class AGame
 	public AGame(Canvas bufferCanvas, Canvas canvas, Scene scene, Playlist playlist)
 	{
 		_spriteManager = this.createSpriteManager(bufferCanvas, canvas);
+		this.registerCounterSprites();
 		this.setSpriteFactory(this.getInitialSpriteFactory(scene));
 		/*
 		 * TODO AB Is this the right place for Audio?
+		 * Consider moving to a LevelManager.
 		 */
 		Audio audio = new Audio(playlist);
 		audio.playBackingTrack();
@@ -69,4 +72,16 @@ public abstract class AGame
 	{
 		return this._spriteManager.getSpriteFactory().getImageLoader();
 	}
+	
+	private void registerCounterSprites()
+	{
+		GamePointCounterSprite[] sprites = this.createGamePointerSprites();
+		
+		for (GamePointCounterSprite counter:sprites) 
+		{
+			CounterManager.getInstance().addCounter(counter);
+		}
+	}
+	
+	abstract protected GamePointCounterSprite[] createGamePointerSprites();
 }
