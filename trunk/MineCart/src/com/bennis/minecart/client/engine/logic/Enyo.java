@@ -7,8 +7,4 @@ package com.bennis.minecart.client.engine.logic;
 public class Enyo 
 {
 
-	/*
-	 * TODO AB
-	 * Do we need any enyo? IO?
-	 */
 }
