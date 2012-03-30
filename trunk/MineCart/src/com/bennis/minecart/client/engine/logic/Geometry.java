@@ -12,11 +12,12 @@ package com.bennis.minecart.client.engine.logic;
 import com.bennis.minecart.client.engine.model.Line;
 
 /**
- * Some useful methods for gemetric calculations
+ * Some useful methods for geometric calculations Geometry
+ * 
  * @author abennis
  *
  */
-public class Geomarty 
+public class Geometry 
 {
 	 public static double angleBetween2Lines(Line line1, Line line2)
 	 {
@@ -25,5 +26,16 @@ public class Geomarty
 	        double angle2 = Math.atan2(line2.getY() - line2.getY1(),
 	                                   line2.getX() - line2.getX1());
 	        return angle1-angle2;
+	 }
+	 
+	 /**
+	  * Inverts a given angle.
+	  * 
+	  * @param angle
+	  * @return inverted angle
+	  */
+	 public static double invertAngle(double angle)
+	 {
+		 return 180 - angle;
 	 }
 }
