@@ -9,42 +9,21 @@
  *******************************************************************************/
 package com.bennis.minecart.client.engine.logic;
 
+import com.bennis.minecart.client.engine.model.Line;
 
 /**
- * Generic class for wrapping user input events
+ * Some useful methods for gemetric calculations
  * @author abennis
  *
  */
-public class InputEvent 
+public class Geomarty 
 {
-	/*
-	 * Use enum names for event IDs.
-	 */
-	private String _eventID;
-	private boolean _consumed = false;
-	
-	public InputEvent(String eventID)
-	{
-		_eventID = eventID;
-	}
-	
-	public String getEventID()
-	{
-		return _eventID;
-	}
-	
-	public void setEventID(String eventID)
-	{
-		_eventID = eventID;
-	}
-	
-	public void consume()
-	{
-		_consumed = true;
-	}
-	
-	public boolean isConsumed()
-	{
-		return _consumed;
-	}
+	 public static double angleBetween2Lines(Line line1, Line line2)
+	 {
+	        double angle1 = Math.atan2(line1.getY() - line1.getY1(),
+	                                   line1.getX() - line1.getX1());
+	        double angle2 = Math.atan2(line2.getY() - line2.getY1(),
+	                                   line2.getX() - line2.getX1());
+	        return angle1-angle2;
+	 }
 }

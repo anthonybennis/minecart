@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2012 Anthony Bennis
+ * All rights reserved. This program and the accompanying materials
+ * are fully owned by Anthony Bennis and cannot be used for commercial projects without prior permission from same.
+ * http://www.anthonybennis.com
+ *
+ * Contributors:
+ * Anthony Bennis.
+ *******************************************************************************/
 package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.ButtonPanel.ButtonClickEventType;
 import com.bennis.minecart.client.engine.logic.CounterManager;
+import com.bennis.minecart.client.engine.logic.Geomarty;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.PlatformUtility;
@@ -9,6 +19,7 @@ import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
+import com.bennis.minecart.client.engine.model.Line;
 import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
@@ -694,7 +705,7 @@ public class MineCartSprite extends BasicSprite
 			}
 			
 			ImageElement currentFrame = _currentAnmationSequence[_currentAnimationFrame];
-//			canvas.getContext2d().rotate(rotationAngle);
+			canvas.getContext2d().rotate(rotationAngle);
 			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
 			
 			// Update animation every second refresh.
@@ -707,7 +718,7 @@ public class MineCartSprite extends BasicSprite
 			/*
 			 * End rotation
 			 */
-//			canvas.getContext2d().rotate(-rotationAngle);
+			canvas.getContext2d().rotate(-rotationAngle);
 		}
 	}
 	
@@ -717,10 +728,29 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private double calculateRotationAngle()
 	{
+		double angle = 0;
+		
 		/*
-		 * TODO AB (Needed when track moves)
+		 * Horizontal Line
 		 */
-		return 0;
+		int x = (int)this.getLocation().x;
+		int y = (int)this.getLocation().y;
+		int x1 =(int)(x + this.getBounds().getWidth());
+		int y1 = y;
+		/*
+		 * Mine Cart Wheel Axel (slope)
+		 * TODO AB - We need to make this axel part of the sprite.
+		 */
+		int x2 = x1;
+		int y2 = y + 10; // TODO AB = Temp. Right wheel is now on a slope, so we have an angle.
+		
+		
+		Line horizontalLine = new Line(x,y,x1,y1);
+		Line mineCartWheelAxel = new Line(x,y,x2,y2);
+		
+		angle = Geomarty.angleBetween2Lines(horizontalLine, mineCartWheelAxel);
+		
+		return angle;
 	}
 	
 	/**
