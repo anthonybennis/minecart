@@ -16,6 +16,7 @@ import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Rectangle;
 import com.bennis.minecart.client.engine.model.Scene;
+import com.bennis.minecart.client.engine.model.Vector;
 
 /**
  * A collection of utility methods for
@@ -78,6 +79,48 @@ public class PlatformUtility
 		}
 		
 		return platform;
+	}
+	
+	/**
+	 * 
+	 * @param vector
+	 * @param platform
+	 * @return
+	 */
+	public static Vector alignVectorToNearestPlatform(Scene sene, Vector vector)
+	{
+		return PlatformUtility.alignVectorToNearestPlatform(sene, vector.x, vector.y);
+	}
+	
+	public static Vector alignVectorToNearestPlatform(Scene sene, double x, double y)
+	{
+		Vector aligendVector = null;
+		
+		Platform endPositionPlatform = PlatformUtility.getNearestPlatform(sene, x, y, Layers.MIDDLE);
+		if (endPositionPlatform != null)
+		{
+			aligendVector = PlatformUtility.alignVectorToPlatform(x, y, endPositionPlatform);
+		}
+		
+		return aligendVector;
+	}
+	
+	/**
+	 * 
+	 * @param vector
+	 * @param platform
+	 * @return
+	 */
+	public static Vector alignVectorToPlatform(Vector vector, Platform platform)
+	{
+		return PlatformUtility.alignVectorToPlatform(vector.x, vector.y, platform);
+	}
+	
+	public static Vector alignVectorToPlatform(double x, double y, Platform platform)
+	{
+		Vector aligendVector = new Vector(x, y);
+		aligendVector.y = platform.getBounds().getY() - 1;
+		return aligendVector;
 	}
 
 }

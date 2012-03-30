@@ -18,7 +18,7 @@ import com.google.gwt.user.client.Timer;
 public class GameLoop 
 {
 	 //timer refresh rate, in milliseconds
-	 private static final int refreshRate = 30;
+	 private static final int refreshRate = 300;
 	 
 	 private static AGame _game;
 	 //ticker timestamp

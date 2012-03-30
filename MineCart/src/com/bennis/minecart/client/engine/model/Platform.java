@@ -62,7 +62,7 @@ abstract public class Platform implements ISprite
 	 * the line segments List.
 	 * @return
 	 */
-	private int getEndPoint()
+	private double getEndPoint()
 	{
 		int lastLineIndex = _lineSegments.size()-1;
 		Line lastLine = _lineSegments.get(lastLineIndex);

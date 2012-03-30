@@ -11,7 +11,7 @@ package com.bennis.minecart.client;
 
 import com.bennis.minecart.client.ButtonPanel.ButtonClickEventType;
 import com.bennis.minecart.client.engine.logic.CounterManager;
-import com.bennis.minecart.client.engine.logic.Geomarty;
+import com.bennis.minecart.client.engine.logic.Geometry;
 import com.bennis.minecart.client.engine.logic.ImageLoader;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.logic.PlatformUtility;
@@ -67,6 +67,12 @@ public class MineCartSprite extends BasicSprite
 	 */
 	GamePointCounterSprite _livesCounter;
 	GamePointCounterSprite _scoreCounter;
+	
+	/*
+	 * Test code
+	 */
+	private Line _cartAxisLine;
+	private Line _horizontalLine;
 	
 	/**
 	 * Constructor
@@ -253,7 +259,7 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private void calculateEndPosition(Movement movement)
 	{
-		Vector alignedVector = this.alignVectorToNearestPlatform(this.getLocation());
+		Vector alignedVector = PlatformUtility.alignVectorToNearestPlatform(_scene, this.getLocation());
 		switch (movement) 
 		{
 			case LEFT:
@@ -547,7 +553,7 @@ public class MineCartSprite extends BasicSprite
 				case PLATFORM:
 				{	
 					Platform platform = (Platform)collisionSprite;
-					this.alignVectorToPlatform(this.getLocation(),platform);
+					PlatformUtility.alignVectorToPlatform(this.getLocation(),platform);
 					
 					break;
 				}
@@ -632,37 +638,9 @@ public class MineCartSprite extends BasicSprite
 		this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
 	}
 	
-	/**
-	 * 
-	 * @param vector
-	 * @param platform
-	 * @return
-	 */
-	private Vector alignVectorToNearestPlatform(Vector vector)
-	{
-		Vector aligendVector = null;
-		
-		Platform endPositionPlatform = PlatformUtility.getNearestPlatform(_scene, vector.x, vector.y, Layers.MIDDLE);
-		if (endPositionPlatform != null)
-		{
-			aligendVector = this.alignVectorToPlatform(vector, endPositionPlatform);
-		}
-		
-		return aligendVector;
-	}
+
 	
-	/**
-	 * 
-	 * @param vector
-	 * @param platform
-	 * @return
-	 */
-	private Vector alignVectorToPlatform(Vector vector, Platform platform)
-	{
-		Vector aligendVector = new Vector(vector.x, vector.y);
-		aligendVector.y = platform.getBounds().getY() - 1;
-		return aligendVector;
-	}
+
 
 	@Override
 	protected String[] getImageNames() 
@@ -705,20 +683,69 @@ public class MineCartSprite extends BasicSprite
 			}
 			
 			ImageElement currentFrame = _currentAnmationSequence[_currentAnimationFrame];
-			canvas.getContext2d().rotate(rotationAngle);
-			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
 			
-			// Update animation every second refresh.
+			/*
+			 * Rotate MineCart so it sits on the Platform
+			 * TODO AB - What about collisions? The bounds need to be rotated too.
+			 */
+			
+			/*
+			 * TODO AB - Translate to the center of the mine cart, as we want to rotate around that.
+			 */
+			canvas.getContext2d().setFillStyle("white");
+			canvas.getContext2d().fillText("Current Rotation: " + rotationAngle, 10, 200);
+			
+			canvas.getContext2d().save();
+			canvas.getContext2d().translate(this.getLocation().x, this.getLocation().y);
+			canvas.getContext2d().rotate(rotationAngle);
+
+			/*
+			 * Draw Sprite Image
+			 */
+			canvas.getContext2d().drawImage(currentFrame, 0,0);//this.getLocation().x, this.getLocation().y);
+			
+			/*
+			 * End rotation
+			 */
+			canvas.getContext2d().rotate(-rotationAngle);
+			canvas.getContext2d().restore();
+			
+			/*
+			 * Test
+			 * Draw the Cart Axis as we've calculated it.
+			 */
+			canvas.getContext2d().setFillStyle("red");
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().setLineWidth(90);
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().moveTo(_cartAxisLine.getX(), _cartAxisLine.getY());
+			canvas.getContext2d().lineTo(_cartAxisLine.getX1(), _cartAxisLine.getY1());
+			canvas.getContext2d().fill();
+			canvas.getContext2d().stroke();
+			canvas.getContext2d().closePath();
+			
+			canvas.getContext2d().setFillStyle("green");
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().setLineWidth(70);
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().moveTo(_horizontalLine.getX(), _horizontalLine.getY());
+			canvas.getContext2d().lineTo(_horizontalLine.getX1(), _horizontalLine.getY1());
+			canvas.getContext2d().stroke();
+			canvas.getContext2d().closePath();
+			
+			/*
+			 * END TEST
+			 */
+			
+			
+			// We update animation every second refresh.
 			_updateFrame = !_updateFrame; 
 			if (_updateFrame)
 			{
 				_currentAnimationFrame++;
 			}
 			
-			/*
-			 * End rotation
-			 */
-			canvas.getContext2d().rotate(-rotationAngle);
+			
 		}
 	}
 	
@@ -731,24 +758,43 @@ public class MineCartSprite extends BasicSprite
 		double angle = 0;
 		
 		/*
-		 * Horizontal Line
+		 * There's only rotation when moving left or right, and NONE.
+		 * 0 rotation for Jumping or falling. 
+		 * 
+		 * When fall ends, there's a rotation, so
+		 * Movement.NONE has a rotation.
 		 */
-		int x = (int)this.getLocation().x;
-		int y = (int)this.getLocation().y;
-		int x1 =(int)(x + this.getBounds().getWidth());
-		int y1 = y;
-		/*
-		 * Mine Cart Wheel Axel (slope)
-		 * TODO AB - We need to make this axel part of the sprite.
-		 */
-		int x2 = x1;
-		int y2 = y + 10; // TODO AB = Temp. Right wheel is now on a slope, so we have an angle.
-		
-		
-		Line horizontalLine = new Line(x,y,x1,y1);
-		Line mineCartWheelAxel = new Line(x,y,x2,y2);
-		
-		angle = Geomarty.angleBetween2Lines(horizontalLine, mineCartWheelAxel);
+		if (_movement == Movement.NONE || _movement == Movement.LEFT || _movement == Movement.RIGHT)
+		{
+			/*
+			 * Find back wheel x and y point (on Platform directly below)
+			 */
+			Vector alignedBackWheelPoint = PlatformUtility.alignVectorToNearestPlatform(_scene, this.getLocation());
+			double x = alignedBackWheelPoint.x;
+			double y = alignedBackWheelPoint.y + this.getBounds().getHeight();
+			
+			/*
+			 * Find front wheel x and y point (on Platform directly below)
+			 */
+			double x1 = this.getLocation().x + this.getBounds().getWidth();
+			
+			Vector alignedFrontWheelPoint = PlatformUtility.alignVectorToNearestPlatform(_scene, x1,y);
+			
+			double x2 = alignedFrontWheelPoint.x;
+			double y2 = alignedFrontWheelPoint.y + this.getBounds().getHeight();
+			
+			Line horizontalLine = new Line(this.getLocation().x,this.getLocation().y,x1,this.getLocation().y); // Cart axis before it's aligned to Platform
+			Line cartAxisLine = new Line(x,y,x2, y2 + 50); // Cart axis aligned to Platform slope.
+			
+			/*
+			 * Test
+			 */
+			_cartAxisLine = cartAxisLine;
+			_horizontalLine = horizontalLine;
+			
+			angle = Geometry.angleBetween2Lines(cartAxisLine, horizontalLine);
+//			angle = Geometry.invertAngle(angle);
+		}
 		
 		return angle;
 	}

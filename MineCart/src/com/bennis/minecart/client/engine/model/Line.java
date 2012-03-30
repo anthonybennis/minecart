@@ -6,14 +6,22 @@ package com.bennis.minecart.client.engine.model;
  */
 public class Line 
 {
-	private int _x;
-	private int _y;
-	private int _x1;
-	private int _y1;
+	private double _x;
+	private double _y;
+	private double _x1;
+	private double _y1;
 
 	public Line()
 	{
 		
+	}
+	
+	public Line(double x, double y, double x1, double y1)
+	{
+		_x = x;
+		_y = y;
+		_x1 = x1;
+		_y1 = y1;
 	}
 	
 	public Line(int x, int y, int x1, int y1)
@@ -24,42 +32,42 @@ public class Line
 		_y1 = y1;
 	}
 	
-	public void setX(int x)
+	public void setX(double x)
 	{
 		_x = x;
 	}
 	
-	public void setY(int y)
+	public void setY(double y)
 	{
 		_y = y;
 	}
 	
-	public void setX1(int x1)
+	public void setX1(double x1)
 	{
 		_x1 = x1;
 	}
 	
-	public void setY1(int y1)
+	public void setY1(double y1)
 	{
 		_y1 = y1;
 	}
 	
-	public int getX()
+	public double getX()
 	{
 		return _x;
 	}
 	
-	public int getY()
+	public double getY()
 	{
 		return _y;
 	}
 	
-	public int getX1()
+	public double getX1()
 	{
 		return _x1;
 	}
 	
-	public int getY1()
+	public double getY1()
 	{
 		return _y1;
 	}
