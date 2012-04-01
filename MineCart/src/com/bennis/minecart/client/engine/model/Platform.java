@@ -6,6 +6,7 @@ import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.logic.InputEvent;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.touch.client.Point;
 
 /**
  * This class represents the ground a sprite can walk on.
@@ -206,5 +207,52 @@ abstract public class Platform implements ISprite
 	public Rectangle getBounds() 
 	{
 		return new Rectangle(this.getLocation().x, this.getLocation().y, _width,1);
+	}
+	
+	/**
+	 * Returns the point where a given line intersects with this Platform.
+	 * Useful when you want a sprite to align to a platform, or for
+	 * collision.
+	 * 
+	 * @param line
+	 * @return
+	 */
+	public Point getIntersectionPointOfVerticalLine(Line line)
+	{
+		/*
+		 * Get the LineSegment
+		 */
+		Line lineSegment = this.getLineSegmentInRangeOfLine(line); // TODO AB - How do we get the current Line segement?
+		
+		/*
+		 * Get intersection piint
+		 * TODO AB - Which line do we pass as a paramater first? Try the arg line
+		 */
+		return Line.getLineLineIntersection(line.getX(), line.getY(), line.getX1(), line.getY1(), lineSegment.getX(), lineSegment.getY(), lineSegment.getX1(), lineSegment.getY1());
+	}
+	
+	/**
+	 * Finds the horizontal line segment of this Platform that
+	 * is within range of the verticalLine.
+	 * 
+	 * Assumption: verticalLine X is = verticalLine X1
+	 * 
+	 * @param line
+	 * @return Line
+	 */
+	private Line getLineSegmentInRangeOfLine(Line verticalLine)
+	{
+		Line lineInRange = null;
+		
+		for (Line line : _lineSegments) 
+		{
+			if (line.getX() <= verticalLine.getX() && line.getX1() >= verticalLine.getX())
+			{
+				lineInRange = line;
+				break;
+			}
+		}
+		
+		return lineInRange;
 	}
 }

@@ -11,12 +11,15 @@ package com.bennis.minecart.client.engine.logic;
 
 import java.util.List;
 
+import com.bennis.minecart.client.GUIConstants;
 import com.bennis.minecart.client.engine.model.ISprite;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Line;
 import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Rectangle;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
+import com.google.gwt.touch.client.Point;
 
 /**
  * A collection of utility methods for
@@ -116,10 +119,20 @@ public class PlatformUtility
 		return PlatformUtility.alignVectorToPlatform(vector.x, vector.y, platform);
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param platform
+	 * @return
+	 */
 	public static Vector alignVectorToPlatform(double x, double y, Platform platform)
 	{
 		Vector aligendVector = new Vector(x, y);
-		aligendVector.y = platform.getBounds().getY() - 1;
+
+		Line verticalLineFromPoint = new Line(x,0,x,GUIConstants.HEIGHT);
+		Point alignedPoint =  platform.getIntersectionPointOfVerticalLine(verticalLineFromPoint);
+		aligendVector.y = alignedPoint.getY();
 		return aligendVector;
 	}
 
