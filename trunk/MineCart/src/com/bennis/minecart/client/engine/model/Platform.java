@@ -141,7 +141,7 @@ abstract public class Platform implements ISprite
 	public void update(InputEvent event) 
 	{
 		/*
-		 * TODO AB
+		 * TODO AB Introduce a Controller for scrolling
 		 * X position should be managed by one ScrollingController, that
 		 * updates all speeds. 
 		 * This way, we can implement automatic scrolling, as in MineCart,
