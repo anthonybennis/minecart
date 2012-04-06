@@ -251,14 +251,14 @@ abstract public class BasicSprite implements ISprite
 	@Override
 	public Rectangle getBounds() 
 	{
+
+		_bounds.setX(this.getLocation().x);
+		_bounds.setY(this.getLocation().y);
 		/*
-		 * Optimisation.
-		 * Bounds only calculated once. Sub classes can be more dynamic if needed.
+		 * Optimised: Calculate Image width and height only once!
 		 */
-//		if (_bounds.getWidth() < 1) 
-//		{
-			_bounds.setX(this.getLocation().x);
-			_bounds.setY(this.getLocation().y);
+		if (_bounds.getWidth() <= 0 || _bounds.getHeight() <= 0)
+		{
 			ImageElement[] images = this.getImageElements();
 			
 			if (images != null && images.length > 0 && images[0] != null)
@@ -267,7 +267,7 @@ abstract public class BasicSprite implements ISprite
 				_bounds.setWidth(element.getWidth());
 				_bounds.setHeight(element.getHeight());
 			}
-//		}
+		}
 		
 		return _bounds;
 	}
