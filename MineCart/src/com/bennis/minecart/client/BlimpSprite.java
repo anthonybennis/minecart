@@ -34,19 +34,19 @@ public class BlimpSprite extends BasicSprite
 	@Override
 	public void update(InputEvent event) 
 	{
-		// TODO 
+		// TODO AB Update Blimp Sprite
 	}
 
 	@Override
 	public void handleCollision(ISprite collisionSprite, Collision collisionType) 
 	{
-		// TODO 
+		// TODO AB Blimp Collision 
 	}
 
 	@Override
 	protected String[] getImageNames() 
 	{
-		// TODO 
+		// TODO AB Get Blimp Image
 		return null;
 	}
 }
