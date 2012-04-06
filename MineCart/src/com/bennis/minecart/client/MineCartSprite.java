@@ -38,7 +38,7 @@ public class MineCartSprite extends BasicSprite
 	private Vector _platformAlignedLEFTWheelLocation;
 	private Vector _platformAlignedRIGHTWheelLocation;
 	private static final int WHEEL_AXIS_THICKNESS = 10;
-	private static final int WHEEL_RADIUS = 15;
+	private static final double WHEEL_RADIUS = 15;
 	
 	/*
 	 * States
@@ -405,7 +405,7 @@ public class MineCartSprite extends BasicSprite
 		double xLocation = _platformAlignedLEFTWheelLocation.x; // TODO AB Revisit this relative position. Maybe move it over a bit?
 		double yLocation = (leftWheelHeight <  rightWheelHeight)?leftWheelHeight:rightWheelHeight;
 		
-		yLocation =  yLocation - height - WHEEL_RADIUS/2;
+		yLocation =  yLocation - (height - WHEEL_RADIUS/2);
 		this.setLocation(xLocation,yLocation);
 	}
 	
