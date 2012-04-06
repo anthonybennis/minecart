@@ -21,34 +21,46 @@ import com.bennis.minecart.client.engine.model.Platform;
  */
 public class RailwayTrack extends Platform 
 {
+	private int _x;
+	private int _y;
+	private int _x1;
+	private int _y1;
 	
 	@Override
 	public List<Line> createLineSegments() 
 	{
+		_x = 0;
+		_y = 500;
+		_x1 = 500;
+		_y1 = _y;
+		
 		/*
 		 * We'll keep a basic flat platform for v 0.1
 		 */
-		List<Line> lineSegments = new ArrayList<Line>();
-		int x = 0;
-		int y = 500;
-		int x1 = 500;
-		int y1 = y;
-		lineSegments.add(new Line(x, y, x1, y1)); 
-		
-		
-		/*
-		 * Example of how you'd create a bump on the track
-		 */
-		lineSegments.add(new Line(x, y, x1, y1)); // Line 1
-		x = x1; y1= y1-50;x1= x1+200;
-		lineSegments.add(new Line(x, y, x1, y1)); // Line 2
-		x = x1; x1= x1+100; y = y1;
-		lineSegments.add(new Line(x, y, x1, y1)); // Line 3
-		x = x1;  y=y1; y1= y1+50;x1= x1+300;
-		lineSegments.add(new Line(x, y, x1, y1)); // Line 4
-		x = x1;  y=y1;x1= x1+100;
-		lineSegments.add(new Line(x, y, x1, y1)); // Line 5
+		List<Line> lineSegments = new ArrayList<Line>();		
+		this.createHill(lineSegments, 50,200,100,300,1000);
+		this.createHill(lineSegments, 100,300,300,300,200);
+		this.createHill(lineSegments, 20,200,100,300,500);
+		this.createHill(lineSegments, 40,200,100,300,500);
 		
 		return lineSegments;
+	}
+	
+	private void createHill(List<Line> lineSegments, int hillHeight, int startLength, int uphillLength, int downhillLength, int endLength)
+	{
+		this.addNewLine(lineSegments); // Line 1 
+		_x = _x1; _y1= _y1-hillHeight;_x1= _x1+startLength;
+		this.addNewLine(lineSegments); // Line 2
+		_x = _x1; _x1= _x1+uphillLength; _y = _y1;
+		this.addNewLine(lineSegments); // Line 3
+		_x = _x1;  _y=_y1; _y1= _y1+hillHeight;_x1= _x1+downhillLength;
+		this.addNewLine(lineSegments); // Line 4
+		_x = _x1;  _y=_y1;_x1= _x1+endLength;
+		this.addNewLine(lineSegments); // Line 5
+	}
+	
+	private void addNewLine(List<Line> lineSegments)
+	{
+		lineSegments.add(new Line(_x, _y, _x1, _y1));
 	}
 }
