@@ -140,7 +140,7 @@ abstract public class AGameEntryPoint implements EntryPoint
 	protected void removeSplashScreen(String divID)
 	{
 		/*
-		 * TODO AB
+		 * TODO AB Splash Screen
 		 */
 //		@SuppressWarnings("static-access")
 //		Element bodyElement = RootPanel.getBodyElement();
