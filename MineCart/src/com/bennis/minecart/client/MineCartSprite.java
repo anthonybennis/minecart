@@ -43,7 +43,7 @@ public class MineCartSprite extends BasicSprite
 	/*
 	 * States
 	 */
-	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, FALL, NONE, STOP, BOUNCE};
+	private enum Movement{LEFT, LEFT_JUMP,RIGHT,RIGHT_JUMP, FALL, NONE, STOP, BOUNCE_LEFT, BOUNCE_RIGHT, COLLIDE};
 	private enum SpriteState{NORMAL, COLLIDE, FALLING};
 	
 	/*
@@ -69,6 +69,8 @@ public class MineCartSprite extends BasicSprite
 	private final double MOVE_SPEED = 3;
 	private final double JUMP_HORIZONTAL_DISTANCE = 150;
 	private final double FALL_SPEED = MOVE_SPEED*2;
+	private enum Bounce{LEFT,RIGHT};
+	private final int BOUNCE_HEIGHT = 50;
 	/*
 	 * Game counters
 	 */
@@ -242,6 +244,21 @@ public class MineCartSprite extends BasicSprite
 					_spriteState = this.moveRight(endofScreen, startofScreen);
 					break;
 				}
+				case BOUNCE_LEFT:
+				{
+					_spriteState = this.bounceLeft(endofScreen, startofScreen);
+					break;	
+				}
+				case BOUNCE_RIGHT:
+				{
+					_spriteState = this.bounceRight(endofScreen, startofScreen);
+					break;	
+				}
+				case COLLIDE:
+				{
+					_spriteState = this.collideWithObstacle(endofScreen, startofScreen);
+					break;
+				}
 				case NONE:
 				{
 					/*
@@ -385,6 +402,37 @@ public class MineCartSprite extends BasicSprite
 				
 				break;
 			}
+			case BOUNCE_LEFT:
+			{
+				/*
+				 * Note: We don't use the current aligned values,
+				 * as we bounce up in the air, then fall. So
+				 * our end point is not on the platform, it's
+				 * somewhere in the air.
+				 */				
+				_endX = this.getLocation().x - JUMP_HORIZONTAL_DISTANCE;
+				_endY = this.getLocation().y - BOUNCE_HEIGHT;
+				
+				break;
+			}
+			case BOUNCE_RIGHT:
+			{
+				/*
+				 * Note: We don't use the current aligned values,
+				 * as we bounce up in the air, then fall. So
+				 * our end point is not on the platform, it's
+				 * somewhere in the air.
+				 */	
+				_endX = this.getLocation().x + JUMP_HORIZONTAL_DISTANCE;
+				_endY = this.getLocation().y - BOUNCE_HEIGHT;
+			}
+			case COLLIDE:
+			{
+				/*
+				 * TODO AB Collide
+				 */
+				break;
+			}
 			default:
 			{
 				break;
@@ -405,7 +453,7 @@ public class MineCartSprite extends BasicSprite
 		double xLocation = _platformAlignedLEFTWheelLocation.x; // TODO AB Revisit this relative position. Maybe move it over a bit?
 		double yLocation = (leftWheelHeight <  rightWheelHeight)?leftWheelHeight:rightWheelHeight;
 		
-		yLocation =  yLocation - (height - WHEEL_RADIUS/2);
+		yLocation =  yLocation - (height); // TODO AB Review: Is this okay? Do we need to make it higher?
 		this.setLocation(xLocation,yLocation);
 	}
 	
@@ -601,6 +649,88 @@ public class MineCartSprite extends BasicSprite
 		return _spriteState;
 	}
 	
+	/**
+	 * When we hit an enemy or obstacle, we must bounce
+	 * back/forward (depending on location of obstacle and cart).
+	 * This allows the cart to escape danger, and getting hit multiple
+	 * times by the same collision.
+	 * 
+	 * A "Bounce" pushes the MineCart up and back, and then it just falls.
+	 * 
+	 * @return SpriteState
+	 */
+	private SpriteState bounceLeft(boolean endofScreen, boolean startofScreen)
+	{
+		if (!startofScreen)
+		{	
+			this.getLocation().y = this.getLocation().y - FALL_SPEED;
+			this.getLocation().x = this.getLocation().x - FALL_SPEED;
+
+			/*
+			 * Conditions to end  movement 
+			 */
+			if (this.getLocation().y <= _endY)
+			{
+				this.startNewMovement(Movement.FALL, _spriteState);
+			}
+		}
+		else
+		{
+			/*
+			 * Reached end/start of screen. Just fall down.
+			 */
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
+		return _spriteState;
+	}
+	
+	/**
+	 * When we hit an enemy or obstacle, we must bounce
+	 * back/forward (depending on location of obstacle and cart).
+	 * This allows the cart to escape danger, and getting hit multiple
+	 * times by the same collision.
+	 * 
+	 * A "Bounce" pushes the MineCart up and back, and then it just falls.
+	 * 
+	 * 
+	 * @return SpriteState
+	 */
+	private SpriteState bounceRight(boolean endofScreen, boolean startofScreen)
+	{
+		if (!startofScreen)
+		{	
+			this.getLocation().y = this.getLocation().y - FALL_SPEED;
+			this.getLocation().x = this.getLocation().x + FALL_SPEED;
+
+			/*
+			 * Conditions to end  movement 
+			 */
+			if (this.getLocation().y <= _endY)
+			{
+				this.startNewMovement(Movement.FALL, _spriteState);
+			}
+		}
+		else
+		{
+			/*
+			 * Reached end/start of screen. Just fall down.
+			 */
+			this.startNewMovement(Movement.FALL, _spriteState);
+		}
+		
+		return _spriteState;
+	}
+	
+	private SpriteState collideWithObstacle(boolean endofScreen, boolean startofScreen)
+	{
+		/*
+		 * TODO AB collideWithObstacle
+		 * See: handleCollison for pseudo code.
+		 */
+		return _spriteState;
+	}
+	
 	@Override
 	public void handleCollision(ISprite collisionSprite,Collision collisionType) 
 	{
@@ -625,16 +755,30 @@ public class MineCartSprite extends BasicSprite
 					}
 					else
 					{
-						this.collide(_movement);
+						Bounce bounceDirection = this.calculateBounceDirection(collisionSprite);
+						
+						if (bounceDirection == Bounce.LEFT)
+						{
+							this.startNewMovement(Movement.BOUNCE_LEFT, SpriteState.COLLIDE);	
+						}
+						else
+						{
+							this.startNewMovement(Movement.BOUNCE_RIGHT, SpriteState.COLLIDE);
+						}
 					}
-					
 					
 					break;
 				}
 				case OBSTACLE:
 				{	
-					this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
-					
+					/*
+					 * TODO AB Handle Collide with obstacle
+					 * - stop a current movement
+					 * - Push MineCart Left if obstacle is on the right
+					 * - Squash/Kill if at the start of the screen
+					 * 
+					 */
+					this.startNewMovement(Movement.COLLIDE, SpriteState.COLLIDE);
 					break;
 				}
 				case PLATFORM:
@@ -643,12 +787,9 @@ public class MineCartSprite extends BasicSprite
 					 *  We don't collide with the Platform. It has no "Bounds".
 					 *  Instead, we move and align.
 					 * 
-					 * TODO AB - When we're not moving, we need to be aligned to the
-					 * Platform, as it moves towards us
-					 * 
 					 * TODO AB - When we're jumping/Falling, we need to know if we hit
 					 * the Platform. Falling is easy, but Jumping? Maybe see if the wheel,
-					 * taking it's radius into account, intersects a Platform?
+					 * taking it's radius into account, intersects a Platform line?
 					 */
 					
 					break;
@@ -661,93 +802,12 @@ public class MineCartSprite extends BasicSprite
 			}
 		}
 	}
-	
-	/**
-	 * Collide with MineCark when you hit an ENEMY
-	 * or OBSTACLE.
-	 * 
-	 * Hitting these sprites affect the current movement of the Mine Cart.
-	 * This is handled here.
-	 * 
-	 * For example, if the cart was moving right, hitting an obstacle would cause it
-	 * to bounce back to the left.
-	 * 
-	 * Note: MineCart will FALL once it's new movement is set.
-	 * 
-	 * @param movement
-	 */
-	private void collide(Movement movement)
-	{
-		
-		double x = this.getLocation().x;
-		double y = this.getLocation().y;
-		
-		final double BUMP_HEIGHT = 60;
-		
-		/*
-		 * TODO AB 
-		 * If we make the scroll speed changeable, this needs to be updated.
-		 * For example: 
-		 * this.setLocation(x + GUIConstants.MEDIUM_SCROLL_SPEED*2, y - BUMP_HEIGHT);
-		 * should become:
-		 * this.setLocation(x + scrollSpeed*2, y - BUMP_HEIGHT);
-		 * or something like that.
-		 * 
-		 * TODO AB - Movement is not correct.
-		 * We need to see where the two centers of both bounding sprites are compared to
-		 * each other. As a collision's direction can come from anywhere, not just the direction
-		 * of the MineCard.
-		 */
-		switch (_movement) 
-		{
-			case NONE:
-			{
-				this.setLocation(x, y + 20); // TODO AB Test this
-				break;
-			}
-			case LEFT:
-			{
-				this.setLocation((x + GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
-				break;
-			}
-			case LEFT_JUMP:
-			{
-				this.setLocation((x + GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
-				break;
-			}
-			case RIGHT:
-			{
-				this.setLocation((x - GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
-				break;
-			}
-			case RIGHT_JUMP:
-			{
-				this.setLocation((x - GUIConstants.MEDIUM_SCROLL_SPEED*2), y - BUMP_HEIGHT);
-				break;
-			}
-			default:
-			{
-				break;
-			}
-		}
-		
-		/*
-		 * TODO AB Check if Sprite is now crushed against the start of the screen.
-		 * If so, he must die.
-		 */
-		
-		this.startNewMovement(Movement.FALL, SpriteState.COLLIDE);
-	}
-	
-
-	
-
 
 	@Override
 	protected String[] getImageNames() 
 	{
 		/*
-		 * TODO AB
+		 * TODO AB Refactor In Future?
 		 * This is a multi animation Sprite. We should
 		 * examine extending BasicSprite to handle this.
 		 */
@@ -764,11 +824,10 @@ public class MineCartSprite extends BasicSprite
 	public void draw(Canvas canvas) 
 	{
 		/*
-		 * TODO AB
+		 * TODO AB Optimise MineCartSprite by reducing calculations
 		 * Maybe we can optimise this, by calculating alignment with Platform
 		 * every four updates or something?
 		 */
-		
 		
 		/*
 		 * Ensure current images are loaded.
@@ -779,8 +838,6 @@ public class MineCartSprite extends BasicSprite
 		}
 		else
 		{
-
-
 			/*
 			 *  Draw Wheels.
 			 *  
@@ -804,7 +861,7 @@ public class MineCartSprite extends BasicSprite
 			canvas.getContext2d().closePath();
 			canvas.getContext2d().fill();
 			/*
-			 * Draw wheel axil
+			 * Draw wheel axis
 			 */
 			Line leftWheelAxis = new Line();
 			leftWheelAxis.setX(_platformAlignedLEFTWheelLocation.x);
@@ -831,6 +888,7 @@ public class MineCartSprite extends BasicSprite
 			canvas.getContext2d().lineTo(rightWheelAxis.getX1(), rightWheelAxis.getY1());
 			canvas.getContext2d().closePath();
 			canvas.getContext2d().stroke();
+			// End Draw Wheel axis.
 			
 			/*
 			 * Temp - Draw Bounds
@@ -881,6 +939,28 @@ public class MineCartSprite extends BasicSprite
 				_currentAnimationFrame++;
 			}
 		}
+	}
+	
+	/**
+	 * The Mine cart will bounce LEFT/RIGHT
+	 * depending on the location of the cart and
+	 * the sprite it collides with.
+	 * 
+	 * @return
+	 */
+	private Bounce calculateBounceDirection(ISprite collisionSprite)
+	{
+		Bounce direction = Bounce.LEFT;
+		
+		Vector collisionSpriteCenter = collisionSprite.getBounds().getCenter();
+		Vector mineCartCenter = this.getBounds().getCenter();
+		
+		if (collisionSpriteCenter.x < mineCartCenter.x)
+		{
+			direction = Bounce.RIGHT;
+		}
+		
+		return direction;
 	}
 	
 	/**
@@ -950,7 +1030,7 @@ public class MineCartSprite extends BasicSprite
 				default:
 				{
 					/*
-					 * FALL, NONE
+					 * FALL, NONE, BOUNCE, COLLIDE
 					 */
 					imageSequence = _currentAnmationSequence;
 					break;
