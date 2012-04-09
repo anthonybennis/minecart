@@ -9,6 +9,8 @@
  *******************************************************************************/
 package com.bennis.minecart.client;
 
+import com.bennis.minecart.client.engine.model.Rectangle;
+
 public interface GUIConstants 
 {
 	public static final int WIDTH = 1000;
@@ -22,6 +24,7 @@ public interface GUIConstants
 	public static final int MEDIUM_SCROLL_SPEED = 3;
 	public static final int FAST_SCROLL_SPEED = 4;
 	public static final int DEFAULT_NUMBER_OF_LIVES = 3;
+	public static final Rectangle SCREEN_SIZE = new Rectangle(0,0,WIDTH, HEIGHT);
 	
 	// Counter names
 	public static final String GAME_POINTS_COUNTER_NAME = "Score :";
