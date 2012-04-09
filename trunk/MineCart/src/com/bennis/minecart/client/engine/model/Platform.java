@@ -19,17 +19,18 @@ import com.google.gwt.touch.client.Point;
 abstract public class Platform implements ISprite 
 {
 	private static final int LINE_THICKNESS = 3;
+	
 	private Vector _location = new Vector();
 	private boolean _selected = false;
 	private boolean _disposed = false;
-	private double _width = 0;
-	List<Line> _lineSegments; // TODO AB Use 2D int array instead of objs.
+	private Rectangle _screenSize;
+	List<Line> _lineSegments; 
 	
-	public Platform()
+	public Platform(Rectangle screenSize)
 	{
 		_lineSegments = this.createLineSegments();
+		_screenSize = screenSize;
 		this.setupInitialLocation();
-		_width = this.calculateWidth();
 	}
 	
 	/**
@@ -40,22 +41,6 @@ abstract public class Platform implements ISprite
 	{
 		Line firstLine = _lineSegments.get(0);
 		this.setLocation(firstLine.getX(), firstLine.getY());
-	}
-	
-	/**
-	 * Calculates the entire width of all segments
-	 * @return
-	 */
-	private double calculateWidth()
-	{
-		double width = 0;
-		
-		for (Line line : _lineSegments) 
-		{
-			width = width + (line.getX1() - line.getX());
-		}
-		
-		return width;
 	}
 	
 	/**
@@ -100,8 +85,6 @@ abstract public class Platform implements ISprite
 			line.setX(line.getX() - scrollAmount);
 			line.setX1(line.getX1() - scrollAmount);
 		}
-		
-		this.setLocation(newXPosition, this.getLocation().y);
 	}
 
 	@Override
@@ -127,13 +110,20 @@ abstract public class Platform implements ISprite
 	{
 		for (Line line: _lineSegments) 
 		{
-			canvas.getContext2d().beginPath();
-			canvas.getContext2d().setStrokeStyle("white");
-			canvas.getContext2d().setLineWidth(LINE_THICKNESS);
-			canvas.getContext2d().moveTo(line.getX(), line.getY());
-			canvas.getContext2d().lineTo(line.getX1(), line.getY1());
-			canvas.getContext2d().closePath();
-			canvas.getContext2d().stroke();
+			/*
+			 * Optimised. Only draw lines within Canvas.
+			 */
+			if (_screenSize.contains(line.getX(), line.getY())
+				|| _screenSize.contains(line.getX1(), line.getY1()))
+				{
+					canvas.getContext2d().beginPath();
+					canvas.getContext2d().setStrokeStyle("white");
+					canvas.getContext2d().setLineWidth(LINE_THICKNESS);
+					canvas.getContext2d().moveTo(line.getX(), line.getY());
+					canvas.getContext2d().lineTo(line.getX1(), line.getY1());
+					canvas.getContext2d().closePath();
+					canvas.getContext2d().stroke();
+				}
 		}
 	}
 
@@ -206,7 +196,10 @@ abstract public class Platform implements ISprite
 	@Override
 	public Rectangle getBounds() 
 	{
-		return new Rectangle(this.getLocation().x, this.getLocation().y, _width,1);
+		/*
+		 * Platform does not have useable bounds.
+		 */
+		return new Rectangle(this.getLocation().x, this.getLocation().y, 0,0);
 	}
 	
 	/**
@@ -222,11 +215,10 @@ abstract public class Platform implements ISprite
 		/*
 		 * Get the LineSegment
 		 */
-		Line lineSegment = this.getLineSegmentInRangeOfLine(line); // TODO AB - How do we get the current Line segement?
+		Line lineSegment = this.getLineSegmentInRangeOfLine(line);
 		
 		/*
-		 * Get intersection piint
-		 * TODO AB - Which line do we pass as a paramater first? Try the arg line
+		 * Get intersection point
 		 */
 		return Line.getLineLineIntersection(line.getX(), line.getY(), line.getX1(), line.getY1(), lineSegment.getX(), lineSegment.getY(), lineSegment.getX1(), lineSegment.getY1());
 	}

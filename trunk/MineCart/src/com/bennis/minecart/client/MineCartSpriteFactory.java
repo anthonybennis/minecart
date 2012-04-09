@@ -91,7 +91,7 @@ public class MineCartSpriteFactory extends SpriteFactory
 		/*
 		 * 1st Platform (Railway)
 		 */
-		Platform platform = new RailwayTrack();
+		Platform platform = new RailwayTrack(GUIConstants.SCREEN_SIZE);
 		scene.storeSprite(platform);
 		
 		/*

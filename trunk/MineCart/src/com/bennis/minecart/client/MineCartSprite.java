@@ -17,12 +17,15 @@ import com.bennis.minecart.client.engine.logic.PlatformUtility;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
-import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.Line;
+import com.bennis.minecart.client.engine.model.Platform;
+import com.bennis.minecart.client.engine.model.Layer.Layers;
+import com.bennis.minecart.client.engine.model.Rectangle;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.touch.client.Point;
 
 /**
  * Main Sprite.
@@ -30,6 +33,8 @@ import com.google.gwt.dom.client.ImageElement;
  */
 public class MineCartSprite extends BasicSprite 
 {	
+	private static final int MINE_CART_HEIGHT = 80;
+
 	private Scene _scene;
 	
 	/*
@@ -37,8 +42,8 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private Vector _platformAlignedLEFTWheelLocation;
 	private Vector _platformAlignedRIGHTWheelLocation;
-	private static final int WHEEL_AXIS_THICKNESS = 10;
-	private static final double WHEEL_RADIUS = 15;
+	private static final int WHEEL_AXIS_THICKNESS = 5;
+	private static final double WHEEL_RADIUS = 20;
 	
 	/*
 	 * States
@@ -53,9 +58,14 @@ public class MineCartSprite extends BasicSprite
 	private ImageElement[] _movingRightAnmationSequence;
 	private ImageElement[] _movingLeftAnmationSequence;
 	private ImageElement[] _collidingAnmationSequence;
+	private ImageElement[] _wheelAnmationSequence;
+	private ImageElement _blinkImage;
 	private int _currentAnimationFrame = 0;
+	private int _currentWheelAnimationFrame = 0;
+	private int _blinkCounter = 0;
 	private SpriteState _spriteState = SpriteState.NORMAL;
 	private boolean _updateFrame;
+	
 	
 	/*
 	 * Movement
@@ -66,7 +76,7 @@ public class MineCartSprite extends BasicSprite
 	private double _startX;
 	private double _startY;
 	private final double MOVE_DISTANCE = 50; 
-	private final double MOVE_SPEED = 3;
+	private final double MOVE_SPEED = 5;
 	private final double JUMP_HORIZONTAL_DISTANCE = 150;
 	private final double FALL_SPEED = MOVE_SPEED*2;
 	private enum Bounce{LEFT,RIGHT};
@@ -118,8 +128,10 @@ public class MineCartSprite extends BasicSprite
 		_movingRightAnmationSequence = this.createMovingRightAnimationSequence();
 		_movingLeftAnmationSequence = this.createMovingLeftAnimationSequence();
 		_collidingAnmationSequence = this.createCollidingAnimationSequence();
-		
+		_wheelAnmationSequence = this.createWheelAnimationSequence();
+		_blinkImage = this.getImageLoader().getImage("images/minecart/Podge00Blink.png");
 		_currentAnmationSequence = _movingRightAnmationSequence;
+		
 		this.setImageElements(_currentAnmationSequence); // Super class needs this to calculate bounds.
 	}
 	
@@ -151,6 +163,17 @@ public class MineCartSprite extends BasicSprite
 		 * TODO AB - Use Correct Sprite Image
 		 */
 		return this.createMovingRightAnimationSequence();
+	}
+	
+	
+	private ImageElement[] createWheelAnimationSequence()
+	{
+		String[] imageNames = new String[3];
+		imageNames[0] = "images/minecart/Wheel00.png";
+		imageNames[1] = "images/minecart/Wheel01.png";
+		imageNames[2] = "images/minecart/Wheel02.png";
+		
+		return this.createAnimationSequence(imageNames);
 	}
 	
 	/**
@@ -346,13 +369,15 @@ public class MineCartSprite extends BasicSprite
 			{
 				if (alignedVector != null)
 				{
-					_endX = alignedVector.x - JUMP_HORIZONTAL_DISTANCE;
-					_endY = alignedVector.y;
+					/*
+					 *  We don't calculate an end point for Jumping. The movement
+					 *  ends when the left wheel intersects with a Platform line.
+					 */
 				}
 				else
 				{
 					// There's no platform to move to! 
-					this.startNewMovement(Movement.NONE, _spriteState);
+					this.startNewMovement(Movement.FALL, _spriteState);
 				}
 				
 				break;
@@ -382,7 +407,7 @@ public class MineCartSprite extends BasicSprite
 				else
 				{
 					// There's no platform to move to! 
-					this.startNewMovement(Movement.NONE, _spriteState);
+					this.startNewMovement(Movement.FALL, _spriteState);
 				}
 				
 				break;
@@ -504,26 +529,36 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState jumpLeft(boolean endofScreen, boolean startofScreen)
 	{
+		/*
+		 * TODO AB
+		 * Jump needs to end when cart intersects Platform.
+		 */
 		if (!startofScreen)
 		{			
-			this.getLocation().x = this.getLocation().x - MOVE_SPEED;
+			_platformAlignedLEFTWheelLocation.x = _platformAlignedLEFTWheelLocation.x - MOVE_SPEED; 
+			_platformAlignedRIGHTWheelLocation.x = _platformAlignedRIGHTWheelLocation.x - MOVE_SPEED;
 			
-			double distanceTravelled = this._startX - this.getLocation().x;
+			
+			double distanceTravelled = (this._startX - _platformAlignedLEFTWheelLocation.x);
 			
 			if (distanceTravelled < JUMP_HORIZONTAL_DISTANCE/2)
 			{
 				/*
 				 * Jump up
 				 */
-				this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+				_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y - MOVE_SPEED; 
+				_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y - MOVE_SPEED;
 			}
 			else
 			{
 				/*
 				 * Fall back down
 				 */
-				this.getLocation().y = this.getLocation().y + MOVE_SPEED;
+				_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y + MOVE_SPEED; 
+				_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y + MOVE_SPEED;
 			}
+			
+			this.setLocationOfCartBasedOnWheelLocation();
 		}
 		else
 		{
@@ -535,9 +570,15 @@ public class MineCartSprite extends BasicSprite
 		
 		/*
 		 * Conditions to end  movement 
-		 */
-		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
+		 * TODO AB Stop when left wheel intersects with a Platform line
+		 */		
+		if (this._platformAlignedLEFTWheelLocation.y == _endY
+				&& this._platformAlignedLEFTWheelLocation.x == _endX)
 		{
+			/*
+			 * Ensure we land on track correctly.
+			 */
+			
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
 		
@@ -589,6 +630,10 @@ public class MineCartSprite extends BasicSprite
 	{
 		if (!endofScreen)
 		{			
+			/*
+			 * TODO AB
+			 * Jump needs to end when cart intersects Platform.
+			 */
 			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
 			
 			double distanceTravelled = this.getLocation().x - this._startX;
@@ -810,12 +855,15 @@ public class MineCartSprite extends BasicSprite
 		 * TODO AB Refactor In Future?
 		 * This is a multi animation Sprite. We should
 		 * examine extending BasicSprite to handle this.
+		 * 
+		 * TODO AB - Animate
 		 */
-		String[] imageNames = new String[4];
-		imageNames[0] = "images/minecart/MineCartRight00.png";
-		imageNames[1] = "images/minecart/MineCartRight01.png";
-		imageNames[2] = "images/minecart/MineCartRight02.png";
-		imageNames[3] = "images/minecart/MineCartRight03.png";
+		String[] imageNames = new String[5];
+		imageNames[0] = "images/minecart/Podge00.png";
+		imageNames[1] = "images/minecart/Podge01.png";
+		imageNames[2] = "images/minecart/Podge02.png";
+		imageNames[3] = "images/minecart/Podge01.png";
+		imageNames[4] = "images/minecart/Podge00.png";
 		
 		return imageNames;
 	}
@@ -832,104 +880,137 @@ public class MineCartSprite extends BasicSprite
 		/*
 		 * Ensure current images are loaded.
 		 */
-		if (!this.haveAllImagesLoaded(_currentAnmationSequence))
+		if (!this.haveAllImagesLoaded(_currentAnmationSequence)
+				|| !this.haveAllImagesLoaded(_wheelAnmationSequence))
 		{
 			this.loadAllImageSequences();
 		}
 		else
 		{
 			/*
-			 *  Draw Wheels.
-			 *  
-			 *  Wheels are white for now.
-			 *  TODO AB - Maybe we'll draw spokes and rotate them?
+			 * Draw Podge Sprite
 			 */
+			if (_currentAnimationFrame >= _currentAnmationSequence.length)
+			{
+				_currentAnimationFrame = 0; //Reset animation.
+			}
+			final int PODGE_SPRITE_POS_Y_OFFSET = 120;
 			canvas.getContext2d().setFillStyle("white");
+			ImageElement currentFrame;
+
+			/*
+			 * Podge sprite blinks every few seconds.
+			 */
+			if (_currentAnimationFrame == 0 && _blinkCounter ==10) 
+			{
+				currentFrame = _blinkImage;
+			}
+			else
+			{
+				currentFrame = _currentAnmationSequence[_currentAnimationFrame];
+			}
+			
+			_blinkCounter = (_blinkCounter == 60)?0:_blinkCounter; // Reset Blink counter when it hits 30
+			
+			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, (this.getLocation().y - (PODGE_SPRITE_POS_Y_OFFSET)));
+			
+			/*
+			 * Draw Mine Cart Side Panel
+			 */
+			canvas.getContext2d().setFillStyle("brown");
+//			CanvasGradient gradient = canvas.getContext2d().createLinearGradient(0, 0, 10, 20);
+//			gradient.addColorStop(0.5f, "#ffaaff");
+//			canvas.getContext2d().setFillStyle(gradient);
+			
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
+			canvas.getContext2d().moveTo(_platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y);
+			canvas.getContext2d().lineTo((_platformAlignedLEFTWheelLocation.x - WHEEL_AXIS_THICKNESS), _platformAlignedLEFTWheelLocation.y - MINE_CART_HEIGHT);
+			canvas.getContext2d().lineTo((_platformAlignedRIGHTWheelLocation.x + WHEEL_AXIS_THICKNESS), _platformAlignedRIGHTWheelLocation.y - MINE_CART_HEIGHT);
+			canvas.getContext2d().lineTo((_platformAlignedRIGHTWheelLocation.x), _platformAlignedRIGHTWheelLocation.y);
+			canvas.getContext2d().closePath();
+			canvas.getContext2d().fill();
+			
+			
+			/*
+			 * Draw Mine Cart Border
+			 */
+			canvas.getContext2d().setFillStyle("#000000");
+			canvas.getContext2d().beginPath();
+			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
+			canvas.getContext2d().moveTo(_platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y);
+			canvas.getContext2d().lineTo((_platformAlignedLEFTWheelLocation.x - (WHEEL_AXIS_THICKNESS + 2)), _platformAlignedLEFTWheelLocation.y - MINE_CART_HEIGHT);
+			canvas.getContext2d().lineTo((_platformAlignedRIGHTWheelLocation.x + (WHEEL_AXIS_THICKNESS + 2)), _platformAlignedRIGHTWheelLocation.y - MINE_CART_HEIGHT);
+			canvas.getContext2d().lineTo((_platformAlignedRIGHTWheelLocation.x), _platformAlignedRIGHTWheelLocation.y);
+			canvas.getContext2d().closePath();
+			canvas.getContext2d().stroke();
+			
+			canvas.getContext2d().setFillStyle("white");
+			
+			/*
+			 * TODO AB Refactor frame rate code into BasicSprite as it's used twice now.
+			 */
+			if (_currentWheelAnimationFrame >= _wheelAnmationSequence.length)
+			{
+				_currentWheelAnimationFrame = 0; //Reset animation.
+			}
+			
+			currentFrame = _wheelAnmationSequence[_currentWheelAnimationFrame];
 			
 			/*
 			 * Draw Left wheel
 			 */
-			canvas.getContext2d().beginPath();
-			canvas.getContext2d().arc(_platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y,WHEEL_RADIUS,0,360);
-			canvas.getContext2d().closePath();
-			canvas.getContext2d().fill();
+			double wheelTopLeftXPos = _platformAlignedLEFTWheelLocation.x - (currentFrame.getWidth()/2);
+			double wheelTopLeftYPos = _platformAlignedLEFTWheelLocation.y - ((currentFrame.getHeight()/2) + 3);
+			
+			canvas.getContext2d().drawImage(currentFrame, wheelTopLeftXPos, wheelTopLeftYPos);
+			
 			/*
 			 * Draw Right wheel
 			 */
-			canvas.getContext2d().beginPath();
-			canvas.getContext2d().arc(_platformAlignedRIGHTWheelLocation.x, _platformAlignedRIGHTWheelLocation.y,WHEEL_RADIUS,0,360);
-			canvas.getContext2d().closePath();
-			canvas.getContext2d().fill();
+			wheelTopLeftXPos = _platformAlignedRIGHTWheelLocation.x - (currentFrame.getWidth()/2);
+			wheelTopLeftYPos = _platformAlignedRIGHTWheelLocation.y - ((currentFrame.getHeight()/2) + 3);
+			
+			canvas.getContext2d().drawImage(currentFrame, wheelTopLeftXPos, wheelTopLeftYPos);
+			
 			/*
 			 * Draw wheel axis
+			 * TODO AB - Change this to draw Wheel Spokes,
+			 * or create images for the wheels and animate those.
+			 * Dont' forget animate forward and back!!
 			 */
-			Line leftWheelAxis = new Line();
-			leftWheelAxis.setX(_platformAlignedLEFTWheelLocation.x);
-			leftWheelAxis.setY(_platformAlignedLEFTWheelLocation.y);
-			leftWheelAxis.setX1(this.getBounds().getCenter().x);
-			leftWheelAxis.setY1(this.getBounds().getCenter().y);
-			
-			Line rightWheelAxis = new Line();
-			rightWheelAxis.setX(_platformAlignedRIGHTWheelLocation.x);
-			rightWheelAxis.setY(_platformAlignedRIGHTWheelLocation.y);
-			rightWheelAxis.setX1(this.getBounds().getCenter().x);
-			rightWheelAxis.setY1(this.getBounds().getCenter().y);
-			
-			canvas.getContext2d().beginPath();
-			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
-			canvas.getContext2d().moveTo(leftWheelAxis.getX(), leftWheelAxis.getY());
-			canvas.getContext2d().lineTo(leftWheelAxis.getX1(), leftWheelAxis.getY1());
-			canvas.getContext2d().closePath();
-			canvas.getContext2d().stroke();
-			
-			canvas.getContext2d().beginPath();
-			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
-			canvas.getContext2d().moveTo(rightWheelAxis.getX(), rightWheelAxis.getY());
-			canvas.getContext2d().lineTo(rightWheelAxis.getX1(), rightWheelAxis.getY1());
-			canvas.getContext2d().closePath();
-			canvas.getContext2d().stroke();
+//			Line leftWheelAxis = new Line();
+//			leftWheelAxis.setX(_platformAlignedLEFTWheelLocation.x);
+//			leftWheelAxis.setY(_platformAlignedLEFTWheelLocation.y);
+//			leftWheelAxis.setX1(this.getBounds().getCenter().x);
+//			leftWheelAxis.setY1(this.getBounds().getCenter().y);
+//			
+//			Line rightWheelAxis = new Line();
+//			rightWheelAxis.setX(_platformAlignedRIGHTWheelLocation.x);
+//			rightWheelAxis.setY(_platformAlignedRIGHTWheelLocation.y);
+//			rightWheelAxis.setX1(this.getBounds().getCenter().x);
+//			rightWheelAxis.setY1(this.getBounds().getCenter().y);
+//			
+//			canvas.getContext2d().beginPath();
+//			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
+//			canvas.getContext2d().moveTo(leftWheelAxis.getX(), leftWheelAxis.getY());
+//			canvas.getContext2d().lineTo(leftWheelAxis.getX1(), leftWheelAxis.getY1());
+//			canvas.getContext2d().closePath();
+//			canvas.getContext2d().stroke();
+//			
+//			canvas.getContext2d().beginPath();
+//			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
+//			canvas.getContext2d().moveTo(rightWheelAxis.getX(), rightWheelAxis.getY());
+//			canvas.getContext2d().lineTo(rightWheelAxis.getX1(), rightWheelAxis.getY1());
+//			canvas.getContext2d().closePath();
+//			canvas.getContext2d().stroke();
 			// End Draw Wheel axis.
 			
 			/*
 			 * Temp - Draw Bounds
 			 */
 //			Rectangle bounds = this.getBounds();
-//			canvas.getContext2d().fillRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
-			
-			/*
-			 * Draw Mine Cart Sprite
-			 * (Drawing Style depends on SpriteState)
-			 */
-			if (_currentAnimationFrame >= _currentAnmationSequence.length)
-			{
-				_currentAnimationFrame = 0; //Reset animation.
-			}
-			
-			ImageElement currentFrame = _currentAnmationSequence[_currentAnimationFrame];
-			
-			/*
-			 * Rotate cart so it rocks when wheels move up/down
-			 */
-			double rotationAngle = this.calculateRotationAngle();
-			canvas.getContext2d().fillText("Current Rotation: " + rotationAngle, 10, 200);
-			canvas.getContext2d().save();
-			double xPos = (this.getLocation().x + (this.getBounds().getWidth()/2));
-			double yPos = (this.getLocation().y + (this.getBounds().getHeight()/2));
-			canvas.getContext2d().fillText("Translation Point: " + xPos + "," + yPos, 10, 230);
-//			canvas.getContext2d().translate(xPos, yPos);
-//			canvas.getContext2d().rotate(rotationAngle);
-
-			/*
-			 * Draw Podge in Cart
-			 */
-			canvas.getContext2d().drawImage(currentFrame, this.getLocation().x, this.getLocation().y);
-			
-			/*
-			 * End rotation
-			 */
-//			canvas.getContext2d().rotate(0);
-//			canvas.getContext2d().restore();
-			
+//			canvas.getContext2d().strokeRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 			
 			// We update animation frame every second refresh.
 			_updateFrame = !_updateFrame; 
@@ -937,6 +1018,8 @@ public class MineCartSprite extends BasicSprite
 			if (_updateFrame)
 			{
 				_currentAnimationFrame++;
+				_currentWheelAnimationFrame++;
+				_blinkCounter++;
 			}
 		}
 	}
@@ -961,34 +1044,6 @@ public class MineCartSprite extends BasicSprite
 		}
 		
 		return direction;
-	}
-	
-	/**
-	 * Cart rotation angle depends on the position
-	 * of it's wheels.
-	 * @return
-	 */
-	private double calculateRotationAngle()
-	{
-		double angle = 0;
-		final double DEFAULT_TILT = 0;
-		double differenceInHeight = _platformAlignedLEFTWheelLocation.y - _platformAlignedRIGHTWheelLocation.y;
-		differenceInHeight = Math.abs(differenceInHeight);
-		
-		if (differenceInHeight == 0)
-		{
-			angle = 0;
-		}
-		else if (_platformAlignedLEFTWheelLocation.y > _platformAlignedRIGHTWheelLocation.y)
-		{
-			angle = 0; //angle = -(DEFAULT_TILT + differenceInHeight);
-		}
-		else
-		{
-			angle = 0; //angle = +(DEFAULT_TILT + differenceInHeight);
-		}
-		
-		return angle;
 	}
 
 	/**
@@ -1043,6 +1098,27 @@ public class MineCartSprite extends BasicSprite
 		}
 		
 		return imageSequence;
+	}
+	
+	@Override
+	public Rectangle getBounds() 
+	{
+		_bounds.setX(this.getLocation().x);
+		_bounds.setY(this.getLocation().y);
+		/*
+		 * Optimised: Calculate Image width and height only once!
+		 */
+		if (_bounds.getWidth() <= 0 || _bounds.getHeight() <= 0)
+		{
+			_bounds.setWidth(150);
+			/*
+			 * TODO AB Calculate height with Podge Sprite in Cart
+			 * Delaying this until I think about how Mine cart will be rendered (image or 2D)
+			 */
+			_bounds.setHeight(MINE_CART_HEIGHT);
+		}
+		
+		return _bounds;
 	}
 	
 	

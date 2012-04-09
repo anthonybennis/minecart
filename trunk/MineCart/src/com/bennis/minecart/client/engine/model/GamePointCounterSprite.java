@@ -22,7 +22,7 @@ public class GamePointCounterSprite implements ISprite
 	private boolean _isDisposed;
 	private Rectangle _bounds;
 	private String _fontColour = "white";
-	private String _font = "bold 16px sans-serif";
+	private String _font = "bold 20px sans-serif";
 	
 	/**
 	 * Constructor.

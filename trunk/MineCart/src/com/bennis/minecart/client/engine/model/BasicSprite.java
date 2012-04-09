@@ -21,7 +21,7 @@ abstract public class BasicSprite implements ISprite
 	private int _imageFrame = 0;
 	private boolean _updateFrame = false;
 	private Type _type;
-	private Rectangle _bounds;
+	protected Rectangle _bounds;
 	
 	/**
 	 * Constructor.
