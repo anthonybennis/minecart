@@ -86,10 +86,10 @@ public class PlatformUtility
 //		return platform;
 //	}
 	
-	public static Platform getNearestPlatform(Scene scene, double x, double y, Layers layer)
+	public static Platform gePlatform(Scene scene)
 	{
 		Platform platform = null;	
-		List<ISprite> spritesList = scene.getLayer(layer);
+		List<ISprite> spritesList = scene.getLayer(Layers.MIDDLE);
 
 		for (ISprite iSprite : spritesList) 
 		{
@@ -101,6 +101,11 @@ public class PlatformUtility
 		}
 		
 		return platform;
+	}
+	
+	public static Platform getNearestPlatform(Scene scene, double x, double y, Layers layer)
+	{
+		return PlatformUtility.gePlatform(scene);
 	}
 	
 	/**
@@ -155,15 +160,43 @@ public class PlatformUtility
 		return aligendVector;
 	}
 	
-	public boolean doesPointIntersectWithPlatform(double x, double y)
+	/**
+	 * 
+	 * If the point does not exactly intersect with the Platform,
+	 * then we use the Threshold value, to see if it nearly intersects with the
+	 * platform. A threshold of 0, means we want an exact answer.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param threshold 0 means we want to know if Point intersects exactly. Any higher value gives us an error tolerance.
+	 * @param platform
+	 * @return
+	 */
+	public static boolean doesPointIntersectWithPlatform(Scene scene, double x, double y, double threshold)
 	{
+		Platform platform = PlatformUtility.gePlatform(scene);
 		boolean lineIntersects = false;
+		Vector aligenedVector = PlatformUtility.alignVectorToPlatform(x,y,platform);
+		lineIntersects = (aligenedVector.x == x && aligenedVector.y == y);
 		
-		// TODO AB
+		/*
+		 * If the point does not exactly intersect with the Platform,
+		 * then we use the Threshold value, to see if it nearly intersects with the
+		 * platform.  
+		 */
+		if (!lineIntersects && threshold !=0)
+		{
+			/*
+			 * aligenedVector is where the exact intersection occurs.
+			 * The threshold affects the vertical (y) position only.
+			 */
+			if (aligenedVector.y <= (y + threshold) && aligenedVector.y >=y
+					|| (aligenedVector.y >= (y - threshold) && aligenedVector.y <=y))
+			{
+				lineIntersects = true;
+			}
+		}
 		
 		return lineIntersects;
-		
 	}
-	
-
 }
