@@ -17,15 +17,12 @@ import com.bennis.minecart.client.engine.logic.PlatformUtility;
 import com.bennis.minecart.client.engine.model.BasicSprite;
 import com.bennis.minecart.client.engine.model.GamePointCounterSprite;
 import com.bennis.minecart.client.engine.model.ISprite;
-import com.bennis.minecart.client.engine.model.Line;
-import com.bennis.minecart.client.engine.model.Platform;
 import com.bennis.minecart.client.engine.model.Layer.Layers;
 import com.bennis.minecart.client.engine.model.Rectangle;
 import com.bennis.minecart.client.engine.model.Scene;
 import com.bennis.minecart.client.engine.model.Vector;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.touch.client.Point;
 
 /**
  * Main Sprite.
@@ -369,10 +366,8 @@ public class MineCartSprite extends BasicSprite
 			{
 				if (alignedVector != null)
 				{
-					/*
-					 *  We don't calculate an end point for Jumping. The movement
-					 *  ends when the left wheel intersects with a Platform line.
-					 */
+					_endX = alignedVector.x - MOVE_DISTANCE;
+					_endY = alignedVector.y;
 				}
 				else
 				{
@@ -529,10 +524,6 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState jumpLeft(boolean endofScreen, boolean startofScreen)
 	{
-		/*
-		 * TODO AB
-		 * Jump needs to end when cart intersects Platform.
-		 */
 		if (!startofScreen)
 		{			
 			_platformAlignedLEFTWheelLocation.x = _platformAlignedLEFTWheelLocation.x - MOVE_SPEED; 
@@ -569,16 +560,13 @@ public class MineCartSprite extends BasicSprite
 		}
 		
 		/*
-		 * Conditions to end  movement 
-		 * TODO AB Stop when left wheel intersects with a Platform line
-		 */		
-		if (this._platformAlignedLEFTWheelLocation.y == _endY
-				&& this._platformAlignedLEFTWheelLocation.x == _endX)
+		 * End movement when left wheel hits the Platform.
+		 */
+		boolean leftWheelHasIntersectedWithPlatform =
+				PlatformUtility.doesPointIntersectWithPlatform(_scene, _platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y, WHEEL_RADIUS);
+		
+		if (leftWheelHasIntersectedWithPlatform)
 		{
-			/*
-			 * Ensure we land on track correctly.
-			 */
-			
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
 		
@@ -628,43 +616,48 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState jumpRight(boolean endofScreen, boolean startofScreen)
 	{
-		if (!endofScreen)
+		if (!startofScreen)
 		{			
-			/*
-			 * TODO AB
-			 * Jump needs to end when cart intersects Platform.
-			 */
-			this.getLocation().x = this.getLocation().x + MOVE_SPEED;
+			_platformAlignedLEFTWheelLocation.x = _platformAlignedLEFTWheelLocation.x + MOVE_SPEED; 
+			_platformAlignedRIGHTWheelLocation.x = _platformAlignedRIGHTWheelLocation.x + MOVE_SPEED;
 			
-			double distanceTravelled = this.getLocation().x - this._startX;
+			
+			double distanceTravelled = (this._startX - _platformAlignedLEFTWheelLocation.x);
 			
 			if (distanceTravelled < JUMP_HORIZONTAL_DISTANCE/2)
 			{
 				/*
 				 * Jump up
 				 */
-				this.getLocation().y = this.getLocation().y - MOVE_SPEED;
+				_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y - MOVE_SPEED; 
+				_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y - MOVE_SPEED;
 			}
 			else
 			{
 				/*
 				 * Fall back down
 				 */
-				this.getLocation().y = this.getLocation().y + MOVE_SPEED;
+				_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y + MOVE_SPEED; 
+				_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y + MOVE_SPEED;
 			}
+			
+			this.setLocationOfCartBasedOnWheelLocation();
 		}
 		else
 		{
 			/*
-			 * Reached end of screen. Just fall down.
+			 * Start of screen. Just fall now.
 			 */
 			this.startNewMovement(Movement.FALL, _spriteState);
 		}
 		
 		/*
-		 * Conditions to end  movement 
+		 * End movement when left wheel hits the Platform.
 		 */
-		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
+		boolean leftWheelHasIntersectedWithPlatform =
+				PlatformUtility.doesPointIntersectWithPlatform(_scene, _platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y, WHEEL_RADIUS);
+		
+		if (leftWheelHasIntersectedWithPlatform)
 		{
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
@@ -1005,6 +998,15 @@ public class MineCartSprite extends BasicSprite
 //			canvas.getContext2d().closePath();
 //			canvas.getContext2d().stroke();
 			// End Draw Wheel axis.
+			
+			/*
+			 * TEMP - Draw Jump END POINT 
+			 */
+			if (_movement == Movement.LEFT_JUMP)
+			{
+				canvas.getContext2d().beginPath();
+				canvas.getContext2d().arc(_endX, _endY, 10, 0, 360);
+			}
 			
 			/*
 			 * Temp - Draw Bounds
