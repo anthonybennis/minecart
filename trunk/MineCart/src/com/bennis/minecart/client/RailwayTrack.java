@@ -42,17 +42,31 @@ public class RailwayTrack extends Platform
 		/*
 		 * Now create all other lines
 		 */
-		this.createNewLine(lineSegments,500, 500);
+		this.createNewLine(lineSegments,200, 500);
+		this.createNewLine(lineSegments,50, 480);
 		this.createNewLine(lineSegments,100, 480);
-		this.createNewLine(lineSegments,200, 480);
-		this.createNewLine(lineSegments,500, 500);
-		this.createNewLine(lineSegments,800, 450);
-		this.createNewLine(lineSegments,400, 450);
-		this.createNewLine(lineSegments,200, 420);
-		this.createNewLine(lineSegments,300, 380);
-		this.createNewLine(lineSegments,600, 500);
-		this.createNewLine(lineSegments,500, 500);
-		this.createNewLine(lineSegments,500, 500);
+		this.createNewLine(lineSegments,250, 460);
+		this.createNewLine(lineSegments,400, 480);
+		this.createNewLine(lineSegments,200, 440);
+		this.createNewLine(lineSegments,100, 440);
+		this.createNewLine(lineSegments,150, 400);
+		this.createNewLine(lineSegments,300, 450);
+		this.createNewLine(lineSegments,250, 450);
+		this.createNewLine(lineSegments,300, 490);
+		this.createNewLine(lineSegments,100, 490);
+		this.createNewLine(lineSegments,200, 450);
+		this.createNewLine(lineSegments,100, 470);
+		this.createNewLine(lineSegments,250, 470);
+		this.createNewLine(lineSegments,300, 420);
+		this.createNewLine(lineSegments,100, 440);
+		this.createNewLine(lineSegments,200, 430);
+		this.createNewLine(lineSegments,300, 500);
+		this.createNewLine(lineSegments,450, 500);
+		this.createNewLine(lineSegments,200, 450);
+		this.createNewLine(lineSegments,200, 400);
+		this.createNewLine(lineSegments,200, 440);
+		this.createNewLine(lineSegments,200, 400);
+		this.createNewLine(lineSegments,200, 380);
 		
 		return lineSegments;
 	}
