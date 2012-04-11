@@ -366,6 +366,10 @@ public class MineCartSprite extends BasicSprite
 			{
 				if (alignedVector != null)
 				{
+					/*
+					 * These are not used. 
+					 * Jump ends when cart collides with Platform.
+					 */
 					_endX = alignedVector.x - MOVE_DISTANCE;
 					_endY = alignedVector.y;
 				}
@@ -396,6 +400,10 @@ public class MineCartSprite extends BasicSprite
 			{
 				if (alignedVector != null)
 				{
+					/*
+					 * These are not used. 
+					 * Jump ends when cart collides with Platform.
+					 */
 					_endX = alignedVector.x + JUMP_HORIZONTAL_DISTANCE;
 					_endY = alignedVector.y;
 				}
@@ -622,7 +630,7 @@ public class MineCartSprite extends BasicSprite
 			_platformAlignedRIGHTWheelLocation.x = _platformAlignedRIGHTWheelLocation.x + MOVE_SPEED;
 			
 			
-			double distanceTravelled = (this._startX - _platformAlignedLEFTWheelLocation.x);
+			double distanceTravelled = ( _platformAlignedLEFTWheelLocation.x - this._startX);
 			
 			if (distanceTravelled < JUMP_HORIZONTAL_DISTANCE/2)
 			{
@@ -655,7 +663,7 @@ public class MineCartSprite extends BasicSprite
 		 * End movement when left wheel hits the Platform.
 		 */
 		boolean leftWheelHasIntersectedWithPlatform =
-				PlatformUtility.doesPointIntersectWithPlatform(_scene, _platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y, WHEEL_RADIUS);
+				PlatformUtility.doesPointIntersectWithPlatform(_scene, _platformAlignedRIGHTWheelLocation.x, _platformAlignedRIGHTWheelLocation.y, WHEEL_RADIUS);
 		
 		if (leftWheelHasIntersectedWithPlatform)
 		{
@@ -701,13 +709,16 @@ public class MineCartSprite extends BasicSprite
 	{
 		if (!startofScreen)
 		{	
-			this.getLocation().y = this.getLocation().y - FALL_SPEED;
-			this.getLocation().x = this.getLocation().x - FALL_SPEED;
+			_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y - FALL_SPEED;
+			_platformAlignedLEFTWheelLocation.x = _platformAlignedLEFTWheelLocation.x - FALL_SPEED;
+			_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y - FALL_SPEED;
+			_platformAlignedRIGHTWheelLocation.x = _platformAlignedRIGHTWheelLocation.x - FALL_SPEED;
+			this.setLocationOfCartBasedOnWheelLocation();
 
 			/*
 			 * Conditions to end  movement 
 			 */
-			if (this.getLocation().y <= _endY)
+			if (_platformAlignedLEFTWheelLocation.y <= _endY)
 			{
 				this.startNewMovement(Movement.FALL, _spriteState);
 			}
@@ -736,15 +747,18 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState bounceRight(boolean endofScreen, boolean startofScreen)
 	{
-		if (!startofScreen)
+		if (!endofScreen)
 		{	
-			this.getLocation().y = this.getLocation().y - FALL_SPEED;
-			this.getLocation().x = this.getLocation().x + FALL_SPEED;
+			_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y - FALL_SPEED;
+			_platformAlignedLEFTWheelLocation.x = _platformAlignedLEFTWheelLocation.x + FALL_SPEED;
+			_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y - FALL_SPEED;
+			_platformAlignedRIGHTWheelLocation.x = _platformAlignedRIGHTWheelLocation.x + FALL_SPEED;
+			this.setLocationOfCartBasedOnWheelLocation();
 
 			/*
 			 * Conditions to end  movement 
 			 */
-			if (this.getLocation().y <= _endY)
+			if (_platformAlignedLEFTWheelLocation.y <= _endY)
 			{
 				this.startNewMovement(Movement.FALL, _spriteState);
 			}
@@ -965,48 +979,6 @@ public class MineCartSprite extends BasicSprite
 			wheelTopLeftYPos = _platformAlignedRIGHTWheelLocation.y - ((currentFrame.getHeight()/2) + 3);
 			
 			canvas.getContext2d().drawImage(currentFrame, wheelTopLeftXPos, wheelTopLeftYPos);
-			
-			/*
-			 * Draw wheel axis
-			 * TODO AB - Change this to draw Wheel Spokes,
-			 * or create images for the wheels and animate those.
-			 * Dont' forget animate forward and back!!
-			 */
-//			Line leftWheelAxis = new Line();
-//			leftWheelAxis.setX(_platformAlignedLEFTWheelLocation.x);
-//			leftWheelAxis.setY(_platformAlignedLEFTWheelLocation.y);
-//			leftWheelAxis.setX1(this.getBounds().getCenter().x);
-//			leftWheelAxis.setY1(this.getBounds().getCenter().y);
-//			
-//			Line rightWheelAxis = new Line();
-//			rightWheelAxis.setX(_platformAlignedRIGHTWheelLocation.x);
-//			rightWheelAxis.setY(_platformAlignedRIGHTWheelLocation.y);
-//			rightWheelAxis.setX1(this.getBounds().getCenter().x);
-//			rightWheelAxis.setY1(this.getBounds().getCenter().y);
-//			
-//			canvas.getContext2d().beginPath();
-//			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
-//			canvas.getContext2d().moveTo(leftWheelAxis.getX(), leftWheelAxis.getY());
-//			canvas.getContext2d().lineTo(leftWheelAxis.getX1(), leftWheelAxis.getY1());
-//			canvas.getContext2d().closePath();
-//			canvas.getContext2d().stroke();
-//			
-//			canvas.getContext2d().beginPath();
-//			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
-//			canvas.getContext2d().moveTo(rightWheelAxis.getX(), rightWheelAxis.getY());
-//			canvas.getContext2d().lineTo(rightWheelAxis.getX1(), rightWheelAxis.getY1());
-//			canvas.getContext2d().closePath();
-//			canvas.getContext2d().stroke();
-			// End Draw Wheel axis.
-			
-			/*
-			 * TEMP - Draw Jump END POINT 
-			 */
-			if (_movement == Movement.LEFT_JUMP)
-			{
-				canvas.getContext2d().beginPath();
-				canvas.getContext2d().arc(_endX, _endY, 10, 0, 360);
-			}
 			
 			/*
 			 * Temp - Draw Bounds
