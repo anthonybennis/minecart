@@ -30,7 +30,8 @@ public class LavaSprite extends ScrollingSprite
 	 */
 	public LavaSprite(Layers layer, ImageLoader imageLoader)
 	{
-		super(layer, imageLoader, Type.ENEMY, 372);
+		super(layer, imageLoader, Type.ENEMY);
+		this.alignToGround();
 	}
 
 	@Override
