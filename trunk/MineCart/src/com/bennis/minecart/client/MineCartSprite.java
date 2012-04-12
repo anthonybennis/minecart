@@ -296,9 +296,6 @@ public class MineCartSprite extends BasicSprite
 					break;
 				}
 			}
-			
-			
-		
 	}
 	
 	/**
@@ -577,6 +574,11 @@ public class MineCartSprite extends BasicSprite
 		{
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
+		else if (_platformAlignedLEFTWheelLocation.y > GUIConstants.HEIGHT
+				|| (_platformAlignedRIGHTWheelLocation.y > GUIConstants.HEIGHT))
+		{
+			this.endGame();
+		}
 		
 		return _spriteState;
 	}
@@ -669,6 +671,11 @@ public class MineCartSprite extends BasicSprite
 		{
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
+		else if (_platformAlignedLEFTWheelLocation.y > GUIConstants.HEIGHT
+				|| (_platformAlignedRIGHTWheelLocation.y > GUIConstants.HEIGHT))
+		{
+			this.endGame();
+		}
 		
 		return _spriteState;
 	}
@@ -683,7 +690,7 @@ public class MineCartSprite extends BasicSprite
 	private SpriteState fall(boolean endofScreen, boolean startofScreen)
 	{		
 		/*
-		 * TODO AB Refactor this "move wheel" code into util method.
+		 * TODO AB Refactor this "move wheel" code into a util method?
 		 */
 		_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y + FALL_SPEED;
 		_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y + FALL_SPEED;
@@ -692,15 +699,22 @@ public class MineCartSprite extends BasicSprite
 
 		/*
 		 * Conditions to end  movement
-		 *  
-		 * TODO AB: I should use the same end condition as jump. When
-		 * left wheel hit's platform.
+		 * End movement when left wheel hits the Platform.
 		 * 
-		 * TODO AB: If cart falls off screen... kill cart and end game.
+		 * TODO AB Refactor: Should we align the left and right wheels so they are on the same
+		 * horizontal line as they fall?
 		 */
-		if ((_platformAlignedLEFTWheelLocation.y) >= _endY) 
+		boolean leftWheelHasIntersectedWithPlatform =
+				PlatformUtility.doesPointIntersectWithPlatform(_scene, _platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y, WHEEL_RADIUS);
+		
+		if (leftWheelHasIntersectedWithPlatform)
 		{
-			this.startNewMovement(Movement.NONE, _spriteState);
+			this.startNewMovement(Movement.NONE, SpriteState.NORMAL);
+		}
+		else if (_platformAlignedLEFTWheelLocation.y > GUIConstants.HEIGHT
+				|| (_platformAlignedRIGHTWheelLocation.y > GUIConstants.HEIGHT))
+		{
+			this.endGame();
 		}
 		
 		return _spriteState;
@@ -814,7 +828,7 @@ public class MineCartSprite extends BasicSprite
 					
 					if (_livesCounter.getValue() <= 0)
 					{
-						// TODO AB End Game.
+						this.endGame();
 					}
 					else
 					{
@@ -873,8 +887,6 @@ public class MineCartSprite extends BasicSprite
 		 * TODO AB Refactor In Future?
 		 * This is a multi animation Sprite. We should
 		 * examine extending BasicSprite to handle this.
-		 * 
-		 * TODO AB - Animate
 		 */
 		String[] imageNames = new String[5];
 		imageNames[0] = "images/minecart/Podge00.png";
@@ -889,11 +901,6 @@ public class MineCartSprite extends BasicSprite
 	@Override
 	public void draw(Canvas canvas) 
 	{
-		/*
-		 * TODO AB Optimise MineCartSprite by reducing calculations
-		 * Maybe we can optimise this, by calculating alignment with Platform
-		 * every four updates or something?
-		 */
 		
 		/*
 		 * Ensure current images are loaded.
@@ -1154,5 +1161,13 @@ public class MineCartSprite extends BasicSprite
 	private boolean isSpriteAtStartOfScreen()
 	{
 		return (this.getLocation().x <= 0);
+	}
+	
+	/**
+	 * End game.
+	 */
+	private void endGame()
+	{
+		// TODO AB End Game!
 	}
 }
