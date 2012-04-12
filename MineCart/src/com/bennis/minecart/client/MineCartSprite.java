@@ -682,12 +682,23 @@ public class MineCartSprite extends BasicSprite
 	 */
 	private SpriteState fall(boolean endofScreen, boolean startofScreen)
 	{		
-		this.getLocation().y = this.getLocation().y + FALL_SPEED; 
+		/*
+		 * TODO AB Refactor this "move wheel" code into util method.
+		 */
+		_platformAlignedLEFTWheelLocation.y = _platformAlignedLEFTWheelLocation.y + FALL_SPEED;
+		_platformAlignedRIGHTWheelLocation.y = _platformAlignedRIGHTWheelLocation.y + FALL_SPEED;
+		
+		this.setLocationOfCartBasedOnWheelLocation();
 
 		/*
-		 * Conditions to end  movement 
+		 * Conditions to end  movement
+		 *  
+		 * TODO AB: I should use the same end condition as jump. When
+		 * left wheel hit's platform.
+		 * 
+		 * TODO AB: If cart falls off screen... kill cart and end game.
 		 */
-		if ((this.getLocation().y + this.getBounds().getHeight()) >= _endY)
+		if ((_platformAlignedLEFTWheelLocation.y) >= _endY) 
 		{
 			this.startNewMovement(Movement.NONE, _spriteState);
 		}
@@ -731,7 +742,7 @@ public class MineCartSprite extends BasicSprite
 			this.startNewMovement(Movement.FALL, _spriteState);
 		}
 		
-		return _spriteState;
+		return SpriteState.COLLIDE;
 	}
 	
 	/**
@@ -771,7 +782,7 @@ public class MineCartSprite extends BasicSprite
 			this.startNewMovement(Movement.FALL, _spriteState);
 		}
 		
-		return _spriteState;
+		return SpriteState.COLLIDE;
 	}
 	
 	private SpriteState collideWithObstacle(boolean endofScreen, boolean startofScreen)
@@ -780,7 +791,7 @@ public class MineCartSprite extends BasicSprite
 		 * TODO AB collideWithObstacle
 		 * See: handleCollison for pseudo code.
 		 */
-		return _spriteState;
+		return SpriteState.COLLIDE;
 	}
 	
 	@Override
