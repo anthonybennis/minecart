@@ -24,6 +24,11 @@ abstract public class ScrollingSprite extends BasicSprite
 		super(layer,imageLoader,type);
 		this.setLocation(GUIConstants.WIDTH, yStartingLocation);
 	}
+	
+	public ScrollingSprite(Layers layer, ImageLoader imageLoader, Type type)
+	{
+		super(layer,imageLoader,type);
+	}
 
 	@Override
 	public void update(InputEvent event) 
@@ -56,5 +61,10 @@ abstract public class ScrollingSprite extends BasicSprite
 	public void setScrollSpeed(int speed)
 	{
 		_scrollSpeed = speed;
+	}
+	
+	protected void alignToGround()
+	{
+		this.getLocation().y = GUIConstants.PERMANENT_PLATFORM_HEIGHT;
 	}
 }
