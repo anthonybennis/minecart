@@ -74,7 +74,7 @@ public class MineCartSprite extends BasicSprite
 	private double _startY;
 	private final double MOVE_DISTANCE = 50; 
 	private final double MOVE_SPEED = 5;
-	private final double JUMP_HORIZONTAL_DISTANCE = 150;
+	private final double JUMP_HORIZONTAL_DISTANCE = 200;
 	private final double FALL_SPEED = MOVE_SPEED*2;
 	private enum Bounce{LEFT,RIGHT};
 	private final int BOUNCE_HEIGHT = 50;
@@ -126,7 +126,7 @@ public class MineCartSprite extends BasicSprite
 		_movingLeftAnmationSequence = this.createMovingLeftAnimationSequence();
 		_collidingAnmationSequence = this.createCollidingAnimationSequence();
 		_wheelAnmationSequence = this.createWheelAnimationSequence();
-		_blinkImage = this.getImageLoader().getImage("images/minecart/Podge00Blink.png");
+		_blinkImage = this.getImageLoader().getImage("images/minecart/Podge00.png");
 		_currentAnmationSequence = _movingRightAnmationSequence;
 		
 		this.setImageElements(_currentAnmationSequence); // Super class needs this to calculate bounds.
@@ -888,12 +888,19 @@ public class MineCartSprite extends BasicSprite
 		 * This is a multi animation Sprite. We should
 		 * examine extending BasicSprite to handle this.
 		 */
-		String[] imageNames = new String[5];
-		imageNames[0] = "images/minecart/Podge00.png";
-		imageNames[1] = "images/minecart/Podge01.png";
-		imageNames[2] = "images/minecart/Podge02.png";
-		imageNames[3] = "images/minecart/Podge01.png";
-		imageNames[4] = "images/minecart/Podge00.png";
+		String[] imageNames = new String[12];
+		imageNames[0] = "images/minecart/Giraffe00.png";
+		imageNames[1] = "images/minecart/Giraffe01.png";
+		imageNames[2] = "images/minecart/Giraffe02.png";
+		imageNames[3] = "images/minecart/Giraffe03.png";
+		imageNames[4] = "images/minecart/Giraffe04.png";
+		imageNames[5] = "images/minecart/Giraffe05.png";
+		imageNames[6] = "images/minecart/Giraffe06.png";
+		imageNames[7] = "images/minecart/Giraffe07.png";
+		imageNames[8] = "images/minecart/Giraffe06.png";
+		imageNames[9] = "images/minecart/Giraffe04.png";
+		imageNames[10] = "images/minecart/Giraffe02.png";
+		imageNames[11] = "images/minecart/Giraffe00.png";
 		
 		return imageNames;
 	}
