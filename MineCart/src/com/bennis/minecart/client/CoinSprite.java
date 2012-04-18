@@ -37,19 +37,25 @@ public class CoinSprite extends ScrollingSprite
 	@Override
 	protected String[] getImageNames() 
 	{
-		String[] names = new String[12];
-		names[0] = "images/SpinningCoin01.gif";
-		names[1] = "images/SpinningCoin02.gif";
-		names[2] = "images/SpinningCoin03.gif";
-		names[3] = "images/SpinningCoin04.gif";
-		names[4] = "images/SpinningCoin05.gif";
-		names[5] = "images/SpinningCoin06.gif";
-		names[6] = "images/SpinningCoin07.gif";
-		names[7] = "images/SpinningCoin08.gif";
-		names[8] = "images/SpinningCoin09.gif";
-		names[9] = "images/SpinningCoin10.gif";
-		names[10] = "images/SpinningCoin11.gif";
-		names[11] = "images/SpinningCoin12.gif";
+		String[] names = new String[17];
+		names[0] = "images/coin/0001.png";
+		names[1] = "images/coin/0002.png";
+		names[2] = "images/coin/0003.png";
+		names[3] = "images/coin/0004.png";
+		names[4] = "images/coin/0005.png";
+		names[5] = "images/coin/0006.png";
+		names[6] = "images/coin/0007.png";
+		names[7] = "images/coin/0008.png";
+		names[8] = "images/coin/0009.png";
+		names[9] = "images/coin/0010.png";
+		names[10] = "images/coin/0011.png";
+		names[11] = "images/coin/0012.png";
+		names[12] = "images/coin/0013.png";
+		names[13] = "images/coin/0014.png";
+		names[14] = "images/coin/0015.png";
+		names[15] = "images/coin/0016.png";
+		names[16] = "images/coin/0017.png";
+		
 
 		return names;
 	}
