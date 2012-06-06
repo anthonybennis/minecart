@@ -65,6 +65,7 @@ abstract public class ScrollingSprite extends BasicSprite
 	
 	protected void alignToGround()
 	{
-		this.getLocation().y = GUIConstants.PERMANENT_PLATFORM_HEIGHT;
+		double height = this.getBounds().getHeight();
+		this.getLocation().y = (GUIConstants.PERMANENT_PLATFORM_HEIGHT);// - height;
 	}
 }

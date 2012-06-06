@@ -926,10 +926,12 @@ public class MineCartSprite extends BasicSprite
 			{
 				_currentAnimationFrame = 0; //Reset animation.
 			}
+			
 			final int PODGE_SPRITE_POS_Y_OFFSET = 120;
-			canvas.getContext2d().setFillStyle("white");
 			ImageElement currentFrame;
 
+			
+			
 			/*
 			 * Podge sprite blinks every few seconds.
 			 */
@@ -949,10 +951,8 @@ public class MineCartSprite extends BasicSprite
 			/*
 			 * Draw Mine Cart Side Panel
 			 */
+			canvas.getContext2d().setStrokeStyle("gray");
 			canvas.getContext2d().setFillStyle("brown");
-//			CanvasGradient gradient = canvas.getContext2d().createLinearGradient(0, 0, 10, 20);
-//			gradient.addColorStop(0.5f, "#ffaaff");
-//			canvas.getContext2d().setFillStyle(gradient);
 			
 			canvas.getContext2d().beginPath();
 			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
@@ -967,7 +967,6 @@ public class MineCartSprite extends BasicSprite
 			/*
 			 * Draw Mine Cart Border
 			 */
-			canvas.getContext2d().setFillStyle("#000000");
 			canvas.getContext2d().beginPath();
 			canvas.getContext2d().setLineWidth(WHEEL_AXIS_THICKNESS);
 			canvas.getContext2d().moveTo(_platformAlignedLEFTWheelLocation.x, _platformAlignedLEFTWheelLocation.y);
@@ -976,8 +975,6 @@ public class MineCartSprite extends BasicSprite
 			canvas.getContext2d().lineTo((_platformAlignedRIGHTWheelLocation.x), _platformAlignedRIGHTWheelLocation.y);
 			canvas.getContext2d().closePath();
 			canvas.getContext2d().stroke();
-			
-			canvas.getContext2d().setFillStyle("white");
 			
 			/*
 			 * TODO AB Refactor frame rate code into BasicSprite as it's used twice now.

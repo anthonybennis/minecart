@@ -25,7 +25,7 @@ public interface GUIConstants
 	public static final int FAST_SCROLL_SPEED = 4;
 	public static final int DEFAULT_NUMBER_OF_LIVES = 3;
 	public static final Rectangle SCREEN_SIZE = new Rectangle(0,0,WIDTH, HEIGHT);
-	public static final int PERMANENT_PLATFORM_HEIGHT=(HEIGHT - 99); // Not the rail way track, but the ground itself.
+	public static final int PERMANENT_PLATFORM_HEIGHT=722; // Not the rail way track, but the ground itself.
 	
 	// Counter names
 	public static final String GAME_POINTS_COUNTER_NAME = "Score :";
