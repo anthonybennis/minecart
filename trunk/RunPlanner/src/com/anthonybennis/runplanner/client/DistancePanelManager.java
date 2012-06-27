@@ -1,14 +1,19 @@
 package com.anthonybennis.runplanner.client;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class DistancePanelManager 
 {
-	protected enum DISTANCE{FIVE_KM,TEN_KM,TWNETY_ONE_KM,FORTY_TWO_KM,FIVE_M,TEN_M,THIRTEEN_POINT_5_M, TWENTY_SIX_POINT_FIVE_M,CUSTOM};
+	/*
+	 * Distance enum
+	 * Note: Internally we store metric, but we support showing Imperial on the UI.
+	 */
+	protected enum DISTANCE{FIVE_KM,TEN_KM,TWNETY_ONE_KM,FORTY_TWO_KM,CUSTOM};
 	protected enum DISTANCE_UNIT{METRIC,IMPERIAL};
 	/*
 	 * Enabled Metric Button Image urls
@@ -26,11 +31,11 @@ public class DistancePanelManager
 	private static final String FORTY_TWO_KM_DISABLED_IMAGE_URL= "42kmGrey.png";
 	
 	
-	protected double _userDefinedDistance = 5;
+	protected DISTANCE _userDefinedDistance;
+	private ImageButtonWrapper[] _imageButtonWrappers = new ImageButtonWrapper[0];
 
 	public DistancePanelManager()
 	{
-
 			
 	}
 	
@@ -43,18 +48,18 @@ public class DistancePanelManager
 		distancePanel.add(distanceLabel);
 		distancePanel.setSpacing(25);
 		
-		ImageButtonWrapper[] buttonImages;
 		if (this.getDistanceUnits() == DISTANCE_UNIT.METRIC)
 		{
-			buttonImages = this.createMetricButtons();
+			_imageButtonWrappers = this.createMetricButtons();
 		}
 		else
 		{
-//			buttonImages = this.createImperialButtons(); // TODO AB
+			_imageButtonWrappers = this.createImperialButtons();
 		}
 		
-		for (ImageButtonWrapper image : buttonImages) 
+		for (ImageButtonWrapper image : _imageButtonWrappers) 
 		{
+			image.getImage().addClickHandler(new DistanceButtonClickHandler());
 			distancePanel.add(image.getImage());
 		}
 		
@@ -65,90 +70,90 @@ public class DistancePanelManager
 	{
 		ImageButtonWrapper[] images = new ImageButtonWrapper[4];
 		
-		images[0].setImage(FIVE_KM_DISABLED_IMAGE_URL);
-		images[1].setImage(TEN_KM_DISABLED_IMAGE_URL);
-		images[2].setImage(TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-		images[3].setImage(FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		images[0] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
+		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_ENABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
+		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_ENABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
+		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_ENABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
 		
+		/*
+		 * Get button to highlight.
+		 */
 		DISTANCE userSetDistance = this.getUserDistance();
 		
-		switch (userSetDistance) 
+		/*
+		 * Disable all by default, and only highlight if the user has pressed
+		 * a distance button.
+		 */
+		this.highlightDistanceButton(userSetDistance);
+		
+		return images;
+	}
+	
+	private ImageButtonWrapper[] createImperialButtons()
+	{
+		ImageButtonWrapper[] images = new ImageButtonWrapper[4];
+		
+		/*
+		 * TODO AB Use mile images.
+		 */
+		images[0] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
+		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_DISABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
+		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_DISABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
+		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_DISABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		
+		/*
+		 * Get button to highlight.
+		 */
+		DISTANCE userSetDistance = this.getUserDistance();
+		
+		/*
+		 * Disable all by default, and only highlight if the user has pressed
+		 * a distance button.
+		 */
+		this.highlightDistanceButton(userSetDistance);
+		
+		return images;
+	}
+	
+	/**
+	 * Highlights a Distance button if it matches the distance param.
+	 * @param distance
+	 */
+	private void highlightDistanceButton(DISTANCE distance)
+	{
+		_imageButtonWrappers[0].disable();
+		_imageButtonWrappers[1].disable();
+		_imageButtonWrappers[2].disable();
+		_imageButtonWrappers[3].disable();
+		
+		switch (distance) 
 		{
 			case FIVE_KM:
 			{	
-				images[0] = FIVE_KM_ENABLED_IMAGE_URL;
+				_imageButtonWrappers[0].enable();
 				break;
 			}
 			case TEN_KM:
 			{	
-				images[1] = TEN_KM_ENABLED_IMAGE_URL;
+				_imageButtonWrappers[1].enable();
 				break;
 			}
 			case TWNETY_ONE_KM: 
 			{	
-				images[2] = TWENTY_ONE_KM_ENABLED_IMAGE_URL;
+				_imageButtonWrappers[2].enable();
 				break;
 			}
 			case FORTY_TWO_KM:
 			{	
-				images[3] = FORTY_TWO_KM_ENABLED_IMAGE_URL;
+				_imageButtonWrappers[3].enable();
 				break;
 			}
 			default: // Custom
 			{
 				// All Image buttons are disabled.
 				break;
-			} 
-		}
-		
-		return images;
-	}
-	
-	private ImageButtonWrapper[][] createImperialButtons()
-	{
-		ImageButtonWrapper[] images = new ImageButtonWrapper[4];
-		
-			/*
-			 * TODO AB - Use Imperial Images
-			 */
-			images[0].setDisabled(FIVE_KM_DISABLED_IMAGE_URL);
-			images[1].setDisabled(TEN_KM_DISABLED_IMAGE_URL);
-			images[2].setDisabled(TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-			images[3].setDisabled(FORTY_TWO_KM_DISABLED_IMAGE_URL);
-			
-			DISTANCE userSetDistance = this.getUserDistance();
-			
-			switch (userSetDistance) 
-			{
-				case FIVE_M:
-				{	
-					images[0] = FIVE_KM_ENABLED_IMAGE_URL;
-					break;
-				}
-				case TEN_M:
-				{	
-					images[1] = TEN_KM_ENABLED_IMAGE_URL;
-					break;
-				}
-				case THIRTEEN_POINT_5_M:
-				{	
-					images[2] = TWENTY_ONE_KM_ENABLED_IMAGE_URL;
-					break;
-				}
-				case TWENTY_SIX_POINT_FIVE_M:
-				{	
-					images[3] = FORTY_TWO_KM_ENABLED_IMAGE_URL;
-					break;
-				}
-				default: // Custom
-				{
-					// All Image buttons are disabled.
-					break;
-				} 
 			}
-		
-		return images;
-		
+		}
 	}
 	
 	/*
@@ -169,13 +174,24 @@ public class DistancePanelManager
 		return DISTANCE_UNIT.METRIC;
 	}
 	
-	protected double getUserDefinedDistance() 
+	protected DISTANCE getUserDefinedDistance() 
 	{
 		return _userDefinedDistance;
 	}
 
-	protected void setUserDefinedDistance(double _userDefinedDistance) 
+	protected void setUserDefinedDistance(DISTANCE userDefinedDistance) 
 	{
-		this._userDefinedDistance = _userDefinedDistance;
+		this._userDefinedDistance = userDefinedDistance;
+	}
+	
+	class DistanceButtonClickHandler implements ClickHandler
+	{
+		@Override
+		public void onClick(ClickEvent event) 
+		{
+			ImageButtonWrapper wrapper = (ImageButtonWrapper)event.getSource();
+			_userDefinedDistance = wrapper.getDistance();
+			highlightDistanceButton(_userDefinedDistance);
+		}	
 	}
 }
