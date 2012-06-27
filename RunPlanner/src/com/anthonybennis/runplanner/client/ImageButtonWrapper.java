@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
+import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE_UNIT;
 import com.google.gwt.user.client.ui.Image;
 
@@ -7,15 +8,17 @@ public class ImageButtonWrapper
 {
 	private Image _image;
 	private DISTANCE_UNIT _unit;
+	private DISTANCE _value;
 	private String _enabledURL;
 	private String _disabledURL;
 	
-	public ImageButtonWrapper(Image image, DISTANCE_UNIT unit, String enabledURL, String disabledURL) 
+	public ImageButtonWrapper(DISTANCE_UNIT unit, DISTANCE value, String enabledURL, String disabledURL) 
 	{
-		_image = image;
 		_unit = unit;
 		_enabledURL = enabledURL;
 		_disabledURL = disabledURL;
+		_image = new Image(_disabledURL);
+		_value = value;
 	}
 	
 	protected Image getImage() 
@@ -66,5 +69,10 @@ public class ImageButtonWrapper
 	public void disable()
 	{
 		this.getImage().setUrl(this.getDisabledURL());
+	}
+	
+	public DISTANCE getDistance()
+	{
+		return _value;
 	}
 }
