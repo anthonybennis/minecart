@@ -24,6 +24,12 @@ h1 {
 
 .gwt-Button { font-size: 350%; }
 
+.gwt-Label {
+	color: #FFFFFF;
+	font: normal 12px tahoma, arial, helvetica, sans-serif;
+	padding: 6px;
+}
+
 .dialogVPanel {
   margin: 5px;
 }
