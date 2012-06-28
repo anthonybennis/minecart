@@ -7,9 +7,10 @@
   <!-- any one of the following lines.                            -->
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <inherits name="com.googlecode.mgwt.MGWT"/>
+  <inherits name='com.allen_sauer.gwt.voices.gwt-voices'/>
   <!--  TODO AB REMOVE THIS LINE OF CODE BEFORE DEPLOYING TO TOUCHPAD -->
   <!-- User Agent -->
-  <set-property name="user.agent" value="gecko1_8" />
+ <!--  <set-property name="user.agent" value="gecko1_8" /> -->
   <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
