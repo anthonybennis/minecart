@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+
 public class DistancePanelManager 
 {
 	/*
@@ -57,12 +58,25 @@ public class DistancePanelManager
 			_imageButtonWrappers = this.createImperialButtons();
 		}
 		
+		/*
+		 * Highlight/Select button
+		 */
+		DISTANCE userSetDistance = this.getUserDistance();
+		this.highlightDistanceButton(userSetDistance);
+		
+		/*
+		 * Add Click Handler to each button
+		 */
 		for (ImageButtonWrapper image : _imageButtonWrappers) 
 		{
-			image.getImage().addClickHandler(new DistanceButtonClickHandler());
+			image.getImage().addClickHandler(new DistanceButtonClickHandler(image));
 			distancePanel.add(image.getImage());
 		}
 		
+		/*
+		 * Imperial/Metric Toggle
+		 */
+
 		return distancePanel;
 	}
 	
@@ -74,17 +88,6 @@ public class DistancePanelManager
 		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_ENABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
 		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_ENABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
 		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_ENABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
-		
-		/*
-		 * Get button to highlight.
-		 */
-		DISTANCE userSetDistance = this.getUserDistance();
-		
-		/*
-		 * Disable all by default, and only highlight if the user has pressed
-		 * a distance button.
-		 */
-		this.highlightDistanceButton(userSetDistance);
 		
 		return images;
 	}
@@ -100,17 +103,6 @@ public class DistancePanelManager
 		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_DISABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
 		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_DISABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
 		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_DISABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
-		
-		/*
-		 * Get button to highlight.
-		 */
-		DISTANCE userSetDistance = this.getUserDistance();
-		
-		/*
-		 * Disable all by default, and only highlight if the user has pressed
-		 * a distance button.
-		 */
-		this.highlightDistanceButton(userSetDistance);
 		
 		return images;
 	}
@@ -184,13 +176,26 @@ public class DistancePanelManager
 		this._userDefinedDistance = userDefinedDistance;
 	}
 	
+	/**
+	 * 
+	 * @author Anthony
+	 *
+	 */
 	class DistanceButtonClickHandler implements ClickHandler
 	{
+		private ImageButtonWrapper _wrapper;
+		
+		private DistanceButtonClickHandler(ImageButtonWrapper wrapper)
+		{
+			_wrapper = wrapper;
+		}
+		
 		@Override
 		public void onClick(ClickEvent event) 
 		{
-			ImageButtonWrapper wrapper = (ImageButtonWrapper)event.getSource();
-			_userDefinedDistance = wrapper.getDistance();
+			Audio audio = new Audio();
+			audio.playButtonClick();
+			_userDefinedDistance = _wrapper.getDistance();
 			highlightDistanceButton(_userDefinedDistance);
 		}	
 	}

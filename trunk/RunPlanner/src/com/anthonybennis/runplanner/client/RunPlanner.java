@@ -1,6 +1,7 @@
 package com.anthonybennis.runplanner.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -16,7 +17,8 @@ public class RunPlanner implements EntryPoint
 	public void onModuleLoad() 
 	{
 		RootPanel rootPanel = RootPanel.get();
-		RootPanel headerElement = RootPanel.get("Header");	
+		RootPanel headerElement = RootPanel.get("Header");
+		headerElement.getElement().getStyle().setPosition(Position.RELATIVE);
 		/*
 		 * Header
 		 */
