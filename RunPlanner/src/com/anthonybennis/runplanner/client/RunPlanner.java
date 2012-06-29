@@ -5,6 +5,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.googlecode.mgwt.ui.client.MGWT;
+import com.googlecode.mgwt.ui.client.MGWTSettings;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -16,6 +18,8 @@ public class RunPlanner implements EntryPoint
 	 */
 	public void onModuleLoad() 
 	{
+		MGWT.applySettings(MGWTSettings.getAppSetting());
+		
 		RootPanel rootPanel = RootPanel.get();
 		RootPanel headerElement = RootPanel.get("Header");
 		headerElement.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -34,9 +38,12 @@ public class RunPlanner implements EntryPoint
 		 */
 		
 		/*
-		 * TODO AB Target Date Panel
-		 * 
+		 * Target Date Panel
 		 */
+		DatePanelManager manager = new DatePanelManager();
+		
+		
+		
 		mainPanel.add(distanceButtonPanel);
 		headerElement.add(mainPanel, 10, 10);
 		mainPanel.setSize("649px", "513px");
