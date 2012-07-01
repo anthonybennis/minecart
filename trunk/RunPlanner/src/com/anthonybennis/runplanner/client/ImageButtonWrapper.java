@@ -17,7 +17,7 @@ public class ImageButtonWrapper
 		_unit = unit;
 		_enabledURL = enabledURL;
 		_disabledURL = disabledURL;
-		_image = new Image(_disabledURL);
+		_image = new Image(_disabledURL); // TODO AB Load on start up (Use Resourced)
 		_value = value;
 	}
 	
