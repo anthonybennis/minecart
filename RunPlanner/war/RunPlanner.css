@@ -1,7 +1,7 @@
 /** Add css rules here for your application. */
 
 html { 
-	background: url('BlackWoodTexture.jpg') no-repeat center center fixed; 
+	background: url('images/BlackWoodTexture.jpg') no-repeat center center fixed; 
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
