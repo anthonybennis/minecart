@@ -25,6 +25,10 @@ import com.allen_sauer.gwt.voices.client.handler.SoundLoadStateChangeEvent;
  */
 public class Audio 
 {
+	private static SoundController _soundController = new SoundController();
+	private static Sound _buttonSound = _soundController.createSound(Sound.MIME_TYPE_AUDIO_OGG_VORBIS,
+	        "audio/ButtonClick1.ogg");
+
 	/**
 	 * Constructor
 	 * @param playlist
@@ -33,28 +37,24 @@ public class Audio
 	{
 	}
 	
-	public void playButtonClick()
+	public static void playButtonClick()
 	{
-		this.play("audio/ButtonClick1.ogg", false, 15);
+		_buttonSound.play();
 	}
 	
 	/**
 	 * 
 	 * @param audio
 	 */
-	public void play(String audiotrack, final boolean loop, int volume)
+	public static void play(final Sound sound, final boolean loop, int volume)
 	{
-		SoundController soundController = new SoundController();
-	    final Sound sound = soundController.createSound(Sound.MIME_TYPE_AUDIO_OGG_VORBIS,
-	        audiotrack);
-	    
 //	    sound.setLooping(loop); // Currently does not work on Firefox.
-	    sound.setVolume(volume);
+		sound.setVolume(volume);
 	    
 	    /*
 	     * Manually enable looping...
 	     */
-	    sound.addEventHandler(new SoundHandler() {
+		sound.addEventHandler(new SoundHandler() {
 			
 			@Override
 			public void onSoundLoadStateChange(SoundLoadStateChangeEvent event) {
@@ -65,11 +65,11 @@ public class Audio
 			public void onPlaybackComplete(PlaybackCompleteEvent event) {
 				if (loop)
 				{
-					 sound.play();
+					sound.play();
 				}
 			}
 		});
 
-	    sound.play();
+		sound.play();
 	}
 }
