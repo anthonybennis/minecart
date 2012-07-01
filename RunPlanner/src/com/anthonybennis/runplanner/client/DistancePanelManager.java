@@ -1,9 +1,7 @@
 package com.anthonybennis.runplanner.client;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -19,17 +17,17 @@ public class DistancePanelManager
 	/*
 	 * Enabled Metric Button Image urls
 	 */
-	private static final String FIVE_KM_ENABLED_IMAGE_URL= "5km.png";
-	private static final String TEN_KM_ENABLED_IMAGE_URL= "10km.png";
-	private static final String TWENTY_ONE_KM_ENABLED_IMAGE_URL= "21km.png";
-	private static final String FORTY_TWO_KM_ENABLED_IMAGE_URL= "42km.png";
+	private static final String FIVE_KM_ENABLED_IMAGE_URL= "images/5km.png";
+	private static final String TEN_KM_ENABLED_IMAGE_URL= "images/10km.png";
+	private static final String TWENTY_ONE_KM_ENABLED_IMAGE_URL= "images/21km.png";
+	private static final String FORTY_TWO_KM_ENABLED_IMAGE_URL= "images/42km.png";
 	/*
 	 * Disabled Metric Button Image urls
 	 */
-	private static final String FIVE_KM_DISABLED_IMAGE_URL= "5kmGrey.png";
-	private static final String TEN_KM_DISABLED_IMAGE_URL= "10kmGrey.png";
-	private static final String TWENTY_ONE_KM_DISABLED_IMAGE_URL= "21kmGrey.png";
-	private static final String FORTY_TWO_KM_DISABLED_IMAGE_URL= "42kmGrey.png";
+	private static final String FIVE_KM_DISABLED_IMAGE_URL= "images/5kmGrey.png";
+	private static final String TEN_KM_DISABLED_IMAGE_URL= "images/10kmGrey.png";
+	private static final String TWENTY_ONE_KM_DISABLED_IMAGE_URL= "images/21kmGrey.png";
+	private static final String FORTY_TWO_KM_DISABLED_IMAGE_URL= "images/42kmGrey.png";
 	
 	
 	protected DISTANCE _userDefinedDistance;
@@ -43,10 +41,6 @@ public class DistancePanelManager
 	protected Panel createDistancePanel()
 	{
 		VerticalPanel distancePanel = new VerticalPanel();
-		
-		Label distanceLabel = new Label("Target Distance:");
-		distanceLabel.getElement().getStyle().setFontSize(25.0, Unit.PX);
-		distancePanel.add(distanceLabel);
 		distancePanel.setSpacing(25);
 		
 		if (this.getDistanceUnits() == DISTANCE_UNIT.METRIC)
@@ -75,6 +69,7 @@ public class DistancePanelManager
 		
 		/*
 		 * Imperial/Metric Toggle
+		 * TODO AB
 		 */
 
 		return distancePanel;
