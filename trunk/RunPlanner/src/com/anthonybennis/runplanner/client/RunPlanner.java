@@ -25,6 +25,11 @@ public class RunPlanner implements EntryPoint
 	 */
 	public void onModuleLoad() 
 	{
+		/*
+		 * TODO AB Load all sound and pictures here...
+		 */
+		Audio.playButtonClick(); // Load into memory.
+		
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("100%", "100%");
 		RootPanel headerElement = RootPanel.get("Header");
