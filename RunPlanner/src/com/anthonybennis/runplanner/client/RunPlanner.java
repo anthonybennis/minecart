@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.Button;
@@ -80,7 +81,7 @@ public class RunPlanner implements EntryPoint
 		 * Target Date Panel
 		 */
 		DatePanelManager manager = new DatePanelManager();
-		VerticalPanel datePanel = manager.createDatePanel();
+		Canvas datePanel = manager.createCanvas();
 		
 		/*
 		 * Calander Panel
