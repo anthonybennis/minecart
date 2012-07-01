@@ -1,8 +1,9 @@
 package com.anthonybennis.runplanner.client;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.user.client.Timer;
 
 /**
  * 
@@ -10,36 +11,82 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class DatePanelManager 
 {
-	
-	private Panel _dateViewPanel;
-	private Panel _datePickerPanel;
+
+	private ImageElement _imageElement;
+	private ImageLoader _imageLoader;
+	private Canvas _canvas;
 
 	public DatePanelManager()
 	{
-		VerticalPanel containerPanel = this.createDatePanel();
-//		 _dateViewPanel = this.createDateViewerPanel();
-//		 _datePickerPanel = this.createDatePickerPanel();
-//		 
-//		 containerPanel.add(_dateViewPanel);
+		_imageLoader = new ImageLoader();
+		_imageElement = this.loadImage();
 	}
 	
-	public VerticalPanel createDatePanel()
+	public Canvas createCanvas()
 	{
-		VerticalPanel datePanelContainer = new VerticalPanel();
-		Button testButton = new Button("Date stuff goes here");
-		datePanelContainer.add(testButton);
-//		datePanelContainer.getElement().getStyle().setBackgroundImage("BlackWoodTexture.jpg");
+		_canvas = Canvas.createIfSupported();
+		_canvas.setWidth("100%");
+		_canvas.setHeight("100%");
 		
-		return datePanelContainer;
+		this.update();
+	
+		
+		return _canvas;
 	}
 	
-	private Panel createDateViewerPanel()
+	protected void update()
 	{
-		return null; // TODO AB
+		if (_canvas != null && _imageElement != null)
+		{			
+			Context2d context2d = _canvas.getContext2d();
+			context2d.restore();
+			/*
+			 * Draw Background Image
+			 */
+			context2d.setGlobalAlpha(.6);
+			context2d.drawImage(_imageElement, 0, 0);
+			/*
+			 * Draw text
+			 */
+			context2d.setFont("bold 22px sans-serif");
+			context2d.setGlobalAlpha(1.0);
+			context2d.setFillStyle("white");
+			context2d.fillText("July",20, 30);
+			/*
+			 * Draw date
+			 * TODO AB Load all images on start up (1-31 etc)
+			 */
+			
+			
+			/*
+			 * Draw Day
+			 */
+			context2d.fillText("Sunday",20, 140);
+			
+			
+			
+			context2d.save();
+			context2d.restore();
+		}
+		else if ((_canvas != null && _imageElement == null)) // Image has not loaded yet.
+		{
+			// Create a new timer that calls Window.alert().
+		    Timer t = new Timer() {
+		      public void run() {
+		    	  _imageElement = loadImage();
+		    	  update(); // RECURSIVE CALL UNTIL IMAGE IS LOADED!!!
+		      }
+		    };
+
+		    // Schedule the timer to run in 100 milliseconds
+		    t.schedule(150);
+		  }
 	}
 	
-	private Panel createDatePickerPanel()
+
+	private ImageElement loadImage()
 	{
-		return null; // TODO AB
+		ImageElement imageElement = _imageLoader.getImage("images/DateViewBackground.png");
+		return imageElement;
 	}
 }
