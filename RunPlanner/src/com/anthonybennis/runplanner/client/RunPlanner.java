@@ -1,19 +1,19 @@
 package com.anthonybennis.runplanner.client;
 
+import com.anthonybennis.runplanner.client.handlers.CloseHandler;
+import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -54,6 +54,7 @@ public class RunPlanner implements EntryPoint
 		Image runPlannerImage = new Image("images/RunPlannerGold.png");
 		Image closeButton = new Image("images/Close.png");
 		closeButton.setTitle("Close app");
+		closeButton.addClickHandler(new CloseHandler());
 		
 		headerPanel.add(settingsButton);
 		headerPanel.setCellVerticalAlignment(settingsButton, HasVerticalAlignment.ALIGN_MIDDLE);

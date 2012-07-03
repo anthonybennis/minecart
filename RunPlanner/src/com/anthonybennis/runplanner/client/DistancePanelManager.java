@@ -188,8 +188,7 @@ public class DistancePanelManager
 		@Override
 		public void onClick(ClickEvent event) 
 		{
-			Audio audio = new Audio();
-			audio.playButtonClick();
+			Audio.playButtonClick();
 			_userDefinedDistance = _wrapper.getDistance();
 			highlightDistanceButton(_userDefinedDistance);
 		}	
