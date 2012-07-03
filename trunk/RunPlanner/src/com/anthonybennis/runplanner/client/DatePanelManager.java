@@ -1,9 +1,15 @@
 package com.anthonybennis.runplanner.client;
 
+import java.util.Date;
+
+import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * 
@@ -25,12 +31,10 @@ public class DatePanelManager
 	public Canvas createCanvas()
 	{
 		_canvas = Canvas.createIfSupported();
-		_canvas.setWidth("100%");
-		_canvas.setHeight("100%");
-		
+		_canvas.addClickHandler(new DatePickerHandler(_canvas));
+
 		this.update();
 	
-		
 		return _canvas;
 	}
 	
@@ -43,7 +47,7 @@ public class DatePanelManager
 			/*
 			 * Draw Background Image
 			 */
-			context2d.setGlobalAlpha(.6);
+//			context2d.setGlobalAlpha(.6);
 			context2d.drawImage(_imageElement, 0, 0);
 			/*
 			 * Draw text
@@ -61,10 +65,8 @@ public class DatePanelManager
 			/*
 			 * Draw Day
 			 */
-			context2d.fillText("Sunday",20, 140);
-			
-			
-			
+			context2d.fillText(getDaysRemaining(),20, 140);
+
 			context2d.save();
 			context2d.restore();
 		}
@@ -88,5 +90,12 @@ public class DatePanelManager
 	{
 		ImageElement imageElement = _imageLoader.getImage("images/DateViewBackground.png");
 		return imageElement;
+	}
+	
+	private String getDaysRemaining()
+	{
+		String daysToGo = "";
+		
+		return daysToGo;
 	}
 }
