@@ -6,7 +6,6 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/apps-marketplace.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/mgwt-1.1.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-voices-2.1.8.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
