@@ -1,21 +1,21 @@
 package com.anthonybennis.runplanner.client.handlers;
 
+import com.anthonybennis.runplanner.client.IDateReciever;
 import com.anthonybennis.runplanner.client.controls.DateChooser;
-import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Panel;
 
 /**
  * 
  * @author abennis
  */
-public class DatePickerHandler implements ClickHandler 
+public class DatePickerHandler implements ClickHandler
 {
-	private Canvas _panel;
-	public DatePickerHandler(Canvas panel)
+	private IDateReciever _dateReciever;
+	
+	public DatePickerHandler(IDateReciever dateReciever)
 	{
-		_panel = panel;
+		_dateReciever = dateReciever;
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class DatePickerHandler implements ClickHandler
 		/*
 		 * Pop up Panel with custom Date Picker
 		 */
-		DateChooser chooser = new DateChooser(_panel);
-		chooser.popup();
+		DateChooser chooser = new DateChooser();
+		chooser.popup(_dateReciever);
 	}
 }

@@ -18,11 +18,9 @@ public class Persistance
 	 public static final String DISTANCE_UNIT = "DISTANCE_UNIT";
 	 
 	 /*
-	  * TODO AB - How will we store calender entries?
-	  * Maybe DATE is key?
-	  * store(Date,String distance);
-	  * or use comma seperated values? (Preffered approach)
-	  * store(PLAN, "DATE,DISTANCE,DATE,DISTANCE,DATE,DISTANCE")
+	  * TODO Store calender entries as Date;Distance;Note comma seperated values.
+	  * use comma separated values
+	  * store(PLAN, "DATE;DISTANCE;NOTE,DATE;DISTANCE;NOTE,DATE;DISTANCE;NOTE")
 	  */
 	 
 	 

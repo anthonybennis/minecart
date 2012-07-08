@@ -1,37 +1,40 @@
 package com.anthonybennis.runplanner.client;
 
-import java.util.Date;
+
 
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
+import com.anthonybennis.runplanner.client.storage.Persistance;
+import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * 
  * @author abennis
  */
-public class DatePanelManager 
+public class DatePanelManager implements IDateReciever
 {
-
 	private ImageElement _imageElement;
-	private ImageLoader _imageLoader;
 	private Canvas _canvas;
+	private final String VALUE_NOT_SET = "-1";
+	private String targetMonth = VALUE_NOT_SET;
+	private String targetYear = VALUE_NOT_SET;
+	private Date _date = new Date();
 
 	public DatePanelManager()
 	{
-		_imageLoader = new ImageLoader();
 		_imageElement = this.loadImage();
+		this.loadUserTargetDateSettings();
 	}
 	
 	public Canvas createCanvas()
 	{
-		_canvas = Canvas.createIfSupported();
-		_canvas.addClickHandler(new DatePickerHandler(_canvas));
+		_canvas = Canvas.createIfSupported(); // We only release on Platforms that support this.
+		_canvas.addClickHandler(new DatePickerHandler(this));
+		_canvas.setWidth("205px");
+		_canvas.setWidth("213px");
 
 		this.update();
 	
@@ -47,7 +50,8 @@ public class DatePanelManager
 			/*
 			 * Draw Background Image
 			 */
-//			context2d.setGlobalAlpha(.6);
+			context2d.clearRect(0, 0, _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight()); // Clear
+			context2d.setGlobalAlpha(.6);
 			context2d.drawImage(_imageElement, 0, 0);
 			/*
 			 * Draw text
@@ -55,17 +59,20 @@ public class DatePanelManager
 			context2d.setFont("bold 22px sans-serif");
 			context2d.setGlobalAlpha(1.0);
 			context2d.setFillStyle("white");
-			context2d.fillText("July",20, 30);
+			context2d.fillText(getDaysRemaining(),30, 40);
 			/*
 			 * Draw date
 			 * TODO AB Load all images on start up (1-31 etc)
 			 */
-			
+			context2d.setFont("bold 62px sans-serif");
+			context2d.fillText(this.getTargetDay(),85, 120);
 			
 			/*
-			 * Draw Day
+			 * Draw Month
+			 * TODO AB - Draw year?
 			 */
-			context2d.fillText(getDaysRemaining(),20, 140);
+			context2d.setFont("bold 22px sans-serif");
+			context2d.fillText(this.getMonthAndYear(),20, 160);
 
 			context2d.save();
 			context2d.restore();
@@ -88,14 +95,70 @@ public class DatePanelManager
 
 	private ImageElement loadImage()
 	{
-		ImageElement imageElement = _imageLoader.getImage("images/DateViewBackground.png");
+		ImageElement imageElement = RunPlanner.IMAGELOADER.getImageElement("images/DateViewBackground.png");
 		return imageElement;
 	}
 	
 	private String getDaysRemaining()
 	{
-		String daysToGo = "";
+		int numberOfDays = _date.calculateNumberOfDaysFromToday(); 
+		String daysToGo = numberOfDays + " days to go";
 		
 		return daysToGo;
+	}
+	
+	private String getTargetMonth()
+	{
+		return _date.getMonthName();
+	}
+	
+	private String getTargetDay()
+	{
+		return "" + _date.getDay();
+	}
+	
+	private String getTargetYear()
+	{
+		String month = "2012";
+		return month;
+	}
+	
+	private String getMonthAndYear()
+	{
+		return this.getTargetMonth() + ", " + this.getTargetYear();
+	}
+	
+	/**
+	 * If the user hasn't set a target, than we
+	 * default to 6 months from today.
+	 */
+	private void createDefaultValues()
+	{
+		
+	}
+	
+	private void loadUserTargetDateSettings()
+	{
+		/*
+		 * Get user settings
+		 */
+		String userpersistedTargetDate = Persistance.get(Persistance.TARGET_DATE);
+		_date = Date.convertStringToDate(userpersistedTargetDate);
+	}
+
+	@Override
+	public void setDate(Date date) 
+	{
+		_date = date;
+		/*
+		 * Persist Target Date
+		 */
+		String key = Persistance.TARGET_DATE;
+		Persistance.store(key, date.convertToString());
+		/*
+		 * Update UI.
+		 *
+		 */
+		this.update();
 	}
 }

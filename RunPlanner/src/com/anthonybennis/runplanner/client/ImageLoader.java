@@ -21,15 +21,36 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * This class loads all images needed.
  * @author abennis
- *
  */
 public class ImageLoader 
 {
-	private Map<String, ImageElement> _allImages = new HashMap<String,ImageElement>();
+	private Map<String, ImageElement> _allImageElements = new HashMap<String,ImageElement>();
+	private Map<String, Image> _allImages = new HashMap<String,Image>();
+	public static String PLUS_IMAGE_PATH = "images/Plus.png";
+	public static String MINUSS_IMAGE_PATH = "images/Minus.png";
 	
-	public ImageElement getImage(String imagePath)
+	public void loadAllImages()
 	{
-		ImageElement image = _allImages.get(imagePath);
+		this.loadImage(PLUS_IMAGE_PATH);
+		this.loadImage(MINUSS_IMAGE_PATH);
+	}
+	
+	public ImageElement getImageElement(String imagePath)
+	{
+		ImageElement image = _allImageElements.get(imagePath);
+		
+		if (image == null)
+		{
+			this.loadImage(imagePath);
+			image = _allImageElements.get(imagePath);
+		}
+		
+		return image;
+	}
+	
+	public Image getImage(String imagePath)
+	{
+		Image image = _allImages.get(imagePath);
 		
 		if (image == null)
 		{
@@ -53,7 +74,8 @@ public class ImageLoader
 		      public void onLoad(LoadEvent event) {
 		        // once image is loaded, put into Map and make available for future.
 		        ImageElement imageElement = (ImageElement)image.getElement().cast();
-		        _allImages.put(imagePath, imageElement);
+		        _allImageElements.put(imagePath, imageElement);
+		        _allImages.put(imagePath, image);
 		        }
 		      });
 		
