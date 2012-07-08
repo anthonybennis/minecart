@@ -1,14 +1,22 @@
 package com.anthonybennis.runplanner.client.controls;
 
-import com.google.gwt.canvas.client.Canvas;
+
+
+import com.anthonybennis.runplanner.client.IDateReciever;
+import com.anthonybennis.runplanner.client.ImageLoader;
+import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * A date picker for use in Touch screen devices
@@ -19,61 +27,69 @@ import com.google.gwt.user.client.ui.PopupPanel;
  */
 public class DateChooser 
 {
-	private Canvas _parentPanel;
+	private UpDownControl _dateControl;
+	private UpDownControl _monthControl;
+	private UpDownControl _yearsControl;
+	private Date _date = new Date();
 	
-	public DateChooser(Canvas parentPanel)
+	public DateChooser()
 	{
-		_parentPanel = parentPanel;
 	}
 	
-	public void popup()
+	public void popup(final IDateReciever dateReciever)
 	{
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Select Race Date");
 		dialogBox.setAutoHideEnabled(true);
-		final HorizontalPanel panel = this.createDatePicker();
-		dialogBox.add(panel);
+		dialogBox.center();
 		
-		/*
-		 * Position Dialog
-		 */
-		dialogBox.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-	          public void setPosition(int offsetWidth, int offsetHeight) {
-	            int left = _parentPanel.getAbsoluteLeft();
-	            int top = _parentPanel.getAbsoluteTop();
-	            dialogBox.setPopupPosition(left, top);
-	            
-	          }
-		});
 		
-		/*
-		 * Create Close Button
-		 */
-		   // Add a close button at the bottom of the dialog
-	    Button closeButton = new Button("Close");
-	    closeButton.addClickHandler(new ClickHandler() {
+		VerticalPanel mainDialogContainer = new VerticalPanel();
+		Panel panel = this.createDatePicker();
+		mainDialogContainer.add(panel);
+		
+		Button closeButton = this.createCloseButton(dialogBox);
+		mainDialogContainer.add(closeButton);
+	    
+		FocusPanel focusPanel = new FocusPanel(mainDialogContainer);
+        dialogBox.add(focusPanel);
+		dialogBox.show();
+		dialogBox.addCloseHandler(new CloseHandler<PopupPanel>() {
 			
 			@Override
-			public void onClick(ClickEvent event) {
-				 dialogBox.hide();
+			public void onClose(CloseEvent<PopupPanel> event) {
+				setDate();
+				dateReciever.setDate(_date);
 			}
 		});
-
-        panel.add(closeButton);
-        panel.setCellHorizontalAlignment(closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
-	    
-		dialogBox.show();
 	}
 	
 	public HorizontalPanel createDatePicker()
 	{
 		HorizontalPanel datePickerPanel = new HorizontalPanel();
-		datePickerPanel.setSize("150px", "115px");
+		datePickerPanel.setSize("240px", "250px");
 		
-		/*
-		 * Add Day selector
-		 */
-		UpDownControl dateControl = new UpDownControl();
+		Image plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
+		Image minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
+		Panel dayPanel = this.createDateControl(plusImage,minusImage);
+		datePickerPanel.add(dayPanel);
+		
+		plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH);
+		minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH);
+		Panel monthPanel = this.createMonthControl(plusImage,minusImage);
+		datePickerPanel.add(monthPanel);
+
+		plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH);
+		minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH);
+		Panel yearPanel = this.createYearPanel(plusImage,minusImage);
+		datePickerPanel.add(yearPanel);
+		
+		return datePickerPanel;
+	}
+	
+	private Panel createDateControl(Image plusImage, Image minusImage)
+	{
+		_dateControl = new UpDownControl(plusImage, minusImage);
 		String[] dates = new String[31];
 		
 		for (int i = 0; i < dates.length; i++) 
@@ -81,19 +97,19 @@ public class DateChooser
 			dates[i] = "" + (i + 1);
 		}
 		
-		datePickerPanel.add(dateControl.createUpDownControl(dates));
-		
-		/*
-		 * Add Month Selector
-		 */
-		UpDownControl monthControl = new UpDownControl();
-		String[] months = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().monthsFull();
-		datePickerPanel.add(monthControl.createUpDownControl(months));
-		
-		/*
-		 * Add Year selector
-		 */
-		UpDownControl yearsControl = new UpDownControl();
+		return _dateControl.createUpDownControl(dates);
+	}
+	
+	private Panel createMonthControl(Image plusImage, Image minusImage)
+	{
+		_monthControl = new UpDownControl(plusImage, minusImage);
+		String[] months = Date.getMonthNames();
+		return _monthControl.createUpDownControl(months);
+	}
+	
+	private Panel createYearPanel(Image plusImage, Image minusImage)
+	{
+		_yearsControl = new UpDownControl(plusImage, minusImage);
 		String[] years = new String[100];
 		
 		for (int i = 0; i < years.length; i++) 
@@ -101,9 +117,29 @@ public class DateChooser
 			years[i] = "" +  (i + 2012);
 		}
 		
-		datePickerPanel.add(yearsControl.createUpDownControl(years));
-		
-		
-		return datePickerPanel;
+		return _yearsControl.createUpDownControl(years);
+	}
+	
+	private Button createCloseButton(final DialogBox box)
+	{
+		 Button closeButton = new Button("Close");
+		 closeButton.setWidth("100%");
+		 closeButton.setHeight("60px");
+		    closeButton.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					 box.hide();
+				}
+			});
+		    
+		    return closeButton;
+	}
+	
+	private void setDate()
+	{
+		_date.setDay(_dateControl.getValue());
+		_date.setMonth(_monthControl.getValue());
+		_date.setYear(_yearsControl.getValue());
 	}
 }

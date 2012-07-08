@@ -1,7 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.handlers.CloseHandler;
-import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
@@ -20,14 +19,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class RunPlanner implements EntryPoint 
 {
+	public final static ImageLoader IMAGELOADER = new ImageLoader();
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() 
 	{
-		/*
-		 * TODO AB Load all sound and pictures here...
-		 */
+		IMAGELOADER.loadAllImages();
 		Audio.playButtonClick(); // Load into memory.
 		
 		RootPanel rootPanel = RootPanel.get();
@@ -51,7 +50,9 @@ public class RunPlanner implements EntryPoint
 		
 		Image settingsButton = new Image("images/Settings.png");
 		settingsButton.setTitle("Settings");
+		
 		Image runPlannerImage = new Image("images/RunPlannerGold.png");
+		
 		Image closeButton = new Image("images/Close.png");
 		closeButton.setTitle("Close app");
 		closeButton.addClickHandler(new CloseHandler());
