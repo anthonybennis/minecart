@@ -77,6 +77,7 @@ public class RunPlanner implements EntryPoint
 		 * Date and Distance container
 		 */
 		VerticalPanel distanceAndDateContainer = new VerticalPanel();
+		distanceAndDateContainer.setHeight("100%");
 		
 		/*
 		 * Target Distance Panel

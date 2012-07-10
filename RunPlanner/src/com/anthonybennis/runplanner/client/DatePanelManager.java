@@ -18,9 +18,6 @@ public class DatePanelManager implements IDateReciever
 {
 	private ImageElement _imageElement;
 	private Canvas _canvas;
-	private final String VALUE_NOT_SET = "-1";
-	private String targetMonth = VALUE_NOT_SET;
-	private String targetYear = VALUE_NOT_SET;
 	private Date _date = new Date();
 
 	public DatePanelManager()
@@ -33,8 +30,8 @@ public class DatePanelManager implements IDateReciever
 	{
 		_canvas = Canvas.createIfSupported(); // We only release on Platforms that support this.
 		_canvas.addClickHandler(new DatePickerHandler(this));
-		_canvas.setWidth("205px");
-		_canvas.setWidth("213px");
+		_canvas.getCanvasElement().setWidth(205);
+		_canvas.getCanvasElement().setHeight(213);
 
 		this.update();
 	
@@ -50,9 +47,9 @@ public class DatePanelManager implements IDateReciever
 			/*
 			 * Draw Background Image
 			 */
-			context2d.clearRect(0, 0, _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight()); // Clear
+			context2d.clearRect(0, 0,205, 213); // Clear
 			context2d.setGlobalAlpha(.6);
-			context2d.drawImage(_imageElement, 0, 0);
+			context2d.drawImage(_imageElement, 0, 0, 205,213);
 			/*
 			 * Draw text
 			 */
@@ -65,15 +62,20 @@ public class DatePanelManager implements IDateReciever
 			 * TODO AB Load all images on start up (1-31 etc)
 			 */
 			context2d.setFont("bold 62px sans-serif");
-			context2d.fillText(this.getTargetDay(),85, 120);
+			String day = this.getTargetDay();
+			int xPos = (day.length() == 1)?85:65;
+			
+			context2d.fillText(day,xPos, 120);
 			
 			/*
 			 * Draw Month
 			 * TODO AB - Draw year?
 			 */
 			context2d.setFont("bold 22px sans-serif");
-			context2d.fillText(this.getMonthAndYear(),20, 160);
-
+			String monthAndYear = this.getMonthAndYear(); 
+			xPos = (monthAndYear.length() >11)?20:45;
+			context2d.fillText(monthAndYear,xPos, 160);
+			
 			context2d.save();
 			context2d.restore();
 		}
@@ -119,7 +121,7 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getTargetYear()
 	{
-		String month = "2012";
+		String month = "" + _date.getYear();
 		return month;
 	}
 	
@@ -127,23 +129,27 @@ public class DatePanelManager implements IDateReciever
 	{
 		return this.getTargetMonth() + ", " + this.getTargetYear();
 	}
-	
-	/**
-	 * If the user hasn't set a target, than we
-	 * default to 6 months from today.
-	 */
-	private void createDefaultValues()
-	{
-		
-	}
-	
+
 	private void loadUserTargetDateSettings()
 	{
 		/*
 		 * Get user settings
 		 */
 		String userpersistedTargetDate = Persistance.get(Persistance.TARGET_DATE);
-		_date = Date.convertStringToDate(userpersistedTargetDate);
+		
+		if (userpersistedTargetDate == null)
+		{
+			/*
+			 * TOD AB Calculate a date 6 months from now...
+			 */
+			_date.setDay(1);
+			_date.setMonth(1);
+			_date.setYear(2012);
+		}
+		else
+		{
+			_date = Date.convertStringToDate(userpersistedTargetDate);
+		}
 	}
 
 	@Override
