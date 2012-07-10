@@ -4,6 +4,9 @@ import com.google.gwt.i18n.client.LocaleInfo;
 
 public class Date 
 {
+	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
+
+	
 	public Date()
 	{
 		
@@ -108,11 +111,11 @@ public class Date
 		}
 		else
 		{
-			dateInString = new String[]{"1","January","2013"};
+			dateInString = new String[]{"1","1","2013"};
 		}
 			
 		date.setDay(dateInString[0]);
-		date.setMonth(dateInString[1]);
+		date.setMonth(Integer.parseInt(dateInString[1]));
 		date.setYear(dateInString[2]);
 		
 		
@@ -126,10 +129,21 @@ public class Date
 	
 	public int calculateNumberOfDaysFromToday()
 	{
-		/*
-		 * TODO AB
-		 */
-		return 18;
+		int daysToGo = 0;
+		
+		java.util.Date raceDate = new java.util.Date();
+		raceDate.setDate(_day);
+		raceDate.setMonth(_month - 1); // Java base is 0 for month
+		raceDate.setYear(_year - 1900);
+		
+		java.util.Date todaysDate = new java.util.Date();
+	    
+		if (todaysDate.compareTo(raceDate) <0)
+		{
+			daysToGo = (int)Math.ceil(((double)raceDate.getTime() - todaysDate.getTime()) / MILLIS_IN_A_DAY);
+		}
+		
+		return daysToGo;
 	}
 	
 	

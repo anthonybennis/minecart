@@ -4,7 +4,9 @@ package com.anthonybennis.runplanner.client.controls;
 
 import com.anthonybennis.runplanner.client.IDateReciever;
 import com.anthonybennis.runplanner.client.ImageLoader;
+import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.Date;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -41,33 +43,38 @@ public class DateChooser
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Select Race Date");
 		dialogBox.setAutoHideEnabled(true);
-		dialogBox.center();
+		dialogBox.setAnimationEnabled(true);
+		dialogBox.setGlassEnabled(true);
 		
+		dialogBox.center();
 		
 		VerticalPanel mainDialogContainer = new VerticalPanel();
 		Panel panel = this.createDatePicker();
+		this.loadLastSavedDate();
 		mainDialogContainer.add(panel);
 		
 		Button closeButton = this.createCloseButton(dialogBox);
+		closeButton.getElement().getStyle().setFontSize(22, Unit.PX);
+		closeButton.setStylePrimaryName("closebutton");
 		mainDialogContainer.add(closeButton);
 	    
 		FocusPanel focusPanel = new FocusPanel(mainDialogContainer);
         dialogBox.add(focusPanel);
+        dialogBox.getElement().getStyle().setWidth(800, Unit.PX);
 		dialogBox.show();
 		dialogBox.addCloseHandler(new CloseHandler<PopupPanel>() {
 			
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				setDate();
+				setSelectedDate();
 				dateReciever.setDate(_date);
 			}
 		});
 	}
 	
-	public HorizontalPanel createDatePicker()
+	private HorizontalPanel createDatePicker()
 	{
 		HorizontalPanel datePickerPanel = new HorizontalPanel();
-		datePickerPanel.setSize("240px", "250px");
 		
 		Image plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
 		Image minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
@@ -136,7 +143,21 @@ public class DateChooser
 		    return closeButton;
 	}
 	
-	private void setDate()
+	private void loadLastSavedDate()
+	{
+		String stringDate = Persistance.get(Persistance.TARGET_DATE);
+		
+		if (stringDate != null)
+		{
+			Date date = Date.convertStringToDate(stringDate);
+			_dateControl.setValue("" + date.getDay());
+			_monthControl.setValue("" + date.getMonthName());
+			_yearsControl.setValue("" + date.getYear());
+		}
+		
+	}
+	
+	private void setSelectedDate()
 	{
 		_date.setDay(_dateControl.getValue());
 		_date.setMonth(_monthControl.getValue());

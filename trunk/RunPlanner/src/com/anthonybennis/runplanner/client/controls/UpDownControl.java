@@ -3,21 +3,20 @@ package com.anthonybennis.runplanner.client.controls;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UpDownControl 
 {
-	private static final String BLACK = "black";
-	private static final String TEXT_WIDTH = "75px";
-	private static final String BUTTON_WIDTH = "85px";
-	private static final String CONTROL_HEIGHT = "70px";
+	private static final String BLACK = "black";	
+	private static final String BUTTON_WIDTH = "110px";
+	private static final String CONTROL_HEIGHT = "60px";
 	private String[] _contents;
-	private TextBox _value;
+	private Label _value;
 	private Image _plusImage;
 	private Image _minusImage;
 	
@@ -27,15 +26,13 @@ public class UpDownControl
 		_minusImage = minusImage;
 	}
 	
-	/*
-	 * TODO AB - Round Buttons.
-	 */
 	public Panel createUpDownControl(String[] contents)
 	{
 		/*
 		 * Create container Panel
 		 */
 		VerticalPanel verticalPanel = new VerticalPanel();
+		verticalPanel.setWidth("100%");
 		_contents = contents;
 		
 		/*
@@ -51,12 +48,13 @@ public class UpDownControl
 		/*
 		 * Value Text
 		 */
-		_value = new TextBox();
-		_value.setWidth(TEXT_WIDTH);
-		_value.setHeight(CONTROL_HEIGHT);
-		_value.setReadOnly(true);
+		_value = new Label();
+		_value.setWidth(BUTTON_WIDTH);
+		_value.setHeight("40px");
+		_value.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		
 		_value.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-		_value.setAlignment(TextAlignment.CENTER);
 		verticalPanel.add(_value);
 		
 		if (contents != null && contents.length > 0)
@@ -80,6 +78,23 @@ public class UpDownControl
 	public String getValue()
 	{
 		return _value.getText();
+	}
+	
+	public boolean setValue(String value)
+	{
+		boolean valueFoundAndSet = false;
+		
+		for (String textValue: _contents) 
+		{
+			if (value.equals(textValue))
+			{
+				_value.setText(textValue);
+				valueFoundAndSet = true;
+				break;
+			}
+		}
+		
+		return valueFoundAndSet;
 	}
 	
 	class UpButtonClickHandler implements ClickHandler
