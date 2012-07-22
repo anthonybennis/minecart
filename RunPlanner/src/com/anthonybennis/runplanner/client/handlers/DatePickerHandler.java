@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client.handlers;
 
+import com.anthonybennis.runplanner.client.Audio;
 import com.anthonybennis.runplanner.client.IDateReciever;
 import com.anthonybennis.runplanner.client.controls.DateChooser;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -24,6 +25,7 @@ public class DatePickerHandler implements ClickHandler
 		/*
 		 * Pop up Panel with custom Date Picker
 		 */
+		Audio.playButtonClick();
 		DateChooser chooser = new DateChooser();
 		chooser.popup(_dateReciever);
 	}

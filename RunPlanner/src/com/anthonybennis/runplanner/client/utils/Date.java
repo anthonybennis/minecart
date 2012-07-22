@@ -1,6 +1,9 @@
 package com.anthonybennis.runplanner.client.utils;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormatInfo;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 public class Date 
 {
@@ -126,6 +129,77 @@ public class Date
 	{
 		return LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().monthsFull();
 	}
+	
+	public static String[] geDayNames(boolean startWithMonday)
+	{
+		String[] dayNames = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().weekdaysFull();
+		
+		if (startWithMonday)
+		{
+			String[] startWithMondayNames = new String[dayNames.length];
+			
+			startWithMondayNames[0] = dayNames[1];
+			startWithMondayNames[1] = dayNames[2];
+			startWithMondayNames[2] = dayNames[3];
+			startWithMondayNames[3] = dayNames[4];
+			startWithMondayNames[4] = dayNames[5];
+			startWithMondayNames[5] = dayNames[6];
+			startWithMondayNames[6] = dayNames[0];
+			
+			dayNames = startWithMondayNames;
+		}
+		
+		return dayNames;
+	}
+	
+	/**
+	 * Month is base 0
+	 */
+	public static String getFirstDayOfTheMonth(int month, int year)
+	{
+		String firstDayOfMonth = "";
+		java.util.Date date = new java.util.Date();
+		date.setDate(1);
+		date.setMonth(month);
+		date.setYear(year - 1900);
+		
+		String day = date.toString();
+		String[] dateSplit = day.split(" ");
+		String dayShortFormat = dateSplit[0];
+		
+		String[] weekDaysShort = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().weekdaysShort();
+		
+		for (int i = 0; i < weekDaysShort.length; i++) 
+		{
+			if (weekDaysShort[i].equals(dayShortFormat))
+			{
+				String[] weekDaysLong = Date.geDayNames(false);
+				firstDayOfMonth = weekDaysLong[i];
+				break;
+			}
+		}
+		
+		
+		return firstDayOfMonth;
+	}
+	
+	public static int daysInMonth(int month, int year) 
+	{
+	  final int daysPerMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+	  int days = daysPerMonth[month];
+
+	  //Check for leap days in Feb.
+	  if (month == 1) 
+	  {
+	    if ((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0)) 
+	    {
+	      days++; //add a leap day
+	    }
+	  }
+	  return days;
+	}
+	
+	
 	
 	public int calculateNumberOfDaysFromToday()
 	{
