@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
+import com.anthonybennis.runplanner.client.controls.calendar.Calander;
 import com.anthonybennis.runplanner.client.handlers.CloseHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
@@ -94,9 +95,8 @@ public class RunPlanner implements EntryPoint
 		/*
 		 * Calander Panel
 		 */
-		HorizontalPanel calanderPanel = new HorizontalPanel();
-		Button button = new Button("Calander goes here...");
-		calanderPanel.add(button);
+		Calander calander = new Calander();
+		Panel calanderPanel = calander.createCalander();
 		
 		distanceAndDateContainer.add(distanceButtonPanel);
 		distanceAndDateContainer.add(datePanel);
