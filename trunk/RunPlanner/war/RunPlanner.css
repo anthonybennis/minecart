@@ -25,12 +25,47 @@ h1 {
 .gwt-Button { font-size: 350%; }
 
 .gwt-Label {
-	color: #FFFFFF;
-	font: normal 12px tahoma, arial, helvetica, sans-serif;
+	color: #000000;
+	font: normal 22px tahoma, arial, helvetica, sans-serif;
 	padding: 6px;
 }
 
+.gwt-PushButton
+{
+        margin: 50px;
+        height: 23px;
+        width: 60px;
+        color:  #000000;
+        font-size: 12px;
+        font-family: arial, sans-serif;
+        text-align: center;
+        vertical-align: middle;
+        horizontal-align: middle;
+        background: #000000;
+        border: 0px solid #3079ED;
+        outline-color: #3079ED;
+        outline-width: 3px;
+    }
+
 .dialogVPanel {
   margin: 5px;
+}
+
+.closeButton{
+	 font-size: 20px;
+	 font-family: arial, sans-serif;
+  	 font-weight: bold;
+}
+
+.monthlabel{
+	color: #FFFFFF;
+	font: normal 32px tahoma, arial, helvetica, sans-serif;
+	padding: 6px;
+}
+
+.daylabel{
+	color: #FFFFFF;
+	font: normal 22px tahoma, arial, helvetica, sans-serif;
+	padding: 6px;
 }
 
