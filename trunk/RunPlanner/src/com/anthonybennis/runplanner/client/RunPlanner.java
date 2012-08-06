@@ -30,6 +30,9 @@ public class RunPlanner implements EntryPoint
 		IMAGELOADER.loadAllImages();
 		Audio.playButtonClick(); // Load into memory.
 		
+		/*
+		 * ROOT
+		 */
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("100%", "100%");
 		RootPanel headerElement = RootPanel.get("Header");
@@ -108,6 +111,26 @@ public class RunPlanner implements EntryPoint
 		mainPanel.add(dateDistanceCalanderPanel);
 		
 		headerElement.add(mainPanel, 10, 10);
+	}
+	
+	private Panel createCalendarPanel()
+	{
+		Panel panel = new HorizontalPanel();
+		
+		return panel;
+	}
+	
+	private Panel createSettingsPanel()
+	{
+		Panel panel = new HorizontalPanel();
+		
+		return panel;
+	}
+	
+	private Panel createHeaderPanel()
+	{
+		Panel panel = new HorizontalPanel();
+		return panel;
 	}
 }
 
