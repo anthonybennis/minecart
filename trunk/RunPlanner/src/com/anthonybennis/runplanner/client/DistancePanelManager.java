@@ -1,5 +1,7 @@
 package com.anthonybennis.runplanner.client;
 
+import com.anthonybennis.runplanner.client.storage.Persistance;
+import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Panel;
@@ -41,7 +43,7 @@ public class DistancePanelManager
 	protected Panel createDistancePanel()
 	{
 		VerticalPanel distancePanel = new VerticalPanel();
-		distancePanel.setSpacing(25);
+		distancePanel.setSpacing(15);
 		
 		if (this.getDistanceUnits() == DISTANCE_UNIT.METRIC)
 		{
@@ -143,12 +145,25 @@ public class DistancePanelManager
 		}
 	}
 	
-	/*
-	 * TODO AB get distance from persisted preferences
+
+	/**
+	 * 
+	 * @return
 	 */
 	private DISTANCE getUserDistance()
 	{
-		DISTANCE distance = DISTANCE.FIVE_KM; // Default
+		DISTANCE distance = null;
+		
+		String userpersistedTargetDistance = Persistance.get(Persistance.TARGET_DISTANCE);
+		
+		if (userpersistedTargetDistance != null)
+		{
+			distance = this.convertPreferenceStringToDistance(userpersistedTargetDistance);
+		}
+		else
+		{
+			distance = DISTANCE.FIVE_KM; // Default
+		}
 		
 		return distance;
 	}
@@ -190,7 +205,39 @@ public class DistancePanelManager
 		{
 			Audio.playButtonClick();
 			_userDefinedDistance = _wrapper.getDistance();
+			 Persistance.store(Persistance.TARGET_DISTANCE, _userDefinedDistance.toString());
 			highlightDistanceButton(_userDefinedDistance);
 		}	
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private DISTANCE convertPreferenceStringToDistance(String userPreferenceDistance)
+	{
+		DISTANCE userPrefferedDistance = DISTANCE.FIVE_KM;
+		
+		if (userPreferenceDistance != null)
+		{
+			if (userPreferenceDistance.equals(DISTANCE.FIVE_KM.toString()))
+			{
+				userPrefferedDistance = DISTANCE.FIVE_KM;
+			}
+			else if (userPreferenceDistance.equals(DISTANCE.TEN_KM.toString()))
+			{
+				userPrefferedDistance = DISTANCE.TEN_KM;
+			}
+			else if (userPreferenceDistance.equals(DISTANCE.TWNETY_ONE_KM.toString()))
+			{
+				userPrefferedDistance = DISTANCE.TWNETY_ONE_KM;
+			}
+			else if (userPreferenceDistance.equals(DISTANCE.FORTY_TWO_KM.toString()))
+			{
+				userPrefferedDistance = DISTANCE.FORTY_TWO_KM;
+			}
+		}
+		
+		return userPrefferedDistance;
 	}
 }

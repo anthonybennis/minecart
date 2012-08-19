@@ -17,6 +17,6 @@ public class CloseHandler implements ClickHandler
 	@Override
 	public void onClick(ClickEvent event) 
 	{
-			CloseHandler.closeBrowser();
+		CloseHandler.closeBrowser();
 	} 
 }

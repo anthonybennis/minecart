@@ -3,7 +3,7 @@ package com.anthonybennis.runplanner.client.controls;
 
 
 import com.anthonybennis.runplanner.client.IDateReciever;
-import com.anthonybennis.runplanner.client.ImageLoader;
+import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.dom.client.Style.Unit;
@@ -54,8 +54,7 @@ public class DateChooser
 		mainDialogContainer.add(panel);
 		
 		Button closeButton = this.createCloseButton(dialogBox);
-		closeButton.getElement().getStyle().setFontSize(22, Unit.PX);
-		closeButton.setStylePrimaryName("closebutton");
+		closeButton.setStylePrimaryName("largeTextButton");
 		mainDialogContainer.add(closeButton);
 	    
 		FocusPanel focusPanel = new FocusPanel(mainDialogContainer);
@@ -76,18 +75,18 @@ public class DateChooser
 	{
 		HorizontalPanel datePickerPanel = new HorizontalPanel();
 		
-		Image plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
-		Image minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH); // TODO AB Remove dependancy on Image Loader
+		Image plusImage = new Image (Resources.INSTANCE.getPlusImage());
+		Image minusImage = new Image (Resources.INSTANCE.getMinusImage());
 		Panel dayPanel = this.createDateControl(plusImage,minusImage);
 		datePickerPanel.add(dayPanel);
 		
-		plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH);
-		minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH);
+		plusImage = new Image (Resources.INSTANCE.getPlusImage());
+		minusImage = new Image (Resources.INSTANCE.getMinusImage());
 		Panel monthPanel = this.createMonthControl(plusImage,minusImage);
 		datePickerPanel.add(monthPanel);
 
-		plusImage = new Image(ImageLoader.PLUS_IMAGE_PATH);
-		minusImage = new Image(ImageLoader.MINUSS_IMAGE_PATH);
+		plusImage = new Image (Resources.INSTANCE.getPlusImage());
+		minusImage = new Image (Resources.INSTANCE.getMinusImage());
 		Panel yearPanel = this.createYearPanel(plusImage,minusImage);
 		datePickerPanel.add(yearPanel);
 		
