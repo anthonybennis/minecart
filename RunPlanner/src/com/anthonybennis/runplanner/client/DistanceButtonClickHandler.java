@@ -10,14 +10,14 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class DistanceButtonClickHandler implements ClickHandler 
 {
-	private ImageButtonWrapper[] _imageSet;
+	private DistanceButton[] _imageSet;
 	
 	/**
 	 * 
 	 * @param enabledImages
 	 * @param disabledImages
 	 */
-	public DistanceButtonClickHandler(ImageButtonWrapper[] imageSet)
+	public DistanceButtonClickHandler(DistanceButton[] imageSet)
 	{
 		_imageSet = imageSet;
 	}
@@ -27,7 +27,7 @@ public class DistanceButtonClickHandler implements ClickHandler
 	{
 		Image clickedImage = (Image)event.getSource();
 		
-		for (ImageButtonWrapper wrapper: _imageSet) 
+		for (DistanceButton wrapper: _imageSet) 
 		{
 			if (clickedImage == wrapper.getImage())
 			{

@@ -18,6 +18,20 @@
     <!--                                           -->
     <title>Run Planner</title>
     
+        <!--                                            -->
+    <!-- So this will run on the HP TouchPad        -->
+    <!--                                            -->
+	<script type="text/javascript">
+            function onLoad() {
+                navigator.device.deviceReady();
+            }
+    </script>
+    
+    <script type="text/javascript" src="enyo-2.0/enyo-2.0/enyo.js"></script>
+    <script type="text/javascript">
+    	enyo.setAllowedOrientation('landscape');
+    </script>
+    
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
     <!-- If you add any GWT meta tags, they must   -->

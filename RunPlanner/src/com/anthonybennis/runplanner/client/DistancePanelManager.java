@@ -33,7 +33,7 @@ public class DistancePanelManager
 	
 	
 	protected DISTANCE _userDefinedDistance;
-	private ImageButtonWrapper[] _imageButtonWrappers = new ImageButtonWrapper[0];
+	private DistanceButton[] _imageButtonWrappers = new DistanceButton[0];
 
 	public DistancePanelManager()
 	{
@@ -63,7 +63,7 @@ public class DistancePanelManager
 		/*
 		 * Add Click Handler to each button
 		 */
-		for (ImageButtonWrapper image : _imageButtonWrappers) 
+		for (DistanceButton image : _imageButtonWrappers) 
 		{
 			image.getImage().addClickHandler(new DistanceButtonClickHandler(image));
 			distancePanel.add(image.getImage());
@@ -77,29 +77,29 @@ public class DistancePanelManager
 		return distancePanel;
 	}
 	
-	private ImageButtonWrapper[] createMetricButtons()
+	private DistanceButton[] createMetricButtons()
 	{
-		ImageButtonWrapper[] images = new ImageButtonWrapper[4];
+		DistanceButton[] images = new DistanceButton[4];
 		
-		images[0] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
-		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_ENABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
-		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_ENABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_ENABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
+		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_ENABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
+		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_ENABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
+		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_ENABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
 		
 		return images;
 	}
 	
-	private ImageButtonWrapper[] createImperialButtons()
+	private DistanceButton[] createImperialButtons()
 	{
-		ImageButtonWrapper[] images = new ImageButtonWrapper[4];
+		DistanceButton[] images = new DistanceButton[4];
 		
 		/*
 		 * TODO AB Use mile images.
 		 */
-		images[0] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
-		images[1] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_DISABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
-		images[2] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_DISABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-		images[3] = new ImageButtonWrapper(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_DISABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
+		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_DISABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
+		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_DISABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
+		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_DISABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
 		
 		return images;
 	}
@@ -193,9 +193,9 @@ public class DistancePanelManager
 	 */
 	class DistanceButtonClickHandler implements ClickHandler
 	{
-		private ImageButtonWrapper _wrapper;
+		private DistanceButton _wrapper;
 		
-		private DistanceButtonClickHandler(ImageButtonWrapper wrapper)
+		private DistanceButtonClickHandler(DistanceButton wrapper)
 		{
 			_wrapper = wrapper;
 		}
