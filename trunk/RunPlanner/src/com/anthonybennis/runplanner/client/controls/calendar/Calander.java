@@ -1,9 +1,6 @@
 package com.anthonybennis.runplanner.client.controls.calendar;
 
 import com.anthonybennis.runplanner.client.utils.Date;
-import com.google.gwt.event.dom.client.TouchEndEvent;
-import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;

@@ -13,9 +13,10 @@ public class Persistance
 	 /*
 	  * Keys
 	  */
-	 public static final String TARGET_DATE = "TARGET_DATE";
-	 public static final String TARGET_DISTANCE = "DISTANCE";
-	 public static final String DISTANCE_UNIT = "DISTANCE_UNIT";
+	 public static final String TARGET_DATE = "RUNPLANNER_TARGET_DATE";
+	 public static final String TARGET_DISTANCE = "RUNPLANNER_DISTANCE";
+	 public static final String DISTANCE_UNIT = "RUNPLANNER_DISTANCE_UNIT";
+	 public static final String AUDIO = "RUNPLANNER_AUDIO";
 	 
 	 /*
 	  * TODO Store calender entries as Date;Distance;Note comma seperated values.

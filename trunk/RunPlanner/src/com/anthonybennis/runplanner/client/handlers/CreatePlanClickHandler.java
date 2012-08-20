@@ -18,7 +18,7 @@ public class CreatePlanClickHandler implements TouchEndHandler
 
 	private void createPlan()
 	{
-		System.out.println("Generate Running Plan....");
+
 		/*
 		 * Get Distance
 		 */

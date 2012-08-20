@@ -46,13 +46,28 @@ h1 {
         outline-color: #3079ED;
         outline-width: 3px;
     }
+    
+ .audioButton
+{
+        margin: 0px;
+        height: 16px;
+        width: 16px;
+        color:  #000000;
+        vertical-align: middle;
+        horizontal-align: middle;
+        background: #000000;
+        border: 0px solid #3079ED;
+        outline-color: #000000;
+        outline-width: 0px;
+    }
 
 .dialogVPanel {
   margin: 5px;
 }
 
-.closeButton{
-	 font-size: 20px;
+.largeTextButton
+{
+	 font-size: 22px;
 	 font-family: arial, sans-serif;
   	 font-weight: bold;
 }

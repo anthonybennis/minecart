@@ -1,14 +1,12 @@
 package com.anthonybennis.runplanner.client;
 
-
-
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.Timer;
 
 /**
  * 
@@ -16,11 +14,13 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class DatePanelManager implements IDateReciever
 {
+	private ImageElement _imageElement;
 	private Canvas _canvas;
 	private Date _date = new Date();
 
 	public DatePanelManager()
 	{
+		_imageElement = this.loadImage();
 		this.loadUserTargetDateSettings();
 	}
 	
@@ -38,10 +38,7 @@ public class DatePanelManager implements IDateReciever
 	
 	protected void update()
 	{
-		Image image = new Image(Resources.INSTANCE.getDatePanelBackgroundImage());
-		ImageElement backgroundImage = ImageElement.as(image.getElement());
-		
-		if (_canvas != null && backgroundImage != null)
+		if (_canvas != null && _imageElement != null)
 		{			
 			Context2d context2d = _canvas.getContext2d();
 			context2d.restore();
@@ -50,7 +47,7 @@ public class DatePanelManager implements IDateReciever
 			 */
 			context2d.clearRect(0, 0,205, 213); // Clear
 			context2d.setGlobalAlpha(.6);
-			context2d.drawImage(backgroundImage, 0, 0, 205,213);
+			context2d.drawImage(_imageElement, 0, 0, 205,213);
 			/*
 			 * Draw text
 			 */
@@ -80,6 +77,26 @@ public class DatePanelManager implements IDateReciever
 			context2d.save();
 			context2d.restore();
 		}
+		else if ((_canvas != null && _imageElement == null)) // Image has not loaded yet.
+		{
+			// Create a new timer that calls Window.alert().
+		    Timer t = new Timer() {
+		      public void run() {
+		    	  _imageElement = loadImage();
+		    	  update(); // RECURSIVE CALL UNTIL IMAGE IS LOADED!!!
+		      }
+		    };
+
+		    // Schedule the timer to run in 100 milliseconds
+		    t.schedule(150);
+		  }
+	}
+	
+
+	private ImageElement loadImage()
+	{	
+		ImageElement imageElement = ImageLoader.getInstance().getImageElement("images/DateViewBackground.png");
+		return imageElement;
 	}
 	
 	private String getDaysRemaining()

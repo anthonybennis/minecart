@@ -29,8 +29,11 @@ public interface Resources extends ClientBundle
 	  @Source("images/DateViewBackground.png")
 	  ImageResource getDatePanelBackgroundImage();	  
 	  
-	  @Source("images/Settings.png")
-	  ImageResource getSettingsImage();	 
+	  @Source("images/AudioButton.png")
+	  ImageResource getAudioButton();
+	  
+	  @Source("images/NoAudioButton.png")
+	  ImageResource getNoAudioButton();
 	  
 	  @Source("images/RunPlannerGold.png")
 	  ImageResource getTitleLogoImage();	 
