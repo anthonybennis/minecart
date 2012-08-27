@@ -2,7 +2,7 @@ package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.anthonybennis.runplanner.client.utils.Date;
+import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
@@ -16,7 +16,7 @@ public class DatePanelManager implements IDateReciever
 {
 	private ImageElement _imageElement;
 	private Canvas _canvas;
-	private Date _date = new Date();
+	private RunPlannerDate _raceDate = new RunPlannerDate();
 
 	public DatePanelManager()
 	{
@@ -57,7 +57,6 @@ public class DatePanelManager implements IDateReciever
 			context2d.fillText(getDaysRemaining(),30, 40);
 			/*
 			 * Draw date
-			 * TODO AB Load all images on start up (1-31 etc)
 			 */
 			context2d.setFont("bold 62px sans-serif");
 			String day = this.getTargetDay();
@@ -101,7 +100,7 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getDaysRemaining()
 	{
-		int numberOfDays = _date.calculateNumberOfDaysFromToday(); 
+		int numberOfDays = _raceDate.calculateNumberOfDaysFromToday(); 
 		String daysToGo = numberOfDays + " days to go";
 		
 		return daysToGo;
@@ -109,17 +108,17 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getTargetMonth()
 	{
-		return _date.getMonthName();
+		return _raceDate.getMonthName();
 	}
 	
 	private String getTargetDay()
 	{
-		return "" + _date.getDay();
+		return "" + _raceDate.getDay();
 	}
 	
 	private String getTargetYear()
 	{
-		String month = "" + _date.getYear();
+		String month = "" + _raceDate.getYear();
 		return month;
 	}
 	
@@ -140,20 +139,20 @@ public class DatePanelManager implements IDateReciever
 			/*
 			 * TOD AB Calculate a date 6 months from now...
 			 */
-			_date.setDay(1);
-			_date.setMonth(1);
-			_date.setYear(2012);
+			_raceDate.setDay(1);
+			_raceDate.setMonth(1);
+			_raceDate.setYear(2013);
 		}
 		else
 		{
-			_date = Date.convertStringToDate(userpersistedTargetDate);
+			_raceDate = RunPlannerDate.convertStringToDate(userpersistedTargetDate);
 		}
 	}
 
 	@Override
-	public void setDate(Date date) 
+	public void setDate(RunPlannerDate date) 
 	{
-		_date = date;
+		_raceDate = date;
 		/*
 		 * Persist Target Date
 		 */

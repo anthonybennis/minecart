@@ -1,13 +1,12 @@
 package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.controls.calendar.Calander;
+import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 import com.anthonybennis.runplanner.client.handlers.CloseHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,7 +31,7 @@ public class RunPlanner implements EntryPoint
 	 */
 	public void onModuleLoad() 
 	{
-		Audio.playButtonClick(); // Load into memory.
+		Audio.playButtonClickSilently(); // Load into memory.
 		
 		/*
 		 * ROOT
@@ -59,24 +58,17 @@ public class RunPlanner implements EntryPoint
 		Image audio = new Image(Resources.INSTANCE.getAudioButton());
 		Image noAudio = new Image(Resources.INSTANCE.getNoAudioButton());
 		
-		ToggleButton audioToggleButton = new ToggleButton(audio,noAudio);
+		final ToggleButton audioToggleButton = new ToggleButton(audio,noAudio);
 		audioToggleButton.setStylePrimaryName("audioButton");
 		audioToggleButton.setSize("64px", "64px");
 		audioToggleButton.setTitle("Audio");
-		
+
 		audioToggleButton.addTouchEndHandler(new TouchEndHandler() {
 			
 			@Override
 			public void onTouchEnd(TouchEndEvent arg0) {
 				Audio.playButtonClick();
-			}
-		});
-		
-		audioToggleButton.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent arg0) {
-				Audio.playButtonClick();
+				AudioOnOffHandler.toggleAudio(audioToggleButton.getValue());
 			}
 		});
 		

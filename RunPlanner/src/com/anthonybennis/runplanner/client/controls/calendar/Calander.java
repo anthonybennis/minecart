@@ -1,6 +1,6 @@
 package com.anthonybennis.runplanner.client.controls.calendar;
 
-import com.anthonybennis.runplanner.client.utils.Date;
+import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -54,7 +54,7 @@ public class Calander
 	{
 		HorizontalPanel dayGrid = new HorizontalPanel();
 		
-		String[] weekDays = Date.geDayNames(true);
+		String[] weekDays = RunPlannerDate.geDayNames(true);
 		
 		for (String weekDay : weekDays) 
 		{
@@ -75,7 +75,7 @@ public class Calander
 		/*
 		 * How many days in the month?
 		 */
-		int numberOfDaysInMonth = Date.daysInMonth(1, 2012);
+		int numberOfDaysInMonth = RunPlannerDate.daysInMonth(1, 2012);
 		System.out.println("Number of days in month: " + numberOfDaysInMonth);
 		
 		/*
@@ -103,7 +103,7 @@ public class Calander
 		/*
 		 * Find what day the 1st starts on
 		 */
-		String day = Date.getFirstDayOfTheMonth(7, 2012);
+		String day = RunPlannerDate.getFirstDayOfTheMonth(7, 2012);
 		System.out.println("Day: " + day);
 		
 		
