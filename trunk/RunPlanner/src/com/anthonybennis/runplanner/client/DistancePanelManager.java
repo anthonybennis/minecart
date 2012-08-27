@@ -1,7 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.anthonybennis.runplanner.client.utils.Date;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Panel;
@@ -70,8 +69,7 @@ public class DistancePanelManager
 		}
 		
 		/*
-		 * Imperial/Metric Toggle
-		 * TODO AB
+		 * TODO AB - Imperial/Metric Toggle
 		 */
 
 		return distancePanel;

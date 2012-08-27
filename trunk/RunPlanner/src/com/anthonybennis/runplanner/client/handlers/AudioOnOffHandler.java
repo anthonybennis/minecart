@@ -1,9 +1,6 @@
 package com.anthonybennis.runplanner.client.handlers;
 
-import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Image;
 
 /**
  * Toggles Audio On/Off
@@ -11,32 +8,17 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class AudioOnOffHandler 
 {
-	private Image _audioButton;
-	private final String ON ="on";
-	private final String OFF ="off";
+	private final static String ON ="on";
+	private final static String OFF ="off";
 	
-	public AudioOnOffHandler(Image audioButton)
+	public static void toggleAudio(boolean toggleOff)
 	{
-		_audioButton = audioButton;
-	}
-	
-	
-	public void toggleAudio()
-	{
-		String currentAudioSetting = Persistance.get(Persistance.AUDIO);
-		
-		if (currentAudioSetting == null)
-		{
-			currentAudioSetting = ON;
-		}
-	
-		if (currentAudioSetting.equals(ON))
+		if (toggleOff)
 		{
 			/*
 			 * Toggle Off
 			 */
 			Persistance.store(Persistance.AUDIO, OFF);
-			_audioButton.setUrl(Resources.INSTANCE.getNoAudioButton().getURL());
 		}
 		else
 		{
@@ -44,8 +26,25 @@ public class AudioOnOffHandler
 			 * Toggle On
 			 */
 			Persistance.store(Persistance.AUDIO, ON);
-			_audioButton.setUrl(Resources.INSTANCE.getAudioButton().getURL());
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isAudioOn()
+	{
+		boolean audioOn = true;
+		
+		String currentAudioSetting = Persistance.get(Persistance.AUDIO);
+		
+		if (currentAudioSetting != null)
+		{
+			audioOn = (currentAudioSetting.equals(ON));
+		}
+			
+		
+		return audioOn;
+	}
 }

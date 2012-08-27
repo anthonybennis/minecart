@@ -14,6 +14,7 @@ import com.allen_sauer.gwt.voices.client.SoundController;
 import com.allen_sauer.gwt.voices.client.handler.PlaybackCompleteEvent;
 import com.allen_sauer.gwt.voices.client.handler.SoundHandler;
 import com.allen_sauer.gwt.voices.client.handler.SoundLoadStateChangeEvent;
+import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 
 /**
  * This class is responsible for playing audio.
@@ -39,7 +40,16 @@ public class Audio
 	
 	public static void playButtonClick()
 	{
-		_buttonSound.play();
+		if (AudioOnOffHandler.isAudioOn())
+		{
+//			_buttonSound.play();
+			Audio.play(_buttonSound, false, 8);
+		}
+	}
+	
+	public static void playButtonClickSilently()
+	{
+		Audio.play(_buttonSound, false, 0);
 	}
 	
 	/**
@@ -48,28 +58,33 @@ public class Audio
 	 */
 	public static void play(final Sound sound, final boolean loop, int volume)
 	{
-//	    sound.setLooping(loop); // Currently does not work on Firefox.
-		sound.setVolume(volume);
-	    
-	    /*
-	     * Manually enable looping...
-	     */
-		sound.addEventHandler(new SoundHandler() {
-			
-			@Override
-			public void onSoundLoadStateChange(SoundLoadStateChangeEvent event) {
-				// Nothing to do here.
-			}
-			
-			@Override
-			public void onPlaybackComplete(PlaybackCompleteEvent event) {
-				if (loop)
-				{
-					sound.play();
+		if (AudioOnOffHandler.isAudioOn())
+		{
+	//	    sound.setLooping(loop); // Currently does not work on Firefox.
+			sound.setVolume(volume);
+		    
+		    /*
+		     * Manually enable looping...
+		     */
+			if (loop)
+			{
+				sound.addEventHandler(new SoundHandler() {
+					
+				@Override
+				public void onSoundLoadStateChange(SoundLoadStateChangeEvent event) {
+					// Nothing to do here.
 				}
+				
+				@Override
+				public void onPlaybackComplete(PlaybackCompleteEvent event) {
+					if (loop)
+					{
+						sound.play();
+					}
+				}
+				});
 			}
-		});
-
-		sound.play();
+			sound.play();
+		}
 	}
 }

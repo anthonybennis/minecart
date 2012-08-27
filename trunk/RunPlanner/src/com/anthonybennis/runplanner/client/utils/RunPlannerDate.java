@@ -1,21 +1,13 @@
 package com.anthonybennis.runplanner.client.utils;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormatInfo;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 
-public class Date 
+public class RunPlannerDate 
 {
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
 	
-	public Date()
-	{
-		
-	}
-	
-	public Date(String stringformat)
+	public RunPlannerDate()
 	{
 		
 	}
@@ -41,7 +33,7 @@ public class Date
 	
 	public void setMonth(String monthName)
 	{
-		String[] monthNames = Date.getMonthNames();
+		String[] monthNames = RunPlannerDate.getMonthNames();
 		
 		for (int i = 0; i < monthNames.length; i++) 
 		{
@@ -61,7 +53,7 @@ public class Date
 	public String getMonthName() 
 	{
 		String monthName = "?";
-		String[] monthNames = Date.getMonthNames();
+		String[] monthNames = RunPlannerDate.getMonthNames();
 		
 		for (int i = 0; i < monthNames.length; i++) 
 		{
@@ -103,9 +95,9 @@ public class Date
 	/**
 	 * 
 	 */
-	public static Date convertStringToDate(String dateInStringFormat)
+	public static RunPlannerDate convertStringToDate(String dateInStringFormat)
 	{
-		Date date = new Date();
+		RunPlannerDate date = new RunPlannerDate();
 		String[] dateInString;
 		
 		if (dateInStringFormat != null)
@@ -155,6 +147,7 @@ public class Date
 	/**
 	 * Month is base 0
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getFirstDayOfTheMonth(int month, int year)
 	{
 		String firstDayOfMonth = "";
@@ -173,7 +166,7 @@ public class Date
 		{
 			if (weekDaysShort[i].equals(dayShortFormat))
 			{
-				String[] weekDaysLong = Date.geDayNames(false);
+				String[] weekDaysLong = RunPlannerDate.geDayNames(false);
 				firstDayOfMonth = weekDaysLong[i];
 				break;
 			}
@@ -200,7 +193,7 @@ public class Date
 	}
 	
 	
-	
+	@SuppressWarnings("deprecation")
 	public int calculateNumberOfDaysFromToday()
 	{
 		int daysToGo = 0;
