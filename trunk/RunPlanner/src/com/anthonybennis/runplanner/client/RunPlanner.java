@@ -4,9 +4,12 @@ import com.anthonybennis.runplanner.client.controls.calendar.Calander;
 import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 import com.anthonybennis.runplanner.client.handlers.CloseHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
+import com.anthonybennis.runplanner.client.logic.PlanGenerator;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -67,25 +70,57 @@ public class RunPlanner implements EntryPoint
 			
 			@Override
 			public void onTouchEnd(TouchEndEvent arg0) {
-				Audio.playButtonClick();
 				AudioOnOffHandler.toggleAudio(audioToggleButton.getValue());
+				Audio.playButtonClick();
 			}
 		});
 		
+		audioToggleButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) 
+			{
+				PlanGenerator.main(null);
+				AudioOnOffHandler.toggleAudio(audioToggleButton.getValue());
+				Audio.playButtonClick();
+			}
+		});
+		
+		if (!AudioOnOffHandler.isAudioOn())
+		{
+			audioToggleButton.setValue(true);
+		}
+		
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
 		
-		Image closeButton = new Image(Resources.INSTANCE.getCloseAppButtonImage());
-		closeButton.setTitle("Close app");
-		closeButton.addClickHandler(new CloseHandler());
+		/*
+		 * Apply Changes Button
+		 */
+		
+		Image buttonIcon = new Image(Resources.INSTANCE.getCreatePlanButtonImage());
+		Image buttonDownIcon = new Image(Resources.INSTANCE.getCreatePlanDownButtonImage());
+		PushButton applyChangesButton = new PushButton(buttonIcon,buttonDownIcon);
+		applyChangesButton.setWidth("100");
+		applyChangesButton.setHeight("102");
+		applyChangesButton.setStylePrimaryName("largeTextButton");
+		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler());
+		applyChangesButton.getElement().setAttribute("align", "center");
+		Label createPlanLabel = new Label("Click here to create Plan");
+//		createPlanLabel.getElement().setAttribute("align", "center");
+		createPlanLabel.setStylePrimaryName("smallWhiteText");
+		VerticalPanel applyChangesPanel = new VerticalPanel();
+		applyChangesPanel.add(applyChangesButton);
+		applyChangesPanel.add(createPlanLabel);
+		
 		
 		headerPanel.add(audioToggleButton);
 		headerPanel.setCellVerticalAlignment(audioToggleButton, HasVerticalAlignment.ALIGN_MIDDLE);
 		headerPanel.add(runPlannerImage);
-		headerPanel.add(closeButton);
-		headerPanel.setCellVerticalAlignment(closeButton, HasVerticalAlignment.ALIGN_MIDDLE);
+		headerPanel.add(applyChangesPanel);
+		headerPanel.setCellVerticalAlignment(applyChangesPanel, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		headerPanel.setCellHorizontalAlignment(audioToggleButton, HasHorizontalAlignment.ALIGN_LEFT);
-		headerPanel.setCellHorizontalAlignment(closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
+		headerPanel.setCellHorizontalAlignment(applyChangesPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		headerPanel.setCellHorizontalAlignment(runPlannerImage, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		/*
@@ -118,27 +153,12 @@ public class RunPlanner implements EntryPoint
 		 */
 		Calander calander = new Calander();
 		Panel calanderPanel = calander.createCalander();
+		calanderPanel.getElement().setAttribute("align", "center");
 		
-		/*
-		 * Apply Changes Button
-		 */
-		Image buttonIcon = new Image(Resources.INSTANCE.getCreatePlanButtonImage());
-		Image buttonDownIcon = new Image(Resources.INSTANCE.getCreatePlanDownButtonImage());
-		PushButton applyChangesButton = new PushButton(buttonIcon,buttonDownIcon);
-		applyChangesButton.setWidth("100");
-		applyChangesButton.setHeight("102");
-		applyChangesButton.setStylePrimaryName("largeTextButton");
-		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler());
-		applyChangesButton.getElement().setAttribute("align", "center");
-		Label createPlanLabel = new Label("Create Plan");
-		createPlanLabel.getElement().setAttribute("align", "center");
-		createPlanLabel.setStylePrimaryName("daylabel");
+
 		
 		distanceAndDateContainer.add(distanceButtonPanel);
 		distanceAndDateContainer.add(datePanel);
-		distanceAndDateContainer.add(applyChangesButton);
-		distanceAndDateContainer.add(createPlanLabel);
-		
 		dateDistanceCalanderPanel.add(distanceAndDateContainer);
 		dateDistanceCalanderPanel.add(calanderPanel);
 		

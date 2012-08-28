@@ -50,8 +50,8 @@ h1 {
  .audioButton
 {
         margin: 0px;
-        height: 16px;
-        width: 16px;
+        height: 32px;
+        width: 32px;
         color:  #000000;
         vertical-align: middle;
         horizontal-align: middle;
@@ -81,6 +81,12 @@ h1 {
 .daylabel{
 	color: #FFFFFF;
 	font: normal 22px tahoma, arial, helvetica, sans-serif;
+	padding: 6px;
+}
+
+.smallWhiteText{
+	color: #FFFFFF;
+	font: normal 12px tahoma, arial, helvetica, sans-serif;
 	padding: 6px;
 }
 
