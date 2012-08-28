@@ -271,18 +271,14 @@ public class PlanGenerator
 		PlanItem lastPlanItem = null;
 		Date lastDaysDate;
 		
-		if (planList != null && planList.size() >0)
+		if (planList != null && planList.size() >0) 
 		{
-			planList.get(planList.size()-1);
+			lastPlanItem = planList.get(planList.size()-1);
+			lastDaysDate = lastPlanItem.getDate();
 		}
-		
-		if (lastPlanItem == null)
+		else // First PlanItem of Plan.
 		{
 			lastDaysDate = this.calculatePlansStartDate();
-		}
-		else
-		{
-			lastDaysDate = lastPlanItem.getDate();
 		}
 		
 		int number = planList.size();
@@ -395,7 +391,7 @@ public class PlanGenerator
 	 */
 	private Date calculatePlansStartDate()
 	{
-		Date startDate = null;
+		Date startDate = new Date();
 		
 		/*
 		 * The plan is 8 weeks.
@@ -477,6 +473,7 @@ public class PlanGenerator
 	
 	/*
 	 * For TESTING
+	 * Can't test storage if it 
 	 */
 	public static void main(String[] args)
 	{
