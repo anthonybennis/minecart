@@ -2,7 +2,6 @@ package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.controls.calendar.Calander;
 import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
-import com.anthonybennis.runplanner.client.handlers.CloseHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
 import com.anthonybennis.runplanner.client.logic.PlanGenerator;
 import com.google.gwt.canvas.client.Canvas;
