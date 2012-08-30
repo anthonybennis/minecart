@@ -269,12 +269,13 @@ public class PlanGenerator
 	private List<PlanItem> addPlanItemToMix(List<PlanItem> planList, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		PlanItem lastPlanItem = null;
-		Date lastDaysDate;
+		Date lastDaysDate = null;
 		
 		if (planList != null && planList.size() >0) 
 		{
 			lastPlanItem = planList.get(planList.size()-1);
 			lastDaysDate = lastPlanItem.getDate();
+			lastDaysDate = this.advanceDateOneDay(lastDaysDate); 
 		}
 		else // First PlanItem of Plan.
 		{
@@ -282,9 +283,10 @@ public class PlanGenerator
 		}
 		
 		int number = planList.size();
-		lastDaysDate = this.advanceDateOneDay(lastDaysDate);	
+			
 		PlanItem planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
 		planList.add(planItem);
+		System.out.println("Created PlanItem: " + planItem.toString());
 		
 		return planList;
 	}
@@ -419,12 +421,18 @@ public class PlanGenerator
 		return date;
 	}
 	
+	/**
+	 * 
+	 * @param plan
+	 * @return
+	 */
 	private String convertPlanToString(List<PlanItem> plan)
 	{
 		StringBuilder planAsString = new StringBuilder();
 		
 		for (PlanItem planItem : plan) 
 		{
+			System.out.println("Saving PlanItem: " + planItem.toString());
 			planAsString.append(planItem.toString());
 			planAsString.append(PLAN_SEPERATPOR);
 		}
@@ -432,6 +440,11 @@ public class PlanGenerator
 		return planAsString.toString();
 	}
 	
+	/**
+	 * 
+	 * @param planAsSttring
+	 * @return
+	 */
 	private List<PlanItem> convertStringToPlan(String planAsSttring)
 	{
 		List<PlanItem> plan = new ArrayList<PlanItem>();
@@ -441,6 +454,7 @@ public class PlanGenerator
 		for (String string : planSplit) 
 		{
 			item = PlanItem.createFromString(string);
+			System.out.println("Loading PlanItem: " + item.toString());
 			plan.add(item);
 		}
 		
