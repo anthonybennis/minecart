@@ -21,28 +21,52 @@ public class PlanItem
 	/**
 	 * Constructor
 	 */
+	@SuppressWarnings("deprecation")
 	public PlanItem(int number, Date date, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		_number = number;
-		_date = date;
+		
+		// I need to create a new date as pass by reference means all PlanItems reference the same Date object.
+		_date = new Date();
+		_date.setDate(date.getDate());
+		_date.setMonth(date.getMonth());
+		_date.setYear(date.getYear());
 		_walkRunMix = walkRunMix;
 		_pace = pace;
 		_comment = comment;
 	}
 	
+	/**
+	 * 
+	 * @param stringRepresentation
+	 */
 	public PlanItem(String stringRepresentation)
 	{
-		this.createFromString(stringRepresentation);
+		PlanItem.createFromString(stringRepresentation);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getNumber()
 	{
 		return _number;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public Date getDate()
 	{
 		return _date;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public WalkRunMix getWalkRunMix()
 	{
 		return _walkRunMix;
@@ -53,6 +77,10 @@ public class PlanItem
 		return _pace;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getComment()
 	{
 		return _comment;
@@ -81,18 +109,21 @@ public class PlanItem
 		planStringBuilder.append(_comment);
 		planStringBuilder.append(SEPERATOR);
 		
-		System.out.println("Plan Item as String: " + planStringBuilder.toString());
-		
 		return planStringBuilder.toString(); // Convert Plan Item to String reperesentation. 
 	}
 	
+	/**
+	 * 
+	 * @param planItemAsString
+	 * @return
+	 */
 	public static PlanItem createFromString(String planItemAsString)
 	{
 		String[] planItemSplitIntoParts = planItemAsString.split(SEPERATOR);
 		
 		int number = Integer.parseInt(planItemSplitIntoParts[0]);
 		Date date = convertStringToDate(planItemSplitIntoParts[1]);
-		WalkRunMix walkRunMix = new WalkRunMix(planItemSplitIntoParts[2]);
+		WalkRunMix walkRunMix = WalkRunMix.convertStringToWalkRunMix(planItemSplitIntoParts[2]);
 		PACE pace = convertStringToPace(planItemSplitIntoParts[3]);
 		String comment = planItemSplitIntoParts[4];
 		
@@ -113,7 +144,7 @@ public class PlanItem
 			System.out.println("Part " + i + ": " + planItemSplitIntoParts[i]);
 		}
 		
-		planItem.createFromString(plas);
+		PlanItem.createFromString(plas);
 		
 	}
 	
