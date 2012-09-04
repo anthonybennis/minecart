@@ -7,6 +7,7 @@ import java.util.List;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
  * Training Plan
@@ -37,14 +38,19 @@ import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
  */
 public class PlanGenerator
 {
-	private RunPlannerDate _raceDate;
 	private static final String PLAN_SEPERATPOR = "€";
+	private int _distance;
+	private int _experience; 
+	private RunPlannerDate _raceDate;
+	
 	/**
 	 * Constructor
 	 * @param raceDate
 	 */
-	public PlanGenerator(RunPlannerDate raceDate)
+	public PlanGenerator(int distance, int experience, RunPlannerDate raceDate)
 	{
+		_distance = distance;
+		_experience = experience;
 		_raceDate = raceDate;
 	}
 	
@@ -55,21 +61,21 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	public List<PlanItem> generatePlan(int distance, int experience)
+	public List<PlanItem> generatePlan()
 	{
 		List<PlanItem> planList = new ArrayList<PlanItem>();
 		
-		switch (experience)
+		switch (_experience)
 		{
 			case 0:
 			{
-				if (distance == 5)
+				if (_distance == 5)
 				{
-					planList = this.createBeginner5KMRacePlan(distance, _raceDate, experience);	
+					planList = this.createBeginner5KMRacePlan();	
 				}
-				else if (distance == 10)
+				else if (_distance == 10)
 				{
-					planList = this.createBeginner10KMRacePlan(distance, _raceDate, experience);
+					planList = this.createBeginner10KMRacePlan();
 				}
 				
 				break;
@@ -100,7 +106,7 @@ public class PlanGenerator
 	 * 
 	 * @return List of Plan Items.
 	 */
-	private List<PlanItem> createBeginner5KMRacePlan(int distance, RunPlannerDate endDate, int experience)
+	private List<PlanItem> createBeginner5KMRacePlan()
 	{
 		List<PlanItem> planList = new ArrayList<PlanItem>();
 		
@@ -117,13 +123,21 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(2), PACE.SLOW, ""); // Sunday 
 		// Week 2: 
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
+		this.addPlanItemToMix(planList, new WalkRunMix(.5,1.5,.5),PACE.COMFORTABLE, ""); // Tuesday 
+		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
+		this.addPlanItemToMix(planList, new WalkRunMix(1.5), PACE.FAST, ""); // Thursday 
+		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
+		this.addPlanItemToMix(planList, new WalkRunMix(2), PACE.COMFORTABLE, ""); // Saturday
+		this.addPlanItemToMix(planList, new WalkRunMix(2), PACE.SLOW, ""); // Sunday 
+		// Week 3: 
+		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(.5,2,.5),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1), PACE.FAST, ""); // Thursday 
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(2.5), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(2), PACE.SLOW, ""); // Sunday 
-		// Week 3:
+		// Week 4:
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(2),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
@@ -131,7 +145,7 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(3), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(2), PACE.SLOW, ""); // Sunday 
-		// Week 4:
+		// Week 5:
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(2.5),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
@@ -139,7 +153,7 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(3), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(3), PACE.SLOW, ""); // Sunday 
-		// Week 5:
+		// Week 6:
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(3),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
@@ -147,7 +161,7 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(3.5), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(3), PACE.SLOW, ""); // Sunday 
-		// Week 6:
+		// Week 7:
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(3.5),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
@@ -155,7 +169,7 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(4), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(3.5), PACE.SLOW, ""); // Sunday 
-		// Week 7:
+		// Week 8:
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(3),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(1,1,1), PACE.MIX, ""); // Wednesday 
@@ -163,7 +177,8 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Friday 
 		this.addPlanItemToMix(planList, new WalkRunMix(4), PACE.COMFORTABLE, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(4), PACE.SLOW, ""); // Sunday 
-		// Week 8: RACE WEEK
+		// Week 9: RACE WEEK
+		// TODO THIS NEEDS TO BE DYNAMICALLY GENERATED!
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Monday
 		this.addPlanItemToMix(planList, new WalkRunMix(3),PACE.COMFORTABLE, ""); // Tuesday 
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Wednesday 
@@ -183,7 +198,7 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	private List<PlanItem> createBeginner10KMRacePlan(int distance, RunPlannerDate endDate, int experience)
+	private List<PlanItem> createBeginner10KMRacePlan()
 	{
 		List<PlanItem> planList = new ArrayList<PlanItem>();
 		
@@ -266,6 +281,7 @@ public class PlanGenerator
 	 * @param sevenDayWalkRunMix
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private List<PlanItem> addPlanItemToMix(List<PlanItem> planList, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		PlanItem lastPlanItem = null;
@@ -279,12 +295,28 @@ public class PlanGenerator
 		}
 		else // First PlanItem of Plan.
 		{
-			lastDaysDate = this.calculatePlansStartDate();
+			lastDaysDate = this.calculatePlansStartDate(_distance, _raceDate, _experience);
 		}
 		
 		int number = planList.size();
 			
-		PlanItem planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
+	
+		
+		int daysLeftToDate = CalendarUtil.getDaysBetween(lastDaysDate, _raceDate.toDate());
+		
+		PlanItem planItem = null;
+		if (daysLeftToDate > 7)
+		{
+			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
+		}
+		else
+		{
+			/*
+			 * TODO Generate Last week program dynamically, or from preset.
+			 */
+			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
+		}
+		
 		planList.add(planItem);
 		System.out.println("Created PlanItem: " + planItem.toString());
 		
@@ -307,7 +339,7 @@ public class PlanGenerator
 		/*
 		 * Calculate time to race
 		 */
-		int daysUntilRace = _raceDate.calculateNumberOfDaysFromToday();
+		int daysUntilRace = endDate.calculateNumberOfDaysFromToday();
 		int recommendedDays = this.getRecommendedDaysNeeded(distance, endDate, experience);
 		
 		return recommendedDays >= daysUntilRace;
@@ -330,7 +362,7 @@ public class PlanGenerator
 		 */
 		if (distance == 5 && experience == 0)
 		{
-			recommendedDays = 84; // Beginner 5KM: 12 weeks/84 days
+			recommendedDays = 56; // Beginner 5KM: 8 weeks/56 days
 		}
 		else if (distance == 10 && experience == 0)
 		{
@@ -364,7 +396,7 @@ public class PlanGenerator
 			
 		}
 		/*
-		 * Advanced.
+		 * TODO FUTURE_ENHANCEMENT = Advanced.
 		 */
 		else if (distance == 5 && experience == 2)
 		{
@@ -391,25 +423,34 @@ public class PlanGenerator
 	 * We always start the plan on a Monday
 	 * @return
 	 */
-	private Date calculatePlansStartDate()
+	@SuppressWarnings("deprecation")
+	private Date calculatePlansStartDate(int distance, RunPlannerDate raceDate, int experience)
 	{
 		Date startDate = new Date();
 		
 		/*
-		 * The plan is 8 weeks.
-		 * Generate plan for 8 weeks only. Not from "today" (Day plan is generated).
-		 * If plan does not start for some time, advice user of the distances they
-		 *  need to be doing before starting the plan. Inform user of start date.
+		 * For example: The plan is 8 weeks.
 		 * 
-		 * The plan  starts on a Monday. If today (the day the plan is generated),
-		 * is not on a Monday, we ramp up by duplicating the first week of the plan,
-		 * by adding extra days dynamically.
+		 * Plan must start on a Monday. Every Plan has an extra week built in,
+		 * so we can eat into this so that it starts on a Monday.
 		 * 
+		 * TODO Add extra week to all plans (Duplicate first week)
+		 * TODO Reduce the List<PlanItems> by the number of days.
 		 */
+		int recommendedDaysNeeded = this.getRecommendedDaysNeeded(distance, raceDate, experience);
+
+		recommendedDaysNeeded = -recommendedDaysNeeded;
+		CalendarUtil.addDaysToDate(startDate, recommendedDaysNeeded); 
+		
+		/*
+		 * If not Monday... keep going forward until we hit a Monday.
+		 * All Plans assume they start on a Monday.
+		 */
+		startDate = RunPlannerDate.getNextMonday(startDate);
 		
 		return startDate;
 	}
-	
+
 	/**
 	 * TODO AB Refactor: move to date utils.
 	 * @return
@@ -496,9 +537,11 @@ public class PlanGenerator
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);
 		
-		PlanGenerator gen = new PlanGenerator(runPlannerDate);
-		List<PlanItem> plan = gen.generatePlan(5, 0);
-		gen.savePlan(plan);
-		gen.loadPlan();
+		PlanGenerator gen = new PlanGenerator(5, 0,runPlannerDate);
+		Date date = new Date();
+		gen.calculatePlansStartDate(5, runPlannerDate, 0);
+//		List<PlanItem> plan = gen.generatePlan();
+//		gen.savePlan(plan);
+//		gen.loadPlan();
 	}
 }

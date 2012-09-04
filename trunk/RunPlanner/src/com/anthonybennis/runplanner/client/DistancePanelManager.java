@@ -69,7 +69,7 @@ public class DistancePanelManager
 		}
 		
 		/*
-		 * TODO AB - Imperial/Metric Toggle
+		 * TODO AB - FUTURE ENHANCEMENT: Imperial/Metric Toggle
 		 */
 
 		return distancePanel;

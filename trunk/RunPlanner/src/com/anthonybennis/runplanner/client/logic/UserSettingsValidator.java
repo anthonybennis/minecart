@@ -9,6 +9,7 @@ import com.anthonybennis.runplanner.client.controls.MessageBox;
  */
 public class UserSettingsValidator 
 {
+	private final String NO_ERROR = "NO_ERROR";
 	/**
 	 * 
 	 * @param distance
@@ -24,28 +25,29 @@ public class UserSettingsValidator
 		 * Make sure user has entered everything
 		 * and/or that the Browser has not detroyed user data.
 		 */
-		boolean distanceValueIsValid = this.validateDistanceSettings(distance);
-		boolean dateValueIsValid = this.validateDateSettings(date);
-		boolean experienceValueIsValid = this.validateExperienceSettings(experience);
+		String distanceValueIsValid = this.validateDistanceSettings(distance);
+		String dateValueIsValid = this.validateDateSettings(date);
+		String experienceValueIsValid = this.validateExperienceSettings(experience);
 		
-		String errorMessage = null;
-		if (!distanceValueIsValid)
+		String messageBoxMessage = null;
+		
+		if (!distanceValueIsValid.equals(NO_ERROR))
 		{
-			errorMessage = "Please set the distance of the run you wish to plan for.";
+			messageBoxMessage = distanceValueIsValid;
 		}
-		else if (!dateValueIsValid)
+		else if (!distanceValueIsValid.equals(NO_ERROR))
 		{
-			errorMessage = "Please specify the date of the race you wish to plan for.";
+			messageBoxMessage = dateValueIsValid;
 		}
-		else if (!experienceValueIsValid)
+		else if (!distanceValueIsValid.equals(NO_ERROR))
 		{
-			errorMessage = "Please set your level of running experience.";
+			messageBoxMessage = experienceValueIsValid;
 		}
 		
-		if (errorMessage != null)
+		if (messageBoxMessage != null)
 		{
 			MessageBox messageBox = new MessageBox();
-			messageBox.open(errorMessage);
+			messageBox.open(messageBoxMessage);
 		}
 		else
 		{
@@ -56,20 +58,22 @@ public class UserSettingsValidator
 	}
 	
 	/**
-	 * 
+	 * Return an errorMessage if error. 
 	 * @param distance
 	 * @return
 	 */
-	private boolean validateDistanceSettings(String distance)
+	private String validateDistanceSettings(String distance)
 	{
-		boolean isValid = false;
+		String errorMessage = NO_ERROR;
 		
-		if (distance != null)
+		if (distance == null)
 		{
-			isValid = true;
+			errorMessage = "Please set the distance of the run you wish to plan for.";
 		}
 		
-		return isValid;
+		// TODO Validate that race date is acceptable - there's enough time.
+		
+		return errorMessage;
 	}
 	
 	/**
@@ -77,16 +81,16 @@ public class UserSettingsValidator
 	 * @param raceDate
 	 * @return
 	 */
-	private boolean validateDateSettings(String raceDate)
+	private String validateDateSettings(String raceDate)
 	{
-		boolean isValid = false;
+		String errorMessage = NO_ERROR;
 		
-		if (raceDate != null)
+		if (raceDate == null)
 		{
-			isValid = true;
+			errorMessage = "Please specify the date of the race you wish to plan for.";
 		}
 		
-		return isValid;
+		return errorMessage;
 	}
 	
 	/**
@@ -94,15 +98,15 @@ public class UserSettingsValidator
 	 * @param experience
 	 * @return
 	 */
-	private boolean validateExperienceSettings(String experience)
+	private String validateExperienceSettings(String experience)
 	{
-		boolean isValid = false;
+		String errorMessage = NO_ERROR;
 		
-		if (experience != null)
+		if (experience == null)
 		{
-			isValid = true;
+			errorMessage =  "Please set your level of running experience.";
 		}
-		
-		return isValid;
+
+		return errorMessage;
 	}
 }
