@@ -50,13 +50,16 @@ public class RunPlanner implements EntryPoint
 		mainPanel.getElement().getStyle().setBackgroundImage("images/BlackWoodTexture.jpg");
 		/*
 		 * Header Panel
-		 * TODO AB - Put in own class.
 		 */
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setSpacing(10);
 		headerPanel.setWidth("98%");
 		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
+		/*
+		 * Audio toggle button.
+		 * TODO Consider making this "Beginner/Intermediate" option.
+		 */
 		Image audio = new Image(Resources.INSTANCE.getAudioButton());
 		Image noAudio = new Image(Resources.INSTANCE.getNoAudioButton());
 		
@@ -95,7 +98,6 @@ public class RunPlanner implements EntryPoint
 		/*
 		 * Apply Changes Button
 		 */
-		
 		Image buttonIcon = new Image(Resources.INSTANCE.getCreatePlanButtonImage());
 		Image buttonDownIcon = new Image(Resources.INSTANCE.getCreatePlanDownButtonImage());
 		PushButton applyChangesButton = new PushButton(buttonIcon,buttonDownIcon);
@@ -105,7 +107,6 @@ public class RunPlanner implements EntryPoint
 		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler());
 		applyChangesButton.getElement().setAttribute("align", "center");
 		Label createPlanLabel = new Label("Click here to create Plan");
-//		createPlanLabel.getElement().setAttribute("align", "center");
 		createPlanLabel.setStylePrimaryName("smallWhiteText");
 		VerticalPanel applyChangesPanel = new VerticalPanel();
 		applyChangesPanel.add(applyChangesButton);
