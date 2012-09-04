@@ -42,8 +42,8 @@ public class CreatePlanClickHandler implements TouchEndHandler
 			runPlannerDate.setMonth(9);
 			runPlannerDate.setYear(2012);
 			
-			PlanGenerator gen = new PlanGenerator(runPlannerDate);
-			List<PlanItem> plan = gen.generatePlan(5, 0);
+			PlanGenerator gen = new PlanGenerator(5, 0,runPlannerDate);
+			List<PlanItem> plan = gen.generatePlan();
 			gen.savePlan(plan);
 			
 			/*
@@ -51,6 +51,4 @@ public class CreatePlanClickHandler implements TouchEndHandler
 			 */
 		}
 	}
-	
-	
 }

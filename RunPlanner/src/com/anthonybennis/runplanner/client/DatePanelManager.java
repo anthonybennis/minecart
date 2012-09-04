@@ -66,7 +66,7 @@ public class DatePanelManager implements IDateReciever
 			
 			/*
 			 * Draw Month
-			 * TODO AB - Draw year?
+			 * TODO AB - ENHANCEMENT: Draw year?
 			 */
 			context2d.setFont("bold 22px sans-serif");
 			String monthAndYear = this.getMonthAndYear(); 

@@ -1,5 +1,7 @@
 package com.anthonybennis.runplanner.client.utils;
 
+import java.util.Date;
+
 import com.google.gwt.i18n.client.LocaleInfo;
 
 public class RunPlannerDate 
@@ -213,5 +215,37 @@ public class RunPlannerDate
 		return daysToGo;
 	}
 	
+	/**
+	 * Gets the next Monday from a given date.
+	 * 
+	 * @param startDate
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static Date getNextMonday(Date startDate)
+	{
+		int desiredDay = 1; // Monday
+		
+		int currDay = startDate.getDay(); 
+		int daysToJump = (7+desiredDay-currDay)%7;
+		
+		Date nextMonday = new Date(startDate.getTime() + daysToJump * 24 * 60 
+		* 60 * 1000); 
+		
+		return nextMonday;
+	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public Date toDate()
+	{
+		Date date = new Date();
+		date.setDate(this.getDay());
+		date.setMonth(this.getMonth());
+		date.setYear(this.getYear());
+		
+		return date;
+	}
 }

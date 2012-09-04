@@ -20,13 +20,6 @@ public class Persistance
 	 public static final String AUDIO = "RUNPLANNER_AUDIO";
 	 public static final String PLAN = "RUNPLANNER_RUNNING_SCHEDULE";
 	 
-	 /*
-	  * TODO Store calender entries as Date;Distance;Note comma seperated values.
-	  * use comma separated values
-	  * store(PLAN, "DATE;DISTANCE;NOTE,DATE;DISTANCE;NOTE,DATE;DISTANCE;NOTE")
-	  */
-	 
-	 
 	 /**
 	  * 
 	  */
