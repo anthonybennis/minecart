@@ -16,6 +16,7 @@ public class Persistance
 	 public static final String TARGET_DATE = "RUNPLANNER_TARGET_DATE";
 	 public static final String TARGET_DISTANCE = "RUNPLANNER_DISTANCE";
 	 public static final String DISTANCE_UNIT = "RUNPLANNER_DISTANCE_UNIT";
+	 public static final String EXPERIENCE_LEVEL = "RUNPLANNER_EXPERIENCE_LEVEL";
 	 public static final String AUDIO = "RUNPLANNER_AUDIO";
 	 public static final String PLAN = "RUNPLANNER_RUNNING_SCHEDULE";
 	 
