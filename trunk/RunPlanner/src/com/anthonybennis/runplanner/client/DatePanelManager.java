@@ -2,7 +2,7 @@ package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
@@ -16,7 +16,7 @@ public class DatePanelManager implements IDateReciever
 {
 	private ImageElement _imageElement;
 	private Canvas _canvas;
-	private RunPlannerDate _raceDate = new RunPlannerDate();
+	private SuperDateUtil _raceDate = new SuperDateUtil();
 
 	public DatePanelManager()
 	{
@@ -145,12 +145,12 @@ public class DatePanelManager implements IDateReciever
 		}
 		else
 		{
-			_raceDate = RunPlannerDate.convertStringToDate(userpersistedTargetDate);
+			_raceDate = SuperDateUtil.convertStringToDate(userpersistedTargetDate);
 		}
 	}
 
 	@Override
-	public void setDate(RunPlannerDate date) 
+	public void setDate(SuperDateUtil date) 
 	{
 		_raceDate = date;
 		/*

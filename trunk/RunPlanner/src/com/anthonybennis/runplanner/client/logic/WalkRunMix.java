@@ -114,4 +114,9 @@ public class WalkRunMix
 		
 		return walkRunAsString.toString();
 	}
+	
+	public List<Activity> getActivityList()
+	{
+		return _activeityList;
+	}
 }

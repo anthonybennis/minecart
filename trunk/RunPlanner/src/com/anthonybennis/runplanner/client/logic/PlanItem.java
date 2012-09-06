@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class PlanItem
 {
-	protected static enum PACE{FAST, SLOW, COMFORTABLE, REST, MIX};
+	public static enum PACE{FAST, SLOW, COMFORTABLE, REST, MIX};
 	protected final static String SEPERATOR = "/";
 	protected final static String DATE_SEPERATOR = "#";
 	

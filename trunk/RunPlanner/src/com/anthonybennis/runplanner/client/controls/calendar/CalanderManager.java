@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.logic.PlanItem;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
  * Creates calender control and manges it.
@@ -47,7 +47,7 @@ public class CalanderManager
 		PlanItem planItemMatch = null;
 		for (PlanItem planItem : planItems) 
 		{
-			boolean sameDate = CalendarUtil.isSameDate(planItem.getDate(), cellDate);
+			boolean sameDate = SuperDateUtil.isSameDate(planItem.getDate(), cellDate);
 			
 			if (sameDate)
 			{
