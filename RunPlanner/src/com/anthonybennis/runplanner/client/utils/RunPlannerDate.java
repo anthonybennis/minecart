@@ -239,6 +239,7 @@ public class RunPlannerDate
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public Date toDate()
 	{
 		Date date = new Date();
