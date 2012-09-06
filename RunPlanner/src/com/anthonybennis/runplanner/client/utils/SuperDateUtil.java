@@ -4,12 +4,12 @@ import java.util.Date;
 
 import com.google.gwt.i18n.client.LocaleInfo;
 
-public class RunPlannerDate 
+public class SuperDateUtil 
 {
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
 	
-	public RunPlannerDate()
+	public SuperDateUtil()
 	{
 		
 	}
@@ -35,7 +35,7 @@ public class RunPlannerDate
 	
 	public void setMonth(String monthName)
 	{
-		String[] monthNames = RunPlannerDate.getMonthNames();
+		String[] monthNames = SuperDateUtil.getMonthNames();
 		
 		for (int i = 0; i < monthNames.length; i++) 
 		{
@@ -54,12 +54,17 @@ public class RunPlannerDate
 	
 	public String getMonthName() 
 	{
+		return SuperDateUtil.getMonthName(_month);
+	}
+	
+	public static String getMonthName(int month)
+	{
 		String monthName = "?";
-		String[] monthNames = RunPlannerDate.getMonthNames();
+		String[] monthNames = SuperDateUtil.getMonthNames();
 		
 		for (int i = 0; i < monthNames.length; i++) 
 		{
-			if ((i+1) == _month)
+			if ((i+1) == month)
 			{
 				monthName = monthNames[i];
 				break;
@@ -97,9 +102,9 @@ public class RunPlannerDate
 	/**
 	 * 
 	 */
-	public static RunPlannerDate convertStringToDate(String dateInStringFormat)
+	public static SuperDateUtil convertStringToDate(String dateInStringFormat)
 	{
-		RunPlannerDate date = new RunPlannerDate();
+		SuperDateUtil date = new SuperDateUtil();
 		String[] dateInString;
 		
 		if (dateInStringFormat != null)
@@ -168,7 +173,7 @@ public class RunPlannerDate
 		{
 			if (weekDaysShort[i].equals(dayShortFormat))
 			{
-				String[] weekDaysLong = RunPlannerDate.geDayNames(false);
+				String[] weekDaysLong = SuperDateUtil.geDayNames(false);
 				firstDayOfMonth = weekDaysLong[i];
 				break;
 			}
@@ -248,5 +253,30 @@ public class RunPlannerDate
 		date.setYear(this.getYear());
 		
 		return date;
+	}
+	
+	/**
+	 * Compares a date by day/month/year, ignoring
+	 * minutes and seconds.
+	 * 
+	 * @param date
+	 * @param date
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static boolean isSameDate(Date date1, Date date2)
+	{
+		boolean datesMatch = false;
+		
+		if(date1 != null && date2 != null
+				&& date1.getDate() == date2.getDate()
+				&& date1.getMonth() == date2.getMonth()
+				&& date1.getYear() == date2.getYear())
+		{
+			datesMatch = true;
+		}
+		
+		
+		return datesMatch;
 	}
 }

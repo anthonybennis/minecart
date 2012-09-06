@@ -1,6 +1,5 @@
 package com.anthonybennis.runplanner.client;
 
-import com.anthonybennis.runplanner.client.controls.calendar.Calander;
 import com.anthonybennis.runplanner.client.controls.calendar.CalanderManager;
 import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;

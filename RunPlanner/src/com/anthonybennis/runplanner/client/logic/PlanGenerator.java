@@ -8,7 +8,7 @@ import com.anthonybennis.runplanner.client.DistancePanelManager;
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
@@ -43,13 +43,13 @@ public class PlanGenerator
 	private static final String PLAN_SEPERATPOR = "€";
 	private DistancePanelManager.DISTANCE _distance;
 	private int _experience; 
-	private RunPlannerDate _raceDate;
+	private SuperDateUtil _raceDate;
 	
 	/**
 	 * Constructor
 	 * @param raceDate
 	 */
-	public PlanGenerator(DistancePanelManager.DISTANCE distance, int experience, RunPlannerDate raceDate)
+	public PlanGenerator(DistancePanelManager.DISTANCE distance, int experience, SuperDateUtil raceDate)
 	{
 		_distance = distance;
 		_experience = experience;
@@ -335,7 +335,7 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	public static boolean isThereSuffecientTimeToPlan(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
+	public static boolean isThereSuffecientTimeToPlan(DistancePanelManager.DISTANCE distance, SuperDateUtil endDate, int experience)
 	{
 		/*
 		 * Calculate time to race
@@ -354,7 +354,7 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	private static int getRecommendedDaysNeeded(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
+	private static int getRecommendedDaysNeeded(DistancePanelManager.DISTANCE distance, SuperDateUtil endDate, int experience)
 	{
 		int recommendedDays = 365;
 		
@@ -424,7 +424,7 @@ public class PlanGenerator
 	 * We always start the plan on a Monday
 	 * @return
 	 */
-	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, RunPlannerDate raceDate, int experience)
+	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, SuperDateUtil raceDate, int experience)
 	{
 		Date startDate = new Date();
 		
@@ -446,7 +446,7 @@ public class PlanGenerator
 		 * If not Monday... keep going forward until we hit a Monday.
 		 * All Plans assume they start on a Monday.
 		 */
-		startDate = RunPlannerDate.getNextMonday(startDate);
+		startDate = SuperDateUtil.getNextMonday(startDate);
 		
 		return startDate;
 	}
@@ -532,7 +532,7 @@ public class PlanGenerator
 	 */
 	public static void main(String[] args)
 	{
-		RunPlannerDate runPlannerDate = new RunPlannerDate();
+		SuperDateUtil runPlannerDate = new SuperDateUtil();
 		runPlannerDate.setDay(1);
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);

@@ -1,10 +1,10 @@
 package com.anthonybennis.runplanner.client;
 
-import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 
 
 
 public interface IDateReciever 
 {
-	void setDate(RunPlannerDate date);
+	void setDate(SuperDateUtil date);
 }

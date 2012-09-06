@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.anthonybennis.runplanner.client.controls.SlidingPanel;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -15,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class CalanderContainer 
 {
-	private SlidingPanel _slidingPanel;
+	private DeckLayoutPanel _deckLayoutPanel;
 	private List<MonthPanel> _monthPanels = new ArrayList<MonthPanel>();
 
 	/**
@@ -46,10 +47,16 @@ public class CalanderContainer
 		VerticalPanel leftButtonPanel = new VerticalPanel();
 		mainCalanderPanel.add(leftButtonPanel);
 		
-		_slidingPanel = new SlidingPanel();
-		_slidingPanel.setSize("100%", "100%");
+		_deckLayoutPanel = new DeckLayoutPanel();
+		
+		
+		/*
+		 * TODO We need an intro panel, when there's no Plan to show.
+		 */
+		Panel introPanel = new HorizontalPanel();
+		_deckLayoutPanel.add(introPanel);
 
-		mainCalanderPanel.add(_slidingPanel);
+		mainCalanderPanel.add(_deckLayoutPanel);
 		
 		/*
 		 * Right Button
@@ -90,14 +97,14 @@ public class CalanderContainer
 		 */
 		for (MonthPanel panel : monthPanels) 
 		{
-			_slidingPanel.add(panel.createPanel());
+			_deckLayoutPanel.add(panel.createPanel()); // TODO Ensure this is done in right order.
 		}
 		
 		/*
 		 * TODO Display today on Calander if today is in Plan
 		 * TODO If not, display first month of plan.
 		 */
-		_slidingPanel.show(0);
+		_deckLayoutPanel.showWidget(0);
 	}
 	
 	/**
@@ -110,16 +117,28 @@ public class CalanderContainer
 	 */
 	private List<MonthPanel> createAndPopulateMonthPanels(List<PlanItem> planItems)
 	{
-		
-		
 		/*
 		 * Create a cell for every Plan Item, and
 		 * add cell to month panel.
 		 * If no Month Panel, create one.
 		 */
+		MonthPanel monthPanel;
+		int month;
+		int year;
 		for (PlanItem planItem : planItems) 
 		{
+			month = planItem.getDate().getMonth();
+			year = planItem.getDate().getYear();
 			
+			monthPanel = this.getMonthPanel(month, year);
+			
+			if (monthPanel == null)
+			{
+				monthPanel = this.createMonthPanel(month, year);
+				_monthPanels.add(monthPanel);
+			}
+			
+			monthPanel.addPlanItem(planItem);
 		}
 		
 		return _monthPanels;
@@ -158,9 +177,7 @@ public class CalanderContainer
 	 */
 	private MonthPanel createMonthPanel(int month, int year)
 	{
-		MonthPanel monthPanel = new MonthPanel();
-		
-		// TODO Create Month Panel
+		MonthPanel monthPanel = new MonthPanel(month, year);
 		
 		return monthPanel;
 	}
@@ -170,7 +187,28 @@ public class CalanderContainer
 	 */
 	private void clear()
 	{
-		_slidingPanel.clear();
+		// TODO Remove all widgets from _deckLayoutPanel
 		_monthPanels.clear();
+	}
+	
+	/**
+	 * 
+	 * @param planItem
+	 * @return
+	 */
+	private MonthPanel getMonthPanel(int month, int year)
+	{
+		MonthPanel monthPanel = null;
+		
+		for (MonthPanel amonthPanel : _monthPanels) 
+		{
+			if (amonthPanel.match(month, year))
+			{
+				monthPanel = amonthPanel;
+				break;
+			}
+		}
+		
+		return monthPanel;
 	}
 }

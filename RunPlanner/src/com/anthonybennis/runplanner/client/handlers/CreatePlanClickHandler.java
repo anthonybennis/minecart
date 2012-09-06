@@ -8,7 +8,7 @@ import com.anthonybennis.runplanner.client.logic.PlanGenerator;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.logic.UserSettingsValidator;
 import com.anthonybennis.runplanner.client.storage.Persistance;
-import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
@@ -49,6 +49,12 @@ public class CreatePlanClickHandler implements TouchEndHandler, ClickHandler
 	 */
 	private void createPlan()
 	{
+		/*
+		 * TODO Temp, Until we get an Experience level
+		 */
+		Persistance.store(Persistance.EXPERIENCE_LEVEL, "0");
+		
+		
 		String distance = Persistance.get(Persistance.TARGET_DISTANCE);
 		String date = Persistance.get(Persistance.TARGET_DATE);
 		String experience = Persistance.get(Persistance.EXPERIENCE_LEVEL);
@@ -62,7 +68,7 @@ public class CreatePlanClickHandler implements TouchEndHandler, ClickHandler
 		if (isValid)
 		{
 			DistancePanelManager.DISTANCE convertedDistance = DistancePanelManager.convertPreferenceStringToDistance(distance);
-			RunPlannerDate runPlannerDate = RunPlannerDate.convertStringToDate(date);
+			SuperDateUtil runPlannerDate = SuperDateUtil.convertStringToDate(date);
 			PlanGenerator gen = new PlanGenerator(convertedDistance, Integer.parseInt(experience),runPlannerDate);
 			List<PlanItem> plan = gen.generatePlan();
 			gen.savePlan(plan);

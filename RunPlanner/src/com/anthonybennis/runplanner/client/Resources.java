@@ -40,4 +40,7 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/Close.png")
 	  ImageResource getCloseAppButtonImage();
+	  
+	  @Source("images/Sleep32x21.png")
+	  ImageResource getSmallSleepImage();
 }
