@@ -13,7 +13,7 @@ public class DistancePanelManager
 	 * Distance enum
 	 * Note: Internally we store metric, but we support showing Imperial on the UI.
 	 */
-	protected enum DISTANCE{FIVE_KM,TEN_KM,TWNETY_ONE_KM,FORTY_TWO_KM,CUSTOM};
+	public enum DISTANCE{FIVE_KM,TEN_KM,TWNETY_ONE_KM,FORTY_TWO_KM,CUSTOM};
 	protected enum DISTANCE_UNIT{METRIC,IMPERIAL};
 	/*
 	 * Enabled Metric Button Image urls
@@ -156,7 +156,7 @@ public class DistancePanelManager
 		
 		if (userpersistedTargetDistance != null)
 		{
-			distance = this.convertPreferenceStringToDistance(userpersistedTargetDistance);
+			distance = DistancePanelManager.convertPreferenceStringToDistance(userpersistedTargetDistance);
 		}
 		else
 		{
@@ -212,7 +212,7 @@ public class DistancePanelManager
 	 * 
 	 * @return
 	 */
-	private DISTANCE convertPreferenceStringToDistance(String userPreferenceDistance)
+	public static DISTANCE convertPreferenceStringToDistance(String userPreferenceDistance)
 	{
 		DISTANCE userPrefferedDistance = DISTANCE.FIVE_KM;
 		
