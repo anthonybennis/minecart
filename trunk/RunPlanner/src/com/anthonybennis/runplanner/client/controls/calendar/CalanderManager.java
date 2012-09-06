@@ -1,10 +1,11 @@
 package com.anthonybennis.runplanner.client.controls.calendar;
 
+import java.util.Date;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
  * Creates calender control and manges it.
@@ -13,17 +14,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class CalanderManager 
 {
+	private CalanderContainer _mainContainer;
+
 	/**
 	 * 
 	 * @return
 	 */
 	public Panel createCalenderContainer()
 	{
-		VerticalPanel mainContainer = new VerticalPanel();
-		mainContainer.setWidth("100%");
-		mainContainer.setHeight("100%");
-		
-		return mainContainer;
+		_mainContainer = new CalanderContainer();
+		return _mainContainer.create();
 	}
 	
 	/**
@@ -32,6 +32,30 @@ public class CalanderManager
 	 */
 	public void update(List<PlanItem> planItems)
 	{
+		_mainContainer.update(planItems);
+	}
+	
+	/**
+	 * TODO Delete this method if not needed.
+	 * 
+	 * @param planItems
+	 * @param cellDate
+	 * @return
+	 */
+	private PlanItem getPlanItem(List<PlanItem> planItems, Date cellDate)
+	{
+		PlanItem planItemMatch = null;
+		for (PlanItem planItem : planItems) 
+		{
+			boolean sameDate = CalendarUtil.isSameDate(planItem.getDate(), cellDate);
+			
+			if (sameDate)
+			{
+				planItemMatch = planItem;
+				break;
+			}
+		}
 		
+		return planItemMatch;
 	}
 }
