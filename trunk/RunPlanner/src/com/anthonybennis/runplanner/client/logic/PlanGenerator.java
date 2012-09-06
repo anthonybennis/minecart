@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.anthonybennis.runplanner.client.DistancePanelManager;
+import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.RunPlannerDate;
@@ -39,7 +41,7 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 public class PlanGenerator
 {
 	private static final String PLAN_SEPERATPOR = "€";
-	private int _distance;
+	private DistancePanelManager.DISTANCE _distance;
 	private int _experience; 
 	private RunPlannerDate _raceDate;
 	
@@ -47,7 +49,7 @@ public class PlanGenerator
 	 * Constructor
 	 * @param raceDate
 	 */
-	public PlanGenerator(int distance, int experience, RunPlannerDate raceDate)
+	public PlanGenerator(DistancePanelManager.DISTANCE distance, int experience, RunPlannerDate raceDate)
 	{
 		_distance = distance;
 		_experience = experience;
@@ -69,11 +71,11 @@ public class PlanGenerator
 		{
 			case 0:
 			{
-				if (_distance == 5)
+				if (_distance == DISTANCE.FIVE_KM)
 				{
 					planList = this.createBeginner5KMRacePlan();	
 				}
-				else if (_distance == 10)
+				else if (_distance == DISTANCE.TEN_KM)
 				{
 					planList = this.createBeginner10KMRacePlan();
 				}
@@ -281,7 +283,6 @@ public class PlanGenerator
 	 * @param sevenDayWalkRunMix
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	private List<PlanItem> addPlanItemToMix(List<PlanItem> planList, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		PlanItem lastPlanItem = null;
@@ -334,13 +335,13 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	public boolean isThereSuffecientTimeToPlan(int distance, RunPlannerDate endDate, int experience)
+	public static boolean isThereSuffecientTimeToPlan(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
 	{
 		/*
 		 * Calculate time to race
 		 */
 		int daysUntilRace = endDate.calculateNumberOfDaysFromToday();
-		int recommendedDays = this.getRecommendedDaysNeeded(distance, endDate, experience);
+		int recommendedDays = PlanGenerator.getRecommendedDaysNeeded(distance, endDate, experience);
 		
 		return recommendedDays >= daysUntilRace;
 	}
@@ -353,66 +354,66 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	private int getRecommendedDaysNeeded(int distance, RunPlannerDate endDate, int experience)
+	private static int getRecommendedDaysNeeded(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
 	{
 		int recommendedDays = 365;
 		
 		/*
 		 * Beginner
 		 */
-		if (distance == 5 && experience == 0)
+		if (distance == DISTANCE.FIVE_KM && experience == 0)
 		{
 			recommendedDays = 56; // Beginner 5KM: 8 weeks/56 days
 		}
-		else if (distance == 10 && experience == 0)
+		else if (distance == DISTANCE.TEN_KM && experience == 0)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 21 && experience == 0)
+		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 0)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 42 && experience == 0)
+		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 0)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
 		/*
 		 * Intermediate.
 		 */
-		else if (distance == 5 && experience == 1)
+		else if (distance == DISTANCE.FIVE_KM && experience == 1)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 10 && experience == 1)
+		else if (distance == DISTANCE.TEN_KM && experience == 1)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 21 && experience == 1)
+		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 1)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 42 && experience == 1)
+		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 1)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
 		/*
 		 * TODO FUTURE_ENHANCEMENT = Advanced.
 		 */
-		else if (distance == 5 && experience == 2)
+		else if (distance == DISTANCE.FIVE_KM && experience == 2)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 10 && experience == 2)
+		else if (distance == DISTANCE.TEN_KM && experience == 2)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 21 && experience == 2)
+		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 2)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
-		else if (distance == 42 && experience == 2)
+		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 2)
 		{
-			
+			// TODO AB Calculate recoemmned days
 		}
 		
 		return recommendedDays; 
@@ -423,8 +424,7 @@ public class PlanGenerator
 	 * We always start the plan on a Monday
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
-	private Date calculatePlansStartDate(int distance, RunPlannerDate raceDate, int experience)
+	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, RunPlannerDate raceDate, int experience)
 	{
 		Date startDate = new Date();
 		
@@ -437,7 +437,7 @@ public class PlanGenerator
 		 * TODO Add extra week to all plans (Duplicate first week)
 		 * TODO Reduce the List<PlanItems> by the number of days.
 		 */
-		int recommendedDaysNeeded = this.getRecommendedDaysNeeded(distance, raceDate, experience);
+		int recommendedDaysNeeded = PlanGenerator.getRecommendedDaysNeeded(distance, raceDate, experience);
 
 		recommendedDaysNeeded = -recommendedDaysNeeded;
 		CalendarUtil.addDaysToDate(startDate, recommendedDaysNeeded); 
@@ -537,9 +537,9 @@ public class PlanGenerator
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);
 		
-		PlanGenerator gen = new PlanGenerator(5, 0,runPlannerDate);
+		PlanGenerator gen = new PlanGenerator(DistancePanelManager.DISTANCE.FIVE_KM, 0,runPlannerDate);
 		Date date = new Date();
-		gen.calculatePlansStartDate(5, runPlannerDate, 0);
+		gen.calculatePlansStartDate(DistancePanelManager.DISTANCE.FIVE_KM, runPlannerDate, 0);
 //		List<PlanItem> plan = gen.generatePlan();
 //		gen.savePlan(plan);
 //		gen.loadPlan();
