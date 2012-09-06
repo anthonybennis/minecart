@@ -35,13 +35,24 @@ public class UserSettingsValidator
 		{
 			messageBoxMessage = distanceValueIsValid;
 		}
-		else if (!distanceValueIsValid.equals(NO_ERROR))
+		else if (!dateValueIsValid.equals(NO_ERROR))
 		{
 			messageBoxMessage = dateValueIsValid;
 		}
-		else if (!distanceValueIsValid.equals(NO_ERROR))
+		else if (!experienceValueIsValid.equals(NO_ERROR))
 		{
 			messageBoxMessage = experienceValueIsValid;
+		}
+		else
+		{
+			/*
+			 * Convert String values to Units and validate toegther.
+			 */
+			// TODO Validate that race date is acceptable - there's enough time.
+//			if (PlanGenerator.isThereSuffecientTimeToPlan(distance, _r, experience))
+//			{
+//				messageBoxMessage = experienceValueIsValid;
+//			}
 		}
 		
 		if (messageBoxMessage != null)
@@ -70,8 +81,6 @@ public class UserSettingsValidator
 		{
 			errorMessage = "Please set the distance of the run you wish to plan for.";
 		}
-		
-		// TODO Validate that race date is acceptable - there's enough time.
 		
 		return errorMessage;
 	}
