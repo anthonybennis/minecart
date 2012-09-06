@@ -1,6 +1,7 @@
 package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.controls.calendar.Calander;
+import com.anthonybennis.runplanner.client.controls.calendar.CalanderManager;
 import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
 import com.anthonybennis.runplanner.client.logic.PlanGenerator;
@@ -28,6 +29,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class RunPlanner implements EntryPoint 
 {
+	private CalanderManager _calanderManager;
+
 	/**
 	 * This is the entry point method.
 	 */
@@ -94,7 +97,7 @@ public class RunPlanner implements EntryPoint
 		}
 		
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
-		
+		_calanderManager = new CalanderManager();
 		/*
 		 * Apply Changes Button
 		 */
@@ -104,7 +107,8 @@ public class RunPlanner implements EntryPoint
 		applyChangesButton.setWidth("100");
 		applyChangesButton.setHeight("102");
 		applyChangesButton.setStylePrimaryName("largeTextButton");
-		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler());
+		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler(_calanderManager));
+		applyChangesButton.addClickHandler(new CreatePlanClickHandler(_calanderManager));
 		applyChangesButton.getElement().setAttribute("align", "center");
 		Label createPlanLabel = new Label("Click here to create Plan");
 		createPlanLabel.setStylePrimaryName("smallWhiteText");
@@ -148,14 +152,8 @@ public class RunPlanner implements EntryPoint
 		DatePanelManager manager = new DatePanelManager();
 		Canvas datePanel = manager.createCanvas();
 		
-		/*
-		 * Calander Panel
-		 */
-		Calander calander = new Calander();
-		Panel calanderPanel = calander.createCalander();
+		Panel calanderPanel = _calanderManager.createCalenderContainer();
 		calanderPanel.getElement().setAttribute("align", "center");
-		
-
 		
 		distanceAndDateContainer.add(distanceButtonPanel);
 		distanceAndDateContainer.add(datePanel);
