@@ -90,3 +90,23 @@ h1 {
 	padding: 6px;
 }
 
+.largeWhiteText{
+	color: #FFFFFF;
+	font: normal 22px tahoma, arial, helvetica, sans-serif;
+	padding: 6px;
+}
+
+.cellPanel {
+        border: 1px solid #EEEEEE;
+}
+
+.monthPanelHeader {
+        horizontal-align: center;
+        color: #FFFFFF;
+		font: normal 22px tahoma, arial, helvetica, sans-serif;
+}
+
+.cellIconImage{
+	horizontal-align: right;
+}
+
