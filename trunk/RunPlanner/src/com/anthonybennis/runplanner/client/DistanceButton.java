@@ -2,6 +2,7 @@ package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE_UNIT;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 
 public class DistanceButton 
@@ -9,15 +10,15 @@ public class DistanceButton
 	private Image _image;
 	private DISTANCE_UNIT _unit;
 	private DISTANCE _value;
-	private String _enabledURL;
-	private String _disabledURL;
+	private ImageResource _enabledIR;
+	private ImageResource _disabledIR;
 	
-	public DistanceButton(DISTANCE_UNIT unit, DISTANCE value, String enabledURL, String disabledURL) 
+	public DistanceButton(DISTANCE_UNIT unit, DISTANCE value, ImageResource enabledIR, ImageResource disabledIR) 
 	{
 		_unit = unit;
-		_enabledURL = enabledURL;
-		_disabledURL = disabledURL;
-		_image = new Image(_disabledURL); // TODO AB Load on start up (Use Resourced)
+		_enabledIR = enabledIR;
+		_disabledIR = disabledIR;
+		_image = new Image(_enabledIR);
 		_value = value;
 	}
 	
@@ -41,34 +42,34 @@ public class DistanceButton
 		this._unit = unit;
 	}
 
-	protected String getEnabledURL() 
+	protected ImageResource getEnabledIR() 
 	{
-		return _enabledURL;
+		return _enabledIR;
 	}
 
-	protected void setEnabledURL(String enabledURL) 
+	protected void setEnabledURL(ImageResource enabledIR) 
 	{
-		this._enabledURL = enabledURL;
+		this._enabledIR = enabledIR;
 	}
 
-	protected String getDisabledURL() 
+	protected ImageResource getDisabledIR() 
 	{
-		return _disabledURL;
+		return _disabledIR;
 	}
 
-	protected void setDisabled(String disabledURL) 
+	protected void setDisabled(ImageResource disabledIR) 
 	{
-		this._disabledURL = disabledURL;
+		this._disabledIR = disabledIR;
 	}
 	
 	public void enable()
 	{
-		this.getImage().setUrl(this.getEnabledURL());
+		this.getImage().setResource(this.getEnabledIR());
 	}
 	
 	public void disable()
 	{
-		this.getImage().setUrl(this.getDisabledURL());
+		this.getImage().setResource(this.getDisabledIR());
 	}
 	
 	public DISTANCE getDistance()

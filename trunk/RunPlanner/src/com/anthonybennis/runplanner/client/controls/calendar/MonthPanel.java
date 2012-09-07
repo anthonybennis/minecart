@@ -41,8 +41,8 @@ public class MonthPanel
 		 * Create Month Name Header
 		 */
 		Label headerLabel = this.createHeaderPanel();
-		headerLabel.setText(SuperDateUtil.getMonthName(_month));
 		panel.add(headerLabel);
+		
 		
 		/*
 		 * Create GridPanel for cells.
@@ -207,5 +207,20 @@ public class MonthPanel
 		}
 		
 		return foundAMatch;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	protected boolean doesTodayFallOnThisMonth()
+	{
+		boolean todayFallsOnThisMonth = false;
+		
+		Date date = new Date();
+		todayFallsOnThisMonth = (date.getMonth() == _month);
+		
+		return todayFallsOnThisMonth;
 	}
 }

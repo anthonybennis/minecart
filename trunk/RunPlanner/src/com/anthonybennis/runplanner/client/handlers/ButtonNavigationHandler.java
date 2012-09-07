@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client.handlers;
 
+import com.anthonybennis.runplanner.client.Audio;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DeckPanel;
@@ -52,24 +53,28 @@ public class ButtonNavigationHandler implements ClickHandler
 	{
 		int indexToShow = -1;
 		
-		if (currentShownIndex < (numberOfMonthPanels -1))
+		if (currentShownIndex < (numberOfMonthPanels -1)
+				&& numberOfMonthPanels >1)
 		{
-			indexToShow++;
+			indexToShow = currentShownIndex + 1;
 			
 			if (!_leftButton.isEnabled())
 			{
 				_leftButton.setEnabled(true);
 			}
+			
+			if (indexToShow == (numberOfMonthPanels - 1)) // If we're at the last Month Panel.
+			{
+				/*
+				 * Disable button
+				 */
+				_rightButton.setEnabled(false);
+				
+			}
+			
+			Audio.playButtonClick();
+			_deckPanel.showWidget(indexToShow);
 		}
-		else
-		{
-			/*
-			 * Disable button
-			 */
-			_rightButton.setEnabled(false);
-		}
-		
-		_deckPanel.showWidget(indexToShow);
 	}
 	
 	/**
@@ -81,23 +86,26 @@ public class ButtonNavigationHandler implements ClickHandler
 	{
 		int indexToShow = -1;
 		
-		if (currentShownIndex > 0)
+		if (currentShownIndex > 0 && numberOfMonthPanels >1)
 		{
-			indexToShow--;
+			indexToShow = (currentShownIndex -1);
 			
 			if (!_rightButton.isEnabled())
 			{
 				_rightButton.setEnabled(true);
 			}
+			
+			if (indexToShow == 0) // If we're at the first Month Panel.
+			{
+				/*
+				 * Disable button
+				 */
+				_leftButton.setEnabled(false);
+				
+			}
+			
+			Audio.playButtonClick();
+			_deckPanel.showWidget(indexToShow);
 		}
-		else
-		{
-			/*
-			 * Disable button
-			 */
-			_leftButton.setEnabled(false);
-		}
-		
-		_deckPanel.showWidget(indexToShow);
 	}
 }

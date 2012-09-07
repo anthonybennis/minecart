@@ -52,4 +52,28 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/Intro.png")
 	  ImageResource getIntroImage();
+	  
+	  @Source("images/5km.png")
+	  ImageResource get5kmEnabledButtonImage();
+	  
+	  @Source("images/5kmGrey.png")
+	  ImageResource get5kmDisabledButtonImage();
+	  
+	  @Source("images/10km.png")
+	  ImageResource get10kmEnabledButtonImage();
+	  
+	  @Source("images/10kmGrey.png")
+	  ImageResource get10kmDisabledButtonImage();
+	  
+	  @Source("images/21km.png")
+	  ImageResource get21kmEnabledButtonImage();
+	  
+	  @Source("images/21kmGrey.png")
+	  ImageResource get2kmDisabledButtonImage();
+	  
+	  @Source("images/42km.png")
+	  ImageResource get42kmEnabledButtonImage();
+	  
+	  @Source("images/42kmGrey.png")
+	  ImageResource get42kmDisabledButtonImage();
 }

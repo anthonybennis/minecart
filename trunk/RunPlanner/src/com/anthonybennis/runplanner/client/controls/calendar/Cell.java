@@ -38,7 +38,6 @@ public class Cell
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	private Panel createHeaderPanel()
 	{
 		Panel headerPanel = new HorizontalPanel();
@@ -63,6 +62,7 @@ public class Cell
 		return headerPanel;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private Label createDateLabel()
 	{
 		Label dateLabel = new Label();
@@ -140,7 +140,7 @@ public class Cell
 		{
 			activityLabel = new Label();
 			activityLabel.setText(activity.getName() + " " + activity.getNumber() + " km");
-			activityLabel.setStylePrimaryName("largeWhiteText");
+			activityLabel.setStylePrimaryName("cellWalkRunMixLabel");
 			walkRunMixDetailsPanel.add(activityLabel);
 		}
 		
@@ -216,8 +216,12 @@ public class Cell
 			parentPanel.add(walkRunMixPanel);
 			
 			/*
-			 * TODO Highlight Cell if today is = _date
+			 * Highlight Cell if today is = _date
 			 */
+			if (this.isToday())
+			{
+				headerPanel.getElement().getStyle().setBackgroundColor("yellow");
+			}
 			
 			/*
 			 * TODO Highlight Cell if today is start day
@@ -235,9 +239,6 @@ public class Cell
 	 */
 	private void createCell(Panel parentPanel)
 	{
-		/*
-		 * TODO Highlight Cell if today is = _date
-		 */
 		Label dateLabel = this.createDateLabel();
 		parentPanel.add(dateLabel);
 	}
@@ -295,5 +296,14 @@ public class Cell
 	{
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
+	}
+	
+	private boolean isToday()
+	{
+		boolean isCellsDateTodaysDate = false;
+		Date date = new Date();
+		isCellsDateTodaysDate = SuperDateUtil.isSameDate(_date, date);
+		
+		return isCellsDateTodaysDate;
 	}
 }

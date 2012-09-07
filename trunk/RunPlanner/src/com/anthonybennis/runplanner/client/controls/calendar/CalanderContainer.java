@@ -51,7 +51,7 @@ public class CalanderContainer
 		 */
 		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
 		_leftButton = new PushButton(leftbuttonIcon);
-		_leftButton.setHeight("100%");
+		_leftButton.setHeight("600px");
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
 		_mainCalanderPanel.add(_leftButton);
@@ -59,6 +59,7 @@ public class CalanderContainer
 		
 		/*
 		 * Intro Panel
+		 * TODO Add Health Warning
 		 */
 		_introImage = this.createIntroPanel();
 		_mainCalanderPanel.add(_introImage);
@@ -76,6 +77,7 @@ public class CalanderContainer
 		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
 		_rightButton = new PushButton(buttonIcon);
 		_rightButton.setHeight("100%");
+		_rightButton.setHeight("600px");
 		_rightButton.getElement().getStyle().setOpacity(0.5);
 		_rightButton.setVisible(false);
 		_mainCalanderPanel.add(_rightButton);
@@ -84,7 +86,7 @@ public class CalanderContainer
 		
 		/*
 		 * Footer
-		 * TODO ENHANCEMENT Legend for Plan
+		 * TODO ENHANCEMENT Legend for Plan where we show the start month to the end month.
 		 */
 		HorizontalPanel footerPanel = new HorizontalPanel(); 
 		mainPanel.add(footerPanel);
@@ -94,7 +96,7 @@ public class CalanderContainer
 		 */
 	
 		 // TODO Do I need to add Touch Listener too?
-		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, true, _leftButton, _rightButton));
+		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, false, _leftButton, _rightButton));
 		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, true, _leftButton, _rightButton));
 		
 		return mainPanel;
@@ -138,19 +140,39 @@ public class CalanderContainer
 		/*
 		 * Add all month panels to sliding panel
 		 */
+		Panel todaysPanel = null;
 		for (MonthPanel panel : monthPanels) 
 		{
 			/*
 			 * Use insert as panels are added after creation.
 			 */
-			_deckPanel.insert(panel.createPanel(), 0); // TODO Check order is correct.
+			Panel monthPanelWidget = panel.createPanel();
+			_deckPanel.insert(monthPanelWidget, 0); // TODO Check order is correct.
+			
+			/*
+			 * Get reference to Today's Month.
+			 */
+			if (panel.doesTodayFallOnThisMonth())
+			{
+				todaysPanel = monthPanelWidget;
+			}
 		}
 		
 		/*
-		 * TODO Display today on Calander if today is in Plan
-		 * TODO If not, display first month of plan.
+		 * Display today on Calander if today is in Plan
+		 * If not, display first month of plan.
 		 */
-		_deckPanel.showWidget(0);
+		int indexOfMonthToShowByDefault = 0;
+		
+		if (_deckPanel.getWidgetCount() > 0)
+		{
+			if (todaysPanel != null)
+			{
+				indexOfMonthToShowByDefault = _deckPanel.getWidgetIndex(todaysPanel);
+			}
+			
+			_deckPanel.showWidget(indexOfMonthToShowByDefault);
+		}
 	}
 	
 	/**

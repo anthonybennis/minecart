@@ -18,17 +18,17 @@ public class DistancePanelManager
 	/*
 	 * Enabled Metric Button Image urls
 	 */
-	private static final String FIVE_KM_ENABLED_IMAGE_URL= "images/5km.png";
-	private static final String TEN_KM_ENABLED_IMAGE_URL= "images/10km.png";
-	private static final String TWENTY_ONE_KM_ENABLED_IMAGE_URL= "images/21km.png";
-	private static final String FORTY_TWO_KM_ENABLED_IMAGE_URL= "images/42km.png";
-	/*
-	 * Disabled Metric Button Image urls
-	 */
-	private static final String FIVE_KM_DISABLED_IMAGE_URL= "images/5kmGrey.png";
-	private static final String TEN_KM_DISABLED_IMAGE_URL= "images/10kmGrey.png";
-	private static final String TWENTY_ONE_KM_DISABLED_IMAGE_URL= "images/21kmGrey.png";
-	private static final String FORTY_TWO_KM_DISABLED_IMAGE_URL= "images/42kmGrey.png";
+//	private static final String FIVE_KM_ENABLED_IMAGE_URL= "images/5km.png";
+//	private static final String TEN_KM_ENABLED_IMAGE_URL= "images/10km.png";
+//	private static final String TWENTY_ONE_KM_ENABLED_IMAGE_URL= "images/21km.png";
+//	private static final String FORTY_TWO_KM_ENABLED_IMAGE_URL= "images/42km.png";
+//	/*
+//	 * Disabled Metric Button Image urls
+//	 */
+//	private static final String FIVE_KM_DISABLED_IMAGE_URL= "images/5kmGrey.png";
+//	private static final String TEN_KM_DISABLED_IMAGE_URL= "images/10kmGrey.png";
+//	private static final String TWENTY_ONE_KM_DISABLED_IMAGE_URL= "images/21kmGrey.png";
+//	private static final String FORTY_TWO_KM_DISABLED_IMAGE_URL= "images/42kmGrey.png";
 	
 	
 	protected DISTANCE _userDefinedDistance;
@@ -79,10 +79,10 @@ public class DistancePanelManager
 	{
 		DistanceButton[] images = new DistanceButton[4];
 		
-		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
-		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_ENABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
-		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_ENABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_ENABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, Resources.INSTANCE.get5kmEnabledButtonImage(),Resources.INSTANCE.get5kmDisabledButtonImage());
+		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,Resources.INSTANCE.get10kmEnabledButtonImage(),Resources.INSTANCE.get10kmDisabledButtonImage());
+		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,Resources.INSTANCE.get21kmEnabledButtonImage(),Resources.INSTANCE.get2kmDisabledButtonImage());
+		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,Resources.INSTANCE.get42kmEnabledButtonImage(),Resources.INSTANCE.get42kmDisabledButtonImage());
 		
 		return images;
 	}
@@ -92,12 +92,12 @@ public class DistancePanelManager
 		DistanceButton[] images = new DistanceButton[4];
 		
 		/*
-		 * TODO AB Use mile images.
+		 * TODO FUTURE ENHANCEMENT Use mile images.
 		 */
-		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, FIVE_KM_ENABLED_IMAGE_URL,FIVE_KM_DISABLED_IMAGE_URL);
-		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,TEN_KM_DISABLED_IMAGE_URL,TEN_KM_DISABLED_IMAGE_URL);
-		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,TWENTY_ONE_KM_DISABLED_IMAGE_URL,TWENTY_ONE_KM_DISABLED_IMAGE_URL);
-		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,FORTY_TWO_KM_DISABLED_IMAGE_URL,FORTY_TWO_KM_DISABLED_IMAGE_URL);
+		images[0] = new DistanceButton(DISTANCE_UNIT.METRIC, DISTANCE.FIVE_KM, Resources.INSTANCE.get5kmEnabledButtonImage(),Resources.INSTANCE.get5kmDisabledButtonImage());
+		images[1] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TEN_KM,Resources.INSTANCE.get10kmEnabledButtonImage(),Resources.INSTANCE.get10kmDisabledButtonImage());
+		images[2] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.TWNETY_ONE_KM,Resources.INSTANCE.get21kmEnabledButtonImage(),Resources.INSTANCE.get2kmDisabledButtonImage());
+		images[3] = new DistanceButton(DISTANCE_UNIT.METRIC,DISTANCE.FORTY_TWO_KM,Resources.INSTANCE.get42kmEnabledButtonImage(),Resources.INSTANCE.get42kmDisabledButtonImage());
 		
 		return images;
 	}
@@ -167,7 +167,7 @@ public class DistancePanelManager
 	}
 	
 	/*
-	 *  TODO AB Get user preffered distance unit.
+	 *  TODO FUTURE ENHANCEMENT Get user preffered distance unit.
 	 */
 	private DISTANCE_UNIT getDistanceUnits()
 	{
