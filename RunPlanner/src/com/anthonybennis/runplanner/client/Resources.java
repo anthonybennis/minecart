@@ -49,4 +49,7 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/RightChevron.png")
 	  ImageResource getRightButtonImage();
+	  
+	  @Source("images/Intro.png")
+	  ImageResource getIntroImage();
 }

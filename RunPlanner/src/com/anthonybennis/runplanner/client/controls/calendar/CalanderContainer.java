@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.Resources;
+import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,10 +19,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class CalanderContainer 
 {
-	private DeckPanel _deckLayoutPanel;
+	private DeckPanel _deckPanel;
 	private List<MonthPanel> _monthPanels = new ArrayList<MonthPanel>();
-	private Panel _introPanel;
+	private Image _introImage;
 	private HorizontalPanel _mainCalanderPanel;
+	private PushButton _leftButton;
+	private PushButton _rightButton;
 
 	/**
 	 * Creates the main containers for the Calander widget.
@@ -47,31 +50,35 @@ public class CalanderContainer
 		 * TODO Add button handler
 		 */
 		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
-		PushButton leftButtonPanel = new PushButton(leftbuttonIcon);
-		_mainCalanderPanel.add(leftButtonPanel);
-		leftbuttonIcon.setHeight("100%");
-		_deckLayoutPanel = new DeckPanel();
+		_leftButton = new PushButton(leftbuttonIcon);
+		_leftButton.setHeight("100%");
+		_leftButton.getElement().getStyle().setOpacity(0.5);
+		_leftButton.setVisible(false);
+		_mainCalanderPanel.add(_leftButton);
+		_deckPanel = new DeckPanel();
 		
 		/*
 		 * Intro Panel
 		 */
-		_introPanel = this.createIntroPanel();
-		_mainCalanderPanel.add(_deckLayoutPanel);
+		_introImage = this.createIntroPanel();
+		_mainCalanderPanel.add(_introImage);
 		
 		/*
 		 * Calander
 		 */
-		_deckLayoutPanel.setSize("100%", "100%");
-		_mainCalanderPanel.add(_deckLayoutPanel);
+		_deckPanel.setSize("100%", "100%");
+		_mainCalanderPanel.add(_deckPanel);
 		
 		/*
 		 * Right Button
 		 * TODO Add button handler
 		 */
 		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
-		PushButton rightButtonPanel = new PushButton(buttonIcon);
-		rightButtonPanel.setHeight("100%");
-		_mainCalanderPanel.add(rightButtonPanel);
+		_rightButton = new PushButton(buttonIcon);
+		_rightButton.setHeight("100%");
+		_rightButton.getElement().getStyle().setOpacity(0.5);
+		_rightButton.setVisible(false);
+		_mainCalanderPanel.add(_rightButton);
 		
 		mainPanel.add(_mainCalanderPanel);
 		
@@ -82,6 +89,14 @@ public class CalanderContainer
 		HorizontalPanel footerPanel = new HorizontalPanel(); 
 		mainPanel.add(footerPanel);
 		
+		/*
+		 * Add Listeners, after all widgets have been created.
+		 */
+	
+		 // TODO Do I need to add Touch Listener too?
+		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, true, _leftButton, _rightButton));
+		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, true, _leftButton, _rightButton));
+		
 		return mainPanel;
 	}
 	
@@ -89,15 +104,10 @@ public class CalanderContainer
 	 * 
 	 * @return
 	 */
-	private Panel createIntroPanel()
+	private Image createIntroPanel()
 	{
-		VerticalPanel introPanel = new VerticalPanel();
-		
-		/*
-		 * TODO Add Intro Image
-		 */
-		
-		return introPanel;
+		Image introImage = new Image(Resources.INSTANCE.getIntroImage());
+		return introImage;
 	}
 	
 	/**
@@ -114,6 +124,13 @@ public class CalanderContainer
 		this.clear();
 		
 		/*
+		 * Make Nav buttons visible
+		 */
+		_leftButton.setVisible(true);
+		_rightButton.setVisible(true);
+		
+		
+		/*
 		 * Create the month panels.
 		 */
 		List<MonthPanel> monthPanels = this.createAndPopulateMonthPanels(planItems);
@@ -126,14 +143,14 @@ public class CalanderContainer
 			/*
 			 * Use insert as panels are added after creation.
 			 */
-			_deckLayoutPanel.insert(panel.createPanel(), 0); // TODO Check order is correct.
+			_deckPanel.insert(panel.createPanel(), 0); // TODO Check order is correct.
 		}
 		
 		/*
 		 * TODO Display today on Calander if today is in Plan
 		 * TODO If not, display first month of plan.
 		 */
-		_deckLayoutPanel.showWidget(0);
+		_deckPanel.showWidget(0);
 	}
 	
 	/**
@@ -195,16 +212,16 @@ public class CalanderContainer
 		/*
 		 * Clear DeckPanel (Calender Months)
 		 */
-		_deckLayoutPanel.clear();
+		_deckPanel.clear();
 		
 		/*
 		 * Clear (Remove) Intro Panel, if it exists.
 		 */
-		int introPanelIndex = _mainCalanderPanel.getWidgetIndex(_introPanel);
+		int introPanelIndex = _mainCalanderPanel.getWidgetIndex(_introImage);
 		
 		if (introPanelIndex != -1)
 		{
-			_mainCalanderPanel.remove(_introPanel);
+			_mainCalanderPanel.remove(_introImage);
 		}
 		
 		/*
