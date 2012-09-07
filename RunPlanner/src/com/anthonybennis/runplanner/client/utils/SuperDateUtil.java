@@ -7,32 +7,49 @@ import com.google.gwt.i18n.client.LocaleInfo;
 public class SuperDateUtil 
 {
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
-
-	
-	public SuperDateUtil()
-	{
-		
-	}
-	
 	private int _day = -1;
 	private int _month = -1;
 	private int _year = -1;
 	
+	/**
+	 * 
+	 */
+	public SuperDateUtil()
+	{
+		
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public int getDay() 
 	{
 		return _day;
 	}
 	
+	/**
+	 * 
+	 * @param day
+	 */
 	public void setDay(int day) 
 	{
 		this._day = day;
 	}
 	
+	/**
+	 * 
+	 * @param day
+	 */
 	public void setDay(String day)
 	{
 		this._day = Integer.parseInt(day);
 	}
 	
+	/**
+	 * 
+	 * @param monthName
+	 */
 	public void setMonth(String monthName)
 	{
 		String[] monthNames = SuperDateUtil.getMonthNames();
@@ -47,16 +64,29 @@ public class SuperDateUtil
 		}
 	}
 	
+	/**
+	 * 
+	 * @param year
+	 */
 	public void setYear(String year)
 	{
 		this._year = Integer.parseInt(year);
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getMonthName() 
 	{
 		return SuperDateUtil.getMonthName(_month);
 	}
 	
+	/**
+	 * 
+	 * @param month
+	 * @return
+	 */
 	public static String getMonthName(int month)
 	{
 		String monthName = "?";
@@ -74,26 +104,46 @@ public class SuperDateUtil
 		return monthName;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMonth() 
 	{
 		return _month;
 	}
 	
+	/**
+	 * 
+	 * @param month
+	 */
 	public void setMonth(int month) 
 	{
 		this._month = month;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getYear() 
 	{
 		return _year;
 	}
 	
+	/**
+	 * 
+	 * @param year
+	 */
 	public void setYear(int year) 
 	{
 		this._year = year;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String convertToString()
 	{
 		return this.getDay() + "," + this.getMonth() + "," + this.getYear();
@@ -124,11 +174,29 @@ public class SuperDateUtil
 		return date;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static String[] getMonthNames()
 	{
 		return LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().monthsFull();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public static String[] getWeekDayNames()
+	{
+		return LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().weekdaysFull();
+	}
+	
+	/**
+	 * 
+	 * @param startWithMonday
+	 * @return
+	 */
 	public static String[] geDayNames(boolean startWithMonday)
 	{
 		String[] dayNames = LocaleInfo.getCurrentLocale().getDateTimeFormatInfo().weekdaysFull();
@@ -183,6 +251,12 @@ public class SuperDateUtil
 		return firstDayOfMonth;
 	}
 	
+	/**
+	 * 
+	 * @param month
+	 * @param year
+	 * @return
+	 */
 	public static int daysInMonth(int month, int year) 
 	{
 	  final int daysPerMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
@@ -199,7 +273,10 @@ public class SuperDateUtil
 	  return days;
 	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	public int calculateNumberOfDaysFromToday()
 	{

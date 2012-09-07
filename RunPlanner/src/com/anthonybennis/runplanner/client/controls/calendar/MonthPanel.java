@@ -7,7 +7,6 @@ import java.util.List;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -54,6 +53,7 @@ public class MonthPanel
 		/*
 		 * Create week Day Name Cells
 		 */
+		this.createWeekDayCells(dateCellsGrid);
 		
 		/*
 		 * Add Cells to grid Panel
@@ -61,17 +61,15 @@ public class MonthPanel
 		 * column for the right first day of the month
 		 */
 		int columnCounter = 0;
-		int rowCounter = 0;
+		int rowCounter = 1;
 		
 		for (Cell cell:_dayCells) 
 		{
 			Panel cellPanel = cell.createPanel();
 			dateCellsGrid.setWidget(rowCounter, columnCounter, cellPanel);
-			dateCellsGrid.getCellFormatter().setWidth(rowCounter, columnCounter, "125px"); // TODO Do we need this?
-			
 			columnCounter++;
 			
-			if (columnCounter == (7 - 1))
+			if (columnCounter == (7))
 			{
 				columnCounter = 0;
 				rowCounter++;
@@ -83,10 +81,56 @@ public class MonthPanel
 		return panel;
 	}
 	
+	/**
+	 * 
+	 */
+	private void createWeekDayCells(Grid dateCellsGrid)
+	{
+		String[] weekDayNames = SuperDateUtil.getWeekDayNames();
+		
+		/*
+		 * Create Labels
+		 */
+		Label mondayLabel = new Label(weekDayNames[1]);
+		Label tuesdayLabel = new Label(weekDayNames[2]);
+		Label wednesdayLabel = new Label(weekDayNames[3]);
+		Label thursdayLabel = new Label(weekDayNames[4]);
+		Label fridayLabel = new Label(weekDayNames[5]);
+		Label saturdayLabel = new Label(weekDayNames[6]);
+		Label sundayLabel = new Label(weekDayNames[0]);
+		
+		/*
+		 * Set style
+		 */
+		mondayLabel.setStylePrimaryName("smallWhiteText");
+		tuesdayLabel.setStylePrimaryName("smallWhiteText");
+		wednesdayLabel.setStylePrimaryName("smallWhiteText");
+		thursdayLabel.setStylePrimaryName("smallWhiteText");
+		fridayLabel.setStylePrimaryName("smallWhiteText");
+		saturdayLabel.setStylePrimaryName("smallWhiteText");
+		sundayLabel.setStylePrimaryName("smallWhiteText");
+		
+		/*
+		 * Add to Grid
+		 */
+		dateCellsGrid.setWidget(0, 0, mondayLabel);
+		dateCellsGrid.setWidget(0, 1, tuesdayLabel);
+		dateCellsGrid.setWidget(0, 2, wednesdayLabel);
+		dateCellsGrid.setWidget(0, 3, thursdayLabel);
+		dateCellsGrid.setWidget(0, 4, fridayLabel);
+		dateCellsGrid.setWidget(0, 5, saturdayLabel);
+		dateCellsGrid.setWidget(0, 6, sundayLabel);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	private Label createHeaderPanel()
 	{
 		Label headerPanel = new Label();
-		headerPanel.setText(SuperDateUtil.getMonthName(_month)); // TODO Make Text Large
+		headerPanel.setText(SuperDateUtil.getMonthName(_month)); 
+		headerPanel.setStylePrimaryName("monthPanelHeader");
 		return headerPanel;
 	}
 	
