@@ -44,6 +44,7 @@ public class RunPlanner implements EntryPoint
 		rootPanel.setSize("100%", "100%");
 		RootPanel headerElement = RootPanel.get("Header");
 		headerElement.getElement().getStyle().setPosition(Position.RELATIVE);
+		
 		/*
 		 * Main container
 		 */
@@ -156,8 +157,10 @@ public class RunPlanner implements EntryPoint
 		
 		distanceAndDateContainer.add(distanceButtonPanel);
 		distanceAndDateContainer.add(datePanel);
+		
 		dateDistanceCalanderPanel.add(distanceAndDateContainer);
 		dateDistanceCalanderPanel.add(calanderPanel);
+		
 		
 		mainPanel.add(headerPanel);
 		mainPanel.add(dateDistanceCalanderPanel);

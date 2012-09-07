@@ -38,6 +38,7 @@ public class Cell
 		 * Date
 		 */
 		Label dateLabel = new Label();
+		dateLabel.setStylePrimaryName("smallWhiteText");
 		int date = _planItem.getDate().getDate();
 		dateLabel.setText("" + date);
 		headerPanel.add(dateLabel);
@@ -104,6 +105,7 @@ public class Cell
 	private Panel createWalkRunMixPanel()
 	{
 		Panel walkRunMixDetailsPanel = new VerticalPanel(); // TODO Consider FlowPanel?
+		walkRunMixDetailsPanel.setSize("100%", "100%");
 		
 		WalkRunMix walkRunMix = _planItem.getWalkRunMix();
 		
@@ -152,6 +154,7 @@ public class Cell
 	protected Panel createPanel()
 	{
 		Panel mainCellPanel = new VerticalPanel();
+		mainCellPanel.setStylePrimaryName("cellPanel");
 		
 		if (_planItem != null) // Should never be null!
 		{
@@ -179,31 +182,31 @@ public class Cell
 	
 	private Image createFastPACEImage()
 	{
-		Image image = new Image(Resources.INSTANCE.getAudioButton());		
+		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
 	private Image createSlowPACEImage()
 	{
-		Image image = new Image(Resources.INSTANCE.getAudioButton());		
+		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
 	private Image createComfortablePACEImage()
 	{
-		Image image = new Image(Resources.INSTANCE.getAudioButton());		
+		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
 	private Image createMixPACEImage()
 	{
-		Image image = new Image(Resources.INSTANCE.getAudioButton());		
+		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
 	private Image createRestPACEImage()
 	{
-		Image image = new Image(Resources.INSTANCE.getAudioButton());		
+		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 }

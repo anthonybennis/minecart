@@ -42,13 +42,14 @@ public class MonthPanel
 		 * Create Month Name Header
 		 */
 		Label headerLabel = this.createHeaderPanel();
+		headerLabel.setText(SuperDateUtil.getMonthName(_month));
 		panel.add(headerLabel);
 		
 		/*
 		 * Create GridPanel for cells.
 		 */
 		Grid dateCellsGrid = new Grid(7, 7); // TODO We should dynamically calculate number of rows.
-		panel.add(dateCellsGrid);
+		
 		
 		/*
 		 * Create week Day Name Cells
@@ -76,6 +77,8 @@ public class MonthPanel
 				rowCounter++;
 			}
 		}
+		
+		panel.add(dateCellsGrid);
 		
 		return panel;
 	}
