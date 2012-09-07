@@ -3,10 +3,11 @@ package com.anthonybennis.runplanner.client.controls.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.anthonybennis.runplanner.client.controls.SlidingPanel;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -16,7 +17,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class CalanderContainer 
 {
-	private DeckLayoutPanel _deckLayoutPanel;
+	private DeckPanel _deckLayoutPanel;
 	private List<MonthPanel> _monthPanels = new ArrayList<MonthPanel>();
 
 	/**
@@ -39,7 +40,7 @@ public class CalanderContainer
 		 * Calander
 		 */
 		HorizontalPanel mainCalanderPanel = new HorizontalPanel();
-		mainPanel.add(mainCalanderPanel);
+		mainCalanderPanel.setSize("100%", "100%");
 		
 		/*
 		 * Left Button
@@ -47,7 +48,7 @@ public class CalanderContainer
 		VerticalPanel leftButtonPanel = new VerticalPanel();
 		mainCalanderPanel.add(leftButtonPanel);
 		
-		_deckLayoutPanel = new DeckLayoutPanel();
+		_deckLayoutPanel = new DeckPanel();
 		
 		
 		/*
@@ -55,7 +56,7 @@ public class CalanderContainer
 		 */
 		Panel introPanel = new HorizontalPanel();
 		_deckLayoutPanel.add(introPanel);
-
+		_deckLayoutPanel.setSize("100%", "100%");
 		mainCalanderPanel.add(_deckLayoutPanel);
 		
 		/*
@@ -63,6 +64,8 @@ public class CalanderContainer
 		 */
 		VerticalPanel rightButtonPanel = new VerticalPanel();
 		mainCalanderPanel.add(rightButtonPanel);
+		
+		mainPanel.add(mainCalanderPanel);
 		
 		/*
 		 * Footer
@@ -97,7 +100,10 @@ public class CalanderContainer
 		 */
 		for (MonthPanel panel : monthPanels) 
 		{
-			_deckLayoutPanel.add(panel.createPanel()); // TODO Ensure this is done in right order.
+			/*
+			 * Use insert as panels are added after creation.
+			 */
+			_deckLayoutPanel.insert(panel.createPanel(), 0); // TODO Check order is correct.
 		}
 		
 		/*
@@ -149,25 +155,25 @@ public class CalanderContainer
 	 * @param planItem
 	 * @return
 	 */
-	private MonthPanel addPlanItemToMonthPanel(PlanItem planItem)
-	{
-		MonthPanel monthPanel = null;
-	
-		/*
-		 * Get Month Panel from the list of MonthPanels
-		 */
-		
-		/*
-		 * If none found for a given month, create one.
-		 */
-		
-		/*
-		 * Add PlanItem to month Panel.
-		 */
-		
-		
-		return monthPanel;
-	}
+//	private MonthPanel addPlanItemToMonthPanel(PlanItem planItem)
+//	{
+//		MonthPanel monthPanel = null;
+//	
+//		/*
+//		 * Get Month Panel from the list of MonthPanels
+//		 */
+//		
+//		/*
+//		 * If none found for a given month, create one.
+//		 */
+//		
+//		/*
+//		 * Add PlanItem to month Panel.
+//		 */
+//		
+//		
+//		return monthPanel;
+//	}
 	
 	/**
 	 * 
