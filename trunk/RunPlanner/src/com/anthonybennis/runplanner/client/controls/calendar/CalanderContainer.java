@@ -3,12 +3,13 @@ package com.anthonybennis.runplanner.client.controls.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
-import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
@@ -19,6 +20,8 @@ public class CalanderContainer
 {
 	private DeckPanel _deckLayoutPanel;
 	private List<MonthPanel> _monthPanels = new ArrayList<MonthPanel>();
+	private Panel _introPanel;
+	private HorizontalPanel _mainCalanderPanel;
 
 	/**
 	 * Creates the main containers for the Calander widget.
@@ -36,36 +39,41 @@ public class CalanderContainer
 		mainPanel.setWidth("100%");
 		mainPanel.setHeight("100%");
 		
-		/*
-		 * Calander
-		 */
-		HorizontalPanel mainCalanderPanel = new HorizontalPanel();
-		mainCalanderPanel.setSize("100%", "100%");
+		_mainCalanderPanel = new HorizontalPanel();
+		_mainCalanderPanel.setSize("100%", "100%");
 		
 		/*
 		 * Left Button
+		 * TODO Add button handler
 		 */
-		VerticalPanel leftButtonPanel = new VerticalPanel();
-		mainCalanderPanel.add(leftButtonPanel);
-		
+		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
+		PushButton leftButtonPanel = new PushButton(leftbuttonIcon);
+		_mainCalanderPanel.add(leftButtonPanel);
+		leftbuttonIcon.setHeight("100%");
 		_deckLayoutPanel = new DeckPanel();
 		
+		/*
+		 * Intro Panel
+		 */
+		_introPanel = this.createIntroPanel();
+		_mainCalanderPanel.add(_deckLayoutPanel);
 		
 		/*
-		 * TODO We need an intro panel, when there's no Plan to show.
+		 * Calander
 		 */
-		Panel introPanel = new HorizontalPanel();
-		_deckLayoutPanel.add(introPanel);
 		_deckLayoutPanel.setSize("100%", "100%");
-		mainCalanderPanel.add(_deckLayoutPanel);
+		_mainCalanderPanel.add(_deckLayoutPanel);
 		
 		/*
 		 * Right Button
+		 * TODO Add button handler
 		 */
-		VerticalPanel rightButtonPanel = new VerticalPanel();
-		mainCalanderPanel.add(rightButtonPanel);
+		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
+		PushButton rightButtonPanel = new PushButton(buttonIcon);
+		rightButtonPanel.setHeight("100%");
+		_mainCalanderPanel.add(rightButtonPanel);
 		
-		mainPanel.add(mainCalanderPanel);
+		mainPanel.add(_mainCalanderPanel);
 		
 		/*
 		 * Footer
@@ -75,6 +83,21 @@ public class CalanderContainer
 		mainPanel.add(footerPanel);
 		
 		return mainPanel;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private Panel createIntroPanel()
+	{
+		VerticalPanel introPanel = new VerticalPanel();
+		
+		/*
+		 * TODO Add Intro Image
+		 */
+		
+		return introPanel;
 	}
 	
 	/**
@@ -121,6 +144,7 @@ public class CalanderContainer
 	 * @param planItems
 	 * @return Panel[] all the Month Panels.
 	 */
+	@SuppressWarnings("deprecation")
 	private List<MonthPanel> createAndPopulateMonthPanels(List<PlanItem> planItems)
 	{
 		/*
@@ -152,31 +176,6 @@ public class CalanderContainer
 	
 	/**
 	 * 
-	 * @param planItem
-	 * @return
-	 */
-//	private MonthPanel addPlanItemToMonthPanel(PlanItem planItem)
-//	{
-//		MonthPanel monthPanel = null;
-//	
-//		/*
-//		 * Get Month Panel from the list of MonthPanels
-//		 */
-//		
-//		/*
-//		 * If none found for a given month, create one.
-//		 */
-//		
-//		/*
-//		 * Add PlanItem to month Panel.
-//		 */
-//		
-//		
-//		return monthPanel;
-//	}
-	
-	/**
-	 * 
 	 * @param month
 	 * @param year
 	 * @return
@@ -193,8 +192,26 @@ public class CalanderContainer
 	 */
 	private void clear()
 	{
-		// TODO Remove all widgets from _deckLayoutPanel
+		/*
+		 * Clear DeckPanel (Calender Months)
+		 */
+		_deckLayoutPanel.clear();
+		
+		/*
+		 * Clear (Remove) Intro Panel, if it exists.
+		 */
+		int introPanelIndex = _mainCalanderPanel.getWidgetIndex(_introPanel);
+		
+		if (introPanelIndex != -1)
+		{
+			_mainCalanderPanel.remove(_introPanel);
+		}
+		
+		/*
+		 * Clear ArrayList of Month Panels.
+		 */
 		_monthPanels.clear();
+		
 	}
 	
 	/**

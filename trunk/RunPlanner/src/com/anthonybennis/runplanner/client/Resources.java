@@ -43,4 +43,10 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/Sleep32x21.png")
 	  ImageResource getSmallSleepImage();
+	  
+	  @Source("images/LeftChevron.png")
+	  ImageResource getLeftButtonImage();
+	  
+	  @Source("images/RightChevron.png")
+	  ImageResource getRightButtonImage();
 }
