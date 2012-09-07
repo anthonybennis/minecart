@@ -367,53 +367,53 @@ public class PlanGenerator
 		}
 		else if (distance == DISTANCE.TEN_KM && experience == 0)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 0)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 0)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		/*
 		 * Intermediate.
 		 */
 		else if (distance == DISTANCE.FIVE_KM && experience == 1)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		else if (distance == DISTANCE.TEN_KM && experience == 1)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 1)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 1)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO AB Calculate recommended days
 		}
 		/*
 		 * TODO FUTURE_ENHANCEMENT = Advanced.
 		 */
 		else if (distance == DISTANCE.FIVE_KM && experience == 2)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO FUTURE_ENHANCEMENT Calculate recommend days
 		}
 		else if (distance == DISTANCE.TEN_KM && experience == 2)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO FUTURE_ENHANCEMENT Calculate recommend days
 		}
 		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 2)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO FUTURE_ENHANCEMENT Calculate recommend days
 		}
 		else if (distance == DISTANCE.FORTY_TWO_KM && experience == 2)
 		{
-			// TODO AB Calculate recoemmned days
+			// TODO FUTURE_ENHANCEMENT Calculate recoemmned days
 		}
 		
 		return recommendedDays; 
