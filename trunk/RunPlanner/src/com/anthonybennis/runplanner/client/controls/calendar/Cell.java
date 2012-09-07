@@ -24,23 +24,29 @@ public class Cell
 	private PlanItem _planItem;
 	private Date _date;
 	
+	/**
+	 * 
+	 * @param date
+	 */
 	public Cell(Date date)
 	{
 		_date = date;
 	
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
 	private Panel createHeaderPanel()
 	{
-		Panel headerPanel = new HorizontalPanel(); // TODO Add Border to Cells.
+		Panel headerPanel = new HorizontalPanel();
 		
 		/*
 		 * Date
 		 */
-		Label dateLabel = new Label();
-		dateLabel.setStylePrimaryName("smallWhiteText");
-		int date = _planItem.getDate().getDate();
-		dateLabel.setText("" + date);
+		Label dateLabel = this.createDateLabel();
 		headerPanel.add(dateLabel);
 		
 		/*
@@ -50,12 +56,27 @@ public class Cell
 		
 		if (image != null)
 		{
-			headerPanel.add(image); //TODO Align Right
+			image.setStylePrimaryName("cellIconImage");
+			headerPanel.add(image); 
 		}
 		
 		return headerPanel;
 	}
 	
+	private Label createDateLabel()
+	{
+		Label dateLabel = new Label();
+		dateLabel.setStylePrimaryName("smallWhiteText");
+		int date = _date.getDate();
+		dateLabel.setText("" + date);
+		
+		return dateLabel;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createHeaderIcon()
 	{
 		Image image = null;
@@ -119,9 +140,9 @@ public class Cell
 		{
 			activityLabel = new Label();
 			activityLabel.setText(activity.getName() + " " + activity.getNumber() + " km");
+			activityLabel.setStylePrimaryName("largeWhiteText");
 			walkRunMixDetailsPanel.add(activityLabel);
 		}
-		
 		
 		return walkRunMixDetailsPanel;
 	}
@@ -133,7 +154,6 @@ public class Cell
 	protected void setPlanItem(PlanItem planItem)
 	{
 		_planItem = planItem;
-		// TODO AB - Populate Cell with PlanItem details
 	}
 	
 	protected PlanItem getPlanItem()
@@ -141,6 +161,11 @@ public class Cell
 		return _planItem;
 	}
 	
+	/**
+	 * 
+	 * @param planItem
+	 * @return
+	 */
 	protected boolean doDatesMatch(PlanItem planItem)
 	{
 		boolean foundAMatch = false;
@@ -151,18 +176,44 @@ public class Cell
 		return foundAMatch;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	protected Panel createPanel()
 	{
 		Panel mainCellPanel = new VerticalPanel();
+		mainCellPanel.setSize("120px", "100px"); // TODO AB Hard coded so all cells are the same. Can we do this more dynamically?
 		mainCellPanel.setStylePrimaryName("cellPanel");
 		
+		if (_planItem != null)
+		{
+			/*
+			 * Create Cell with Plan Item details
+			 */
+			this.createCell(mainCellPanel, _planItem);
+		}
+		else
+		{
+			/*
+			 * Create Cell with no details.
+			 */
+			this.createCell(mainCellPanel);
+		}
+	
+		
+		return mainCellPanel;
+	}
+	
+	private void createCell(Panel parentPanel, PlanItem planItem)
+	{
 		if (_planItem != null) // Should never be null!
 		{
 			Panel headerPanel = this.createHeaderPanel();
 			Panel walkRunMixPanel = this.createWalkRunMixPanel();
 			
-			mainCellPanel.add(headerPanel);
-			mainCellPanel.add(walkRunMixPanel);
+			parentPanel.add(headerPanel);
+			parentPanel.add(walkRunMixPanel);
 			
 			/*
 			 * TODO Highlight Cell if today is = _date
@@ -176,34 +227,70 @@ public class Cell
 			 * TODO Highlight Cell if today is Race day
 			 */
 		}
-		
-		return mainCellPanel;
 	}
 	
+	/**
+	 * 
+	 * @param parentPanel
+	 */
+	private void createCell(Panel parentPanel)
+	{
+		/*
+		 * TODO Highlight Cell if today is = _date
+		 */
+		Label dateLabel = this.createDateLabel();
+		parentPanel.add(dateLabel);
+	}
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createFastPACEImage()
 	{
+		// TODO Create icon
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createSlowPACEImage()
 	{
+		// TODO Create icon
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createComfortablePACEImage()
 	{
+		// TODO Create icon
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createMixPACEImage()
 	{
+		// TODO Create icon
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
 		return image;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private Image createRestPACEImage()
 	{
 		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
