@@ -100,6 +100,11 @@ h1 {
         border: 1px solid #EEEEEE;
 }
 
+.cellWalkRunMixLabel {
+	color: #FFFFFF;
+	font: normal 18px tahoma, arial, helvetica, sans-serif;
+}
+
 .monthPanelHeader {
         horizontal-align: center;
         color: #FFFFFF;
@@ -108,8 +113,4 @@ h1 {
 
 .cellIconImage{
 	horizontal-align: right;
-}
-
-.calanderNavigationButton{
-	opacity:0.5;
 }
