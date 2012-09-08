@@ -1,5 +1,7 @@
 package com.anthonybennis.runplanner.client;
 
+import java.util.Date;
+
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
@@ -127,6 +129,7 @@ public class DatePanelManager implements IDateReciever
 		return this.getTargetMonth() + ", " + this.getTargetYear();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void loadUserTargetDateSettings()
 	{
 		/*
@@ -136,12 +139,12 @@ public class DatePanelManager implements IDateReciever
 		
 		if (userpersistedTargetDate == null)
 		{
-			/*
-			 * TOD AB Calculate a date 6 months from now...
-			 */
+			Date date = new Date();
+			date.setDate(date.getDate() + 180);
+			
 			_raceDate.setDay(1);
-			_raceDate.setMonth(1);
-			_raceDate.setYear(2013);
+			_raceDate.setMonth(date.getMonth());
+			_raceDate.setYear(date.getYear());
 		}
 		else
 		{
@@ -153,6 +156,7 @@ public class DatePanelManager implements IDateReciever
 	public void setDate(SuperDateUtil date) 
 	{
 		_raceDate = date;
+		date.setMonth(date.getMonth() - 1); // Store date month with base 0
 		/*
 		 * Persist Target Date
 		 */

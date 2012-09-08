@@ -41,6 +41,18 @@ public interface Resources extends ClientBundle
 	  @Source("images/Close.png")
 	  ImageResource getCloseAppButtonImage();
 	  
+	  @Source("images/Run.png")
+	  ImageResource getRunImage();
+	  
+	  @Source("images/FastRun.png")
+	  ImageResource getFastRunImage();
+	  
+	  @Source("images/Walk.png")
+	  ImageResource getWalkImage();
+	  
+	  @Source("images/CycleSwim.png")
+	  ImageResource getMixImage();
+	  
 	  @Source("images/Sleep32x21.png")
 	  ImageResource getSmallSleepImage();
 	  

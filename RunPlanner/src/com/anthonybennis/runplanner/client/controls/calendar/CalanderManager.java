@@ -32,28 +32,4 @@ public class CalanderManager
 	{
 		_mainContainer.update(planItems);
 	}
-	
-	/**
-	 * TODO Delete this method if not needed.
-	 * 
-	 * @param planItems
-	 * @param cellDate
-	 * @return
-	 */
-//	private PlanItem getPlanItem(List<PlanItem> planItems, Date cellDate)
-//	{
-//		PlanItem planItemMatch = null;
-//		for (PlanItem planItem : planItems) 
-//		{
-//			boolean sameDate = SuperDateUtil.isSameDate(planItem.getDate(), cellDate);
-//			
-//			if (sameDate)
-//			{
-//				planItemMatch = planItem;
-//				break;
-//			}
-//		}
-//		
-//		return planItemMatch;
-//	}
 }

@@ -1,14 +1,17 @@
 package com.anthonybennis.runplanner.client.controls.calendar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
+import com.anthonybennis.runplanner.client.utils.MonthPanelSorter;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,6 +28,7 @@ public class CalanderContainer
 	private HorizontalPanel _mainCalanderPanel;
 	private PushButton _leftButton;
 	private PushButton _rightButton;
+	private Label _detailsLabel;
 
 	/**
 	 * Creates the main containers for the Calander widget.
@@ -51,7 +55,7 @@ public class CalanderContainer
 		 */
 		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
 		_leftButton = new PushButton(leftbuttonIcon);
-		_leftButton.setHeight("600px");
+		_leftButton.setHeight("500px");
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
 		_mainCalanderPanel.add(_leftButton);
@@ -77,7 +81,7 @@ public class CalanderContainer
 		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
 		_rightButton = new PushButton(buttonIcon);
 		_rightButton.setHeight("100%");
-		_rightButton.setHeight("600px");
+		_rightButton.setHeight("500px");
 		_rightButton.getElement().getStyle().setOpacity(0.5);
 		_rightButton.setVisible(false);
 		_mainCalanderPanel.add(_rightButton);
@@ -86,9 +90,8 @@ public class CalanderContainer
 		
 		/*
 		 * Footer
-		 * TODO ENHANCEMENT Legend for Plan where we show the start month to the end month.
 		 */
-		HorizontalPanel footerPanel = new HorizontalPanel(); 
+		Panel footerPanel = this.createFooterPanel(); 
 		mainPanel.add(footerPanel);
 		
 		/*
@@ -137,17 +140,25 @@ public class CalanderContainer
 		 */
 		List<MonthPanel> monthPanels = this.createAndPopulateMonthPanels(planItems);
 		
+		
+		/*
+		 * Order Month Panels
+		 */
+		Collections.sort(monthPanels, new MonthPanelSorter());
+		
 		/*
 		 * Add all month panels to sliding panel
 		 */
 		Panel todaysPanel = null;
+		Panel monthPanelWidget;
 		for (MonthPanel panel : monthPanels) 
 		{
+			System.out.println("Creating panel: " + panel.getMonth() + "," + panel.getYear());
 			/*
 			 * Use insert as panels are added after creation.
 			 */
-			Panel monthPanelWidget = panel.createPanel();
-			_deckPanel.insert(monthPanelWidget, 0); // TODO Check order is correct.
+			monthPanelWidget = panel.createPanel();
+			_deckPanel.insert(monthPanelWidget, _deckPanel.getWidgetCount());
 			
 			/*
 			 * Get reference to Today's Month.
@@ -173,6 +184,11 @@ public class CalanderContainer
 			
 			_deckPanel.showWidget(indexOfMonthToShowByDefault);
 		}
+		
+		/*
+		 * Footer info/ 
+		 */
+		_detailsLabel.setText("Training plan starts on the " + planItems.get(planItems.size() - 1).getDate().toString());
 	}
 	
 	/**
@@ -198,6 +214,7 @@ public class CalanderContainer
 		{
 			month = planItem.getDate().getMonth();
 			year = planItem.getDate().getYear();
+			System.out.println("Creating panel for " + month + ", " + year);
 			
 			monthPanel = this.getMonthPanel(month, year);
 			
@@ -272,5 +289,15 @@ public class CalanderContainer
 		}
 		
 		return monthPanel;
+	}
+	
+	private Panel createFooterPanel()
+	{
+		Panel footer = new HorizontalPanel();
+		
+		_detailsLabel = new Label();
+		
+		
+		return footer;
 	}
 }

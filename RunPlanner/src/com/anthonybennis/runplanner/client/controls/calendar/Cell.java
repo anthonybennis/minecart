@@ -139,7 +139,7 @@ public class Cell
 		for (Activity activity : activitiesList) 
 		{
 			activityLabel = new Label();
-			activityLabel.setText(activity.getName() + " " + activity.getNumber() + " km");
+			activityLabel.setText(" " + activity.getName() + " " + activity.getNumber() + " km");
 			activityLabel.setStylePrimaryName("cellWalkRunMixLabel");
 			walkRunMixDetailsPanel.add(activityLabel);
 		}
@@ -250,8 +250,7 @@ public class Cell
 	 */
 	private Image createFastPACEImage()
 	{
-		// TODO Create icon
-		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
+		Image image = new Image(Resources.INSTANCE.getFastRunImage());		
 		return image;
 	}
 	
@@ -261,8 +260,7 @@ public class Cell
 	 */
 	private Image createSlowPACEImage()
 	{
-		// TODO Create icon
-		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
+		Image image = new Image(Resources.INSTANCE.getWalkImage());		
 		return image;
 	}
 	
@@ -272,8 +270,7 @@ public class Cell
 	 */
 	private Image createComfortablePACEImage()
 	{
-		// TODO Create icon
-		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
+		Image image = new Image(Resources.INSTANCE.getRunImage());		
 		return image;
 	}
 	
@@ -283,8 +280,7 @@ public class Cell
 	 */
 	private Image createMixPACEImage()
 	{
-		// TODO Create icon
-		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
+		Image image = new Image(Resources.INSTANCE.getMixImage());		
 		return image;
 	}
 	
