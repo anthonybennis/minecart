@@ -129,7 +129,8 @@ public class MonthPanel
 	private Label createHeaderPanel()
 	{
 		Label headerPanel = new Label();
-		headerPanel.setText(SuperDateUtil.getMonthName(_month)); 
+		String monthName = SuperDateUtil.getMonthName(_month);
+		headerPanel.setText(monthName + " " + this.getYear()); 
 		headerPanel.setStylePrimaryName("monthPanelHeader");
 		return headerPanel;
 	}
@@ -222,5 +223,15 @@ public class MonthPanel
 		todayFallsOnThisMonth = (date.getMonth() == _month);
 		
 		return todayFallsOnThisMonth;
+	}
+	
+	public int getMonth()
+	{
+		return _month;
+	}
+	
+	public int getYear()
+	{
+		return _year;
 	}
 }

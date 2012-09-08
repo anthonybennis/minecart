@@ -292,7 +292,7 @@ public class PlanGenerator
 		{
 			lastPlanItem = planList.get(planList.size()-1);
 			lastDaysDate = lastPlanItem.getDate();
-			lastDaysDate = this.advanceDateOneDay(lastDaysDate); 
+			lastDaysDate = SuperDateUtil.advanceDateOneDay(lastDaysDate); 
 		}
 		else // First PlanItem of Plan.
 		{
@@ -424,9 +424,13 @@ public class PlanGenerator
 	 * We always start the plan on a Monday
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, SuperDateUtil raceDate, int experience)
 	{
 		Date startDate = new Date();
+		startDate.setDate(raceDate.getDay());
+		startDate.setMonth(raceDate.getMonth());
+		startDate.setYear(raceDate.getYear());
 		
 		/*
 		 * For example: The plan is 8 weeks.
@@ -440,7 +444,7 @@ public class PlanGenerator
 		int recommendedDaysNeeded = PlanGenerator.getRecommendedDaysNeeded(distance, raceDate, experience);
 
 		recommendedDaysNeeded = -recommendedDaysNeeded;
-		CalendarUtil.addDaysToDate(startDate, recommendedDaysNeeded); 
+		startDate.setDate(recommendedDaysNeeded);
 		
 		/*
 		 * If not Monday... keep going forward until we hit a Monday.
@@ -451,16 +455,7 @@ public class PlanGenerator
 		return startDate;
 	}
 
-	/**
-	 * TODO AB Refactor: move to date utils.
-	 * @return
-	 */
-	@SuppressWarnings("deprecation")
-	private Date advanceDateOneDay(Date date)
-	{
-		date.setDate(date.getDate() + 1);
-		return date;
-	}
+
 	
 	/**
 	 * 

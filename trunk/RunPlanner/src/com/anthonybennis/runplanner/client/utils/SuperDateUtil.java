@@ -65,6 +65,17 @@ public class SuperDateUtil
 	}
 	
 	/**
+	 * TODO AB Refactor: move to date utils.
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static Date advanceDateOneDay(Date date)
+	{
+		date.setDate(date.getDate() + 1);
+		return date;
+	}
+	
+	/**
 	 * 
 	 * @param year
 	 */
@@ -94,7 +105,7 @@ public class SuperDateUtil
 		
 		for (int i = 0; i < monthNames.length; i++) 
 		{
-			if ((i+1) == month)
+			if (i == month)
 			{
 				monthName = monthNames[i];
 				break;
