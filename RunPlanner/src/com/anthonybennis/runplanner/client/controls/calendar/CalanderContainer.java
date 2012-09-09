@@ -55,11 +55,12 @@ public class CalanderContainer
 		 */
 		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
 		_leftButton = new PushButton(leftbuttonIcon);
-		_leftButton.setHeight("500px");
+		_leftButton.setHeight("570px");
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
 		_mainCalanderPanel.add(_leftButton);
 		_deckPanel = new DeckPanel();
+		_deckPanel.setAnimationEnabled(false);		
 		
 		/*
 		 * Intro Panel
@@ -81,7 +82,7 @@ public class CalanderContainer
 		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
 		_rightButton = new PushButton(buttonIcon);
 		_rightButton.setHeight("100%");
-		_rightButton.setHeight("500px");
+		_rightButton.setHeight("570px");
 		_rightButton.getElement().getStyle().setOpacity(0.5);
 		_rightButton.setVisible(false);
 		_mainCalanderPanel.add(_rightButton);

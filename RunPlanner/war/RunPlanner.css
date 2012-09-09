@@ -1,7 +1,7 @@
 /** Add css rules here for your application. */
 
 html { 
-	background: url('images/BlackWoodTexture.jpg') no-repeat center center fixed; 
+	background: url('images/LeatherBackground.jpg') repeat-x center center fixed; 
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -47,14 +47,12 @@ h1 {
         outline-width: 3px;
     }
     
- .audioButton
+ .experienceButton
 {
         margin: 0px;
-        height: 32px;
-        width: 32px;
+        height: 70px;
+        width: 0px;
         color:  #000000;
-        vertical-align: middle;
-        horizontal-align: middle;
         background: #000000;
         border: 0px solid #3079ED;
         outline-color: #000000;
@@ -102,7 +100,7 @@ h1 {
 
 .cellWalkRunMixLabel {
 	color: #FFFFFF;
-	font: normal 18px tahoma, arial, helvetica, sans-serif;
+	font: normal 16px tahoma, arial, helvetica, sans-serif;
 }
 
 .monthPanelHeader {

@@ -42,7 +42,6 @@ public class DistancePanelManager
 	protected Panel createDistancePanel()
 	{
 		VerticalPanel distancePanel = new VerticalPanel();
-		distancePanel.setSpacing(15);
 		
 		if (this.getDistanceUnits() == DISTANCE_UNIT.METRIC)
 		{
