@@ -295,7 +295,7 @@ public class SuperDateUtil
 		
 		java.util.Date raceDate = new java.util.Date();
 		raceDate.setDate(_day);
-		raceDate.setMonth(_month - 1); // Java base is 0 for month
+		raceDate.setMonth(_month); // Java base is 0 for month
 		raceDate.setYear(_year - 1900);
 		
 		java.util.Date todaysDate = new java.util.Date();

@@ -48,9 +48,9 @@ public class RunPlanner implements EntryPoint
 		/*
 		 * Main container
 		 */
-		FlowPanel mainPanel = new FlowPanel();
+		Panel mainPanel = new HorizontalPanel();
 		mainPanel.setSize("100%", "100%");
-		mainPanel.getElement().getStyle().setBackgroundImage("images/BlackWoodTexture.jpg");
+
 		/*
 		 * Header Panel
 		 */
@@ -60,42 +60,25 @@ public class RunPlanner implements EntryPoint
 		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
 		/*
-		 * Audio toggle button.
-		 * TODO Consider making this "Beginner/Intermediate" option.
+		 * Advanced/Beginner Toggle Buttons.
 		 */
-		Image audio = new Image(Resources.INSTANCE.getAudioButton());
-		Image noAudio = new Image(Resources.INSTANCE.getNoAudioButton());
+		Label experienceLabel = new Label("Experience:");
+		experienceLabel.setStylePrimaryName("smallWhiteText");
+		Image beginnerImage = new Image(Resources.INSTANCE.getBeginnerButtonImage());
+		Image beginnergGreyImage = new Image(Resources.INSTANCE.getBeginnerGreyButtonImage());
+		Image intermediateImage = new Image(Resources.INSTANCE.getIntermediateButtonImage());
+		Image intermediateGreyImage = new Image(Resources.INSTANCE.getIntermediateGreyButtonImage());
 		
-		final ToggleButton audioToggleButton = new ToggleButton(audio,noAudio);
-		audioToggleButton.setStylePrimaryName("audioButton");
-		audioToggleButton.setSize("64px", "64px");
-		audioToggleButton.setTitle("Audio");
-
-		audioToggleButton.addTouchEndHandler(new TouchEndHandler() {
-			
-			@Override
-			public void onTouchEnd(TouchEndEvent arg0) {
-				AudioOnOffHandler.toggleAudio(audioToggleButton.getValue());
-				Audio.playButtonClick();
-			}
-		});
+		ToggleButton beginnerButton = new ToggleButton(beginnerImage, beginnergGreyImage);
+		beginnerButton.setStylePrimaryName("experienceButton");
+		beginnerButton.setValue(true); // TODO Load experience value from store.
 		
-		audioToggleButton.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) 
-			{
-				PlanGenerator.main(null);
-				AudioOnOffHandler.toggleAudio(audioToggleButton.getValue());
-				Audio.playButtonClick();
-			}
-		});
+		ToggleButton intermediateButton = new ToggleButton(intermediateImage, intermediateGreyImage);
+		intermediateButton.setStylePrimaryName("experienceButton");
 		
-		if (!AudioOnOffHandler.isAudioOn())
-		{
-			audioToggleButton.setValue(true);
-		}
-		
+		/*
+		 * Heaer Logo
+		 */
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
 		_calanderManager = new CalanderManager();
 		/*
@@ -116,33 +99,25 @@ public class RunPlanner implements EntryPoint
 		applyChangesPanel.add(applyChangesButton);
 		applyChangesPanel.add(createPlanLabel);
 		
-		
-		headerPanel.add(audioToggleButton);
-		headerPanel.setCellVerticalAlignment(audioToggleButton, HasVerticalAlignment.ALIGN_MIDDLE);
 		headerPanel.add(runPlannerImage);
 		headerPanel.add(applyChangesPanel);
 		headerPanel.setCellVerticalAlignment(applyChangesPanel, HasVerticalAlignment.ALIGN_MIDDLE);
-		
-		headerPanel.setCellHorizontalAlignment(audioToggleButton, HasHorizontalAlignment.ALIGN_LEFT);
 		headerPanel.setCellHorizontalAlignment(applyChangesPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		headerPanel.setCellHorizontalAlignment(runPlannerImage, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		/*
-		 * Date/Disatnce and Calander container
-		 */
-		HorizontalPanel dateDistanceCalanderPanel = new HorizontalPanel();
 		
 		/*
 		 * Date and Distance container
 		 */
 		VerticalPanel distanceAndDateContainer = new VerticalPanel();
-		distanceAndDateContainer.setSpacing(3);
 		distanceAndDateContainer.setHeight("100%");
 		
 		
 		/*
 		 * Target Distance Panel
 		 */
+		Label distanceLabel = new Label("Distance:");
+		distanceLabel.setStylePrimaryName("smallWhiteText");
 		DistancePanelManager distancePanelManager = new DistancePanelManager();
 		Panel distanceButtonPanel = distancePanelManager.createDistancePanel();
 		
@@ -151,19 +126,37 @@ public class RunPlanner implements EntryPoint
 		 */
 		DatePanelManager manager = new DatePanelManager();
 		Canvas datePanel = manager.createCanvas();
+		Label dateLabel = new Label("Race Date:");
+		dateLabel.setStylePrimaryName("smallWhiteText");
 		
+		/*
+		 * Calendar Panel
+		 */
 		Panel calanderPanel = _calanderManager.createCalenderContainer();
-		calanderPanel.getElement().setAttribute("align", "center");
 		
+		/*
+		 * Add Header and Calendar panels to Vertical Panel
+		 */
+		Panel headerAndCalanderPanel = new VerticalPanel();
+		headerAndCalanderPanel.add(headerPanel);
+		headerAndCalanderPanel.add(calanderPanel);
+		
+		/*
+		 * Experience, Distance Buttons and Date Buttons
+		 * in Vertical Panel.
+		 */
+		distanceAndDateContainer.add(experienceLabel);
+		distanceAndDateContainer.add(beginnerButton);
+		distanceAndDateContainer.add(intermediateButton);
+		distanceAndDateContainer.add(distanceLabel);
 		distanceAndDateContainer.add(distanceButtonPanel);
+		distanceAndDateContainer.add(dateLabel);
 		distanceAndDateContainer.add(datePanel);
-		
-		dateDistanceCalanderPanel.add(distanceAndDateContainer);
-		dateDistanceCalanderPanel.add(calanderPanel);
+		distanceAndDateContainer.setCellVerticalAlignment(datePanel, HasVerticalAlignment.ALIGN_TOP);
 		
 		
-		mainPanel.add(headerPanel);
-		mainPanel.add(dateDistanceCalanderPanel);
+		mainPanel.add(distanceAndDateContainer);
+		mainPanel.add(headerAndCalanderPanel);
 		
 		headerElement.add(mainPanel, 10, 10);
 	}

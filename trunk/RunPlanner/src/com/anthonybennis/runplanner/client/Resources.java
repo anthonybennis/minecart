@@ -88,4 +88,16 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/42kmGrey.png")
 	  ImageResource get42kmDisabledButtonImage();
+	  
+	  @Source("images/Beginner.png")
+	  ImageResource getBeginnerButtonImage();
+	  
+	  @Source("images/BeginnerGrey.png")
+	  ImageResource getBeginnerGreyButtonImage();
+	  
+	  @Source("images/Intermediate.png")
+	  ImageResource getIntermediateButtonImage();
+	  
+	  @Source("images/IntermediateGrey.png")
+	  ImageResource getIntermediateGreyButtonImage();
 }

@@ -128,11 +128,14 @@ public class MonthPanel
 	 */
 	private Label createHeaderPanel()
 	{
-		Label headerPanel = new Label();
+		Label monthNameLabel = new Label();
 		String monthName = SuperDateUtil.getMonthName(_month);
-		headerPanel.setText(monthName + " " + this.getYear()); 
-		headerPanel.setStylePrimaryName("monthPanelHeader");
-		return headerPanel;
+		monthNameLabel.setText(monthName + " " + this.getYear()); 
+		monthNameLabel.setStylePrimaryName("monthPanelHeader");
+		
+		monthNameLabel.getElement().setAttribute("align", "center");
+		
+		return monthNameLabel;
 	}
 	
 	/**
