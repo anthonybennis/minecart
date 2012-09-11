@@ -1,17 +1,12 @@
 package com.anthonybennis.runplanner.client;
 
 import com.anthonybennis.runplanner.client.controls.calendar.CalanderManager;
-import com.anthonybennis.runplanner.client.handlers.AudioOnOffHandler;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
-import com.anthonybennis.runplanner.client.logic.PlanGenerator;
+import com.anthonybennis.runplanner.client.handlers.ExperienceButtonHandler;
+import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.TouchEndEvent;
-import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -71,10 +66,25 @@ public class RunPlanner implements EntryPoint
 		
 		ToggleButton beginnerButton = new ToggleButton(beginnerImage, beginnergGreyImage);
 		beginnerButton.setStylePrimaryName("experienceButton");
-		beginnerButton.setValue(true); // TODO Load experience value from store.
 		
 		ToggleButton intermediateButton = new ToggleButton(intermediateImage, intermediateGreyImage);
 		intermediateButton.setStylePrimaryName("experienceButton");
+		
+		beginnerButton.addClickHandler(new ExperienceButtonHandler(beginnerButton,intermediateButton));
+		intermediateButton.addClickHandler(new ExperienceButtonHandler(beginnerButton,intermediateButton));
+		
+		String experienceLevel = Persistance.get(Persistance.EXPERIENCE_LEVEL);
+		
+		if (experienceLevel == null || experienceLevel.equals("0"))
+		{
+			beginnerButton.setValue(true); 
+			intermediateButton.setValue(false);
+		}
+		else
+		{
+			beginnerButton.setValue(false); 
+			intermediateButton.setValue(true);
+		}
 		
 		/*
 		 * Heaer Logo
