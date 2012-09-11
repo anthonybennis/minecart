@@ -20,6 +20,7 @@ public class MonthPanel
 	private List<Cell> _dayCells = new ArrayList<Cell>();
 	private int _month;
 	private int _year;
+	private Label _monthNameLabel;
 	
 	public MonthPanel(int month, int year)
 	{
@@ -33,15 +34,15 @@ public class MonthPanel
 	 * 
 	 * @return
 	 */
-	protected Panel createPanel()
+	protected Panel createPanel(Label monthNameLabel)
 	{
 		Panel panel = new VerticalPanel();
 		
 		/*
 		 * Create Month Name Header
 		 */
-		Label headerLabel = this.createHeaderPanel();
-		panel.add(headerLabel);
+		_monthNameLabel = monthNameLabel;
+		this.updateMonthNameLabel();
 		
 		
 		/*
@@ -126,16 +127,10 @@ public class MonthPanel
 	 * 
 	 * @return
 	 */
-	private Label createHeaderPanel()
+	public void updateMonthNameLabel()
 	{
-		Label monthNameLabel = new Label();
 		String monthName = SuperDateUtil.getMonthName(_month);
-		monthNameLabel.setText(monthName + " " + this.getYear()); 
-		monthNameLabel.setStylePrimaryName("monthPanelHeader");
-		
-		monthNameLabel.getElement().setAttribute("align", "center");
-		
-		return monthNameLabel;
+		_monthNameLabel.setText(monthName + " " + this.getYear());
 	}
 	
 	/**

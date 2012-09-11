@@ -9,6 +9,7 @@ import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.utils.MonthPanelSorter;
 import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -29,6 +30,7 @@ public class CalanderContainer
 	private PushButton _leftButton;
 	private PushButton _rightButton;
 	private Label _detailsLabel;
+	private Label _monthNameLabel;
 
 	/**
 	 * Creates the main containers for the Calander widget.
@@ -50,21 +52,42 @@ public class CalanderContainer
 		_mainCalanderPanel.setSize("100%", "100%");
 		
 		/*
+		 * Header Panel
+		 */
+		HorizontalPanel headerPanel = new HorizontalPanel();
+		headerPanel.setWidth("95%");
+		/*
 		 * Left Button
-		 * TODO Add button handler
 		 */
 		Image leftbuttonIcon = new Image(Resources.INSTANCE.getLeftButtonImage());
-		_leftButton = new PushButton(leftbuttonIcon);
-		_leftButton.setHeight("570px");
+		Image leftbuttonDownIcon = new Image(Resources.INSTANCE.getLeftDownButtonImage());
+		_leftButton = new PushButton(leftbuttonIcon, leftbuttonDownIcon);
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
-		_mainCalanderPanel.add(_leftButton);
+		_leftButton.setStylePrimaryName("monthNavButton");
 		_deckPanel = new DeckPanel();
-		_deckPanel.setAnimationEnabled(false);		
+		_deckPanel.setAnimationEnabled(false);	
+		_leftButton.getElement().setAttribute("align", "left");
+		
+		headerPanel.add(_leftButton);
+		_monthNameLabel = this.createMonthNameLabel();
+		headerPanel.setCellVerticalAlignment(_monthNameLabel, HasVerticalAlignment.ALIGN_MIDDLE);
+		headerPanel.add(_monthNameLabel);
+		
+		/*
+		 * Right Button
+		 */
+		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
+		Image rightbuttonDownIcon = new Image(Resources.INSTANCE.getRightDownButtonImage());
+		_rightButton = new PushButton(buttonIcon,rightbuttonDownIcon);
+		_rightButton.getElement().getStyle().setOpacity(0.5);
+		_rightButton.setVisible(false);
+		_rightButton.setStylePrimaryName("monthNavButton");
+		_rightButton.getElement().setAttribute("align", "right");
+		headerPanel.add(_rightButton);
 		
 		/*
 		 * Intro Panel
-		 * TODO Add Health Warning
 		 */
 		_introImage = this.createIntroPanel();
 		_mainCalanderPanel.add(_introImage);
@@ -76,23 +99,13 @@ public class CalanderContainer
 		_mainCalanderPanel.add(_deckPanel);
 		
 		/*
-		 * Right Button
-		 * TODO Add button handler
-		 */
-		Image buttonIcon = new Image(Resources.INSTANCE.getRightButtonImage());
-		_rightButton = new PushButton(buttonIcon);
-		_rightButton.setHeight("100%");
-		_rightButton.setHeight("570px");
-		_rightButton.getElement().getStyle().setOpacity(0.5);
-		_rightButton.setVisible(false);
-		_mainCalanderPanel.add(_rightButton);
-		
-		mainPanel.add(_mainCalanderPanel);
-		
-		/*
 		 * Footer
 		 */
-		Panel footerPanel = this.createFooterPanel(); 
+		Panel footerPanel = this.createFooterPanel();
+		
+		
+		mainPanel.add(headerPanel);
+		mainPanel.add(_mainCalanderPanel);
 		mainPanel.add(footerPanel);
 		
 		/*
@@ -100,11 +113,21 @@ public class CalanderContainer
 		 */
 	
 		 // TODO Do I need to add Touch Listener too?
-		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, false, _leftButton, _rightButton));
-		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, true, _leftButton, _rightButton));
+		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,false, _leftButton, _rightButton));
+		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,true, _leftButton, _rightButton));
 		
 		return mainPanel;
 	}
+	
+	private Label createMonthNameLabel()
+	{
+		_monthNameLabel = new Label("                ");
+		_monthNameLabel.setStylePrimaryName("monthPanelHeader");
+		_monthNameLabel.getElement().setAttribute("align", "center");
+		
+		return _monthNameLabel;
+	}
+	
 	
 	/**
 	 * 
@@ -158,7 +181,7 @@ public class CalanderContainer
 			/*
 			 * Use insert as panels are added after creation.
 			 */
-			monthPanelWidget = panel.createPanel();
+			monthPanelWidget = panel.createPanel(_monthNameLabel);
 			_deckPanel.insert(monthPanelWidget, _deckPanel.getWidgetCount());
 			
 			/*
@@ -240,7 +263,6 @@ public class CalanderContainer
 	private MonthPanel createMonthPanel(int month, int year)
 	{
 		MonthPanel monthPanel = new MonthPanel(month, year);
-		
 		return monthPanel;
 	}
 	

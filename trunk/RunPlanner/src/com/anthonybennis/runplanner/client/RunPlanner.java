@@ -105,13 +105,10 @@ public class RunPlanner implements EntryPoint
 		headerPanel.setCellHorizontalAlignment(applyChangesPanel, HasHorizontalAlignment.ALIGN_RIGHT);
 		headerPanel.setCellHorizontalAlignment(runPlannerImage, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		
 		/*
 		 * Date and Distance container
 		 */
 		VerticalPanel distanceAndDateContainer = new VerticalPanel();
-		distanceAndDateContainer.setHeight("100%");
-		
 		
 		/*
 		 * Target Distance Panel
