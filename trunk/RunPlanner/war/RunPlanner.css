@@ -47,8 +47,7 @@ h1 {
         outline-width: 3px;
     }
     
- .experienceButton
-{
+ .experienceButton{
         margin: 0px;
         height: 70px;
         width: 0px;
@@ -57,7 +56,18 @@ h1 {
         border: 0px solid #3079ED;
         outline-color: #000000;
         outline-width: 0px;
-    }
+}
+
+ .monthNavButton{
+        margin: 0px;
+        height: 70px;
+        width: 0px;
+        color:  #000000;
+        background: #000000;
+        border: 0px solid #3079ED;
+        outline-color: #000000;
+        outline-width: 0px;
+}
 
 .dialogVPanel {
   margin: 5px;
