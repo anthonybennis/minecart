@@ -1,6 +1,9 @@
 package com.anthonybennis.runplanner.client.handlers;
 
+import java.util.List;
+
 import com.anthonybennis.runplanner.client.Audio;
+import com.anthonybennis.runplanner.client.controls.calendar.MonthPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DeckPanel;
@@ -16,13 +19,15 @@ public class ButtonNavigationHandler implements ClickHandler
 	private boolean _moveForward;
 	private PushButton _leftButton;
 	private PushButton _rightButton;
+	private List<MonthPanel> _monthPanels;
 	
 	/**
 	 * 
 	 */
-	public ButtonNavigationHandler(DeckPanel deckPanel, boolean moveForward, PushButton leftButton, PushButton rightButton)
+	public ButtonNavigationHandler(DeckPanel deckPanel, List<MonthPanel> monthPanels, boolean moveForward, PushButton leftButton, PushButton rightButton)
 	{
 		_moveForward = moveForward;
+		_monthPanels = monthPanels;
 		_deckPanel = deckPanel;	
 		_leftButton = leftButton;
 		_rightButton = rightButton;
@@ -41,7 +46,7 @@ public class ButtonNavigationHandler implements ClickHandler
 		else
 		{
 			this.moveBackward(numerOfMonthPanels,visbleMonthIndex);
-		}		
+		}
 	}
 	
 	/**
@@ -74,6 +79,11 @@ public class ButtonNavigationHandler implements ClickHandler
 			
 			Audio.playButtonClick();
 			_deckPanel.showWidget(indexToShow);
+			/*
+			 * TODO Test that the index matches.
+			 */
+			_monthPanels.get(indexToShow).updateMonthNameLabel();
+			
 		}
 	}
 	
@@ -106,6 +116,13 @@ public class ButtonNavigationHandler implements ClickHandler
 			
 			Audio.playButtonClick();
 			_deckPanel.showWidget(indexToShow);
+			
+			/*
+			 * TODO Test that the index matches.
+			 */
+			_monthPanels.get(indexToShow).updateMonthNameLabel();
 		}
+		
+		
 	}
 }
