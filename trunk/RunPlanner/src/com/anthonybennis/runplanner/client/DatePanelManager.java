@@ -140,11 +140,13 @@ public class DatePanelManager implements IDateReciever
 		if (userpersistedTargetDate == null)
 		{
 			Date date = new Date();
-			date.setDate(date.getDate() + 180);
+			date.setDate(date.getDate() + 180); // Our fiest
 			
 			_raceDate.setDay(1);
 			_raceDate.setMonth(date.getMonth());
-			_raceDate.setYear(date.getYear());
+			int year = date.getYear();
+			year = date.getYear() + 1900;
+			_raceDate.setYear(year);
 		}
 		else
 		{
