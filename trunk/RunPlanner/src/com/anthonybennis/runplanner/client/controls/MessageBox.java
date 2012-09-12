@@ -1,6 +1,7 @@
 package com.anthonybennis.runplanner.client.controls;
 
-import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * This class launches pop up message dialogs.
@@ -13,19 +14,16 @@ public class MessageBox
 		
 	}
 	
+	/*
+	 * TODO This message box does not have a back ground!
+	 */
 	public void open(String message)
 	{
-		DialogBox dialogBox = new DialogBox();
-		dialogBox.setAnimationEnabled(true);
-		dialogBox.setAutoHideEnabled(true);
-		dialogBox.setGlassEnabled(true);
-		dialogBox.setModal(true);
-		dialogBox.setPixelSize(600, 400);
-		dialogBox.setTitle("Run Planner");
-		dialogBox.setText(message);
-		dialogBox.center();
-		
-		dialogBox.show();
+		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
+	    simplePopup.setWidth("150px");
+	    simplePopup.setWidget(new Label(message));
+	    simplePopup.center();
+	    simplePopup.show();
 	}
 	
 }

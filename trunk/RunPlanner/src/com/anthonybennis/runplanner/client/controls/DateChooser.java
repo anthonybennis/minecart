@@ -153,6 +153,12 @@ public class DateChooser
 			_monthControl.setValue("" + date.getMonthName());
 			_yearsControl.setValue("" + date.getYear());
 		}
+		else
+		{
+			/*
+			 * Set default Date and store.
+			 */
+		}
 		
 	}
 	

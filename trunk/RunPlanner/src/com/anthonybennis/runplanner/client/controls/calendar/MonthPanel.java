@@ -40,10 +40,10 @@ public class MonthPanel
 		
 		/*
 		 * Create Month Name Header
+		 * This is not set now, but after all panels are created, and when the
+		 * user clicks Left or Right.
 		 */
 		_monthNameLabel = monthNameLabel;
-		this.updateMonthNameLabel();
-		
 		
 		/*
 		 * Create GridPanel for cells.
@@ -93,12 +93,19 @@ public class MonthPanel
 		 * Create Labels
 		 */
 		Label mondayLabel = new Label(weekDayNames[1]);
+		mondayLabel.getElement().setAttribute("align", "center");
 		Label tuesdayLabel = new Label(weekDayNames[2]);
+		tuesdayLabel.getElement().setAttribute("align", "center");
 		Label wednesdayLabel = new Label(weekDayNames[3]);
+		wednesdayLabel.getElement().setAttribute("align", "center");
 		Label thursdayLabel = new Label(weekDayNames[4]);
+		thursdayLabel.getElement().setAttribute("align", "center");
 		Label fridayLabel = new Label(weekDayNames[5]);
+		fridayLabel.getElement().setAttribute("align", "center");
 		Label saturdayLabel = new Label(weekDayNames[6]);
+		saturdayLabel.getElement().setAttribute("align", "center");
 		Label sundayLabel = new Label(weekDayNames[0]);
+		sundayLabel.getElement().setAttribute("align", "center");
 		
 		/*
 		 * Set style
