@@ -49,13 +49,12 @@ public class CalanderContainer
 		mainPanel.setHeight("100%");
 		
 		_mainCalanderPanel = new HorizontalPanel();
-		_mainCalanderPanel.setSize("100%", "100%");
 		
 		/*
 		 * Header Panel
 		 */
 		HorizontalPanel headerPanel = new HorizontalPanel();
-		headerPanel.setWidth("95%");
+		headerPanel.setWidth("97%");
 		/*
 		 * Left Button
 		 */
@@ -65,11 +64,12 @@ public class CalanderContainer
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
 		_leftButton.setStylePrimaryName("monthNavButton");
-		_deckPanel = new DeckPanel();
-		_deckPanel.setAnimationEnabled(false);	
 		_leftButton.getElement().setAttribute("align", "left");
-		
 		headerPanel.add(_leftButton);
+		/*
+		 * Month name panel
+		 */
+		
 		_monthNameLabel = this.createMonthNameLabel();
 		headerPanel.setCellVerticalAlignment(_monthNameLabel, HasVerticalAlignment.ALIGN_MIDDLE);
 		headerPanel.add(_monthNameLabel);
@@ -87,6 +87,12 @@ public class CalanderContainer
 		headerPanel.add(_rightButton);
 		
 		/*
+		 * Deck panel (Month Panel container)
+		 */
+		_deckPanel = new DeckPanel();
+		_deckPanel.setAnimationEnabled(false);
+		
+		/*
 		 * Intro Panel
 		 */
 		_introImage = this.createIntroPanel();
@@ -95,14 +101,12 @@ public class CalanderContainer
 		/*
 		 * Calander
 		 */
-		_deckPanel.setSize("100%", "100%");
 		_mainCalanderPanel.add(_deckPanel);
 		
 		/*
 		 * Footer
 		 */
 		Panel footerPanel = this.createFooterPanel();
-		
 		
 		mainPanel.add(headerPanel);
 		mainPanel.add(_mainCalanderPanel);
@@ -194,6 +198,14 @@ public class CalanderContainer
 		}
 		
 		/*
+		 * Update Month Panel Name with first month
+		 */
+		if (monthPanels != null && monthPanels.size() > 0)
+		{
+			monthPanels.get(0).updateMonthNameLabel();
+		}
+		
+		/*
 		 * Display today on Calander if today is in Plan
 		 * If not, display first month of plan.
 		 */
@@ -212,7 +224,10 @@ public class CalanderContainer
 		/*
 		 * Footer info/ 
 		 */
-		_detailsLabel.setText("Training plan starts on the " + planItems.get(planItems.size() - 1).getDate().toString());
+		if (planItems != null && planItems.size() > 0)
+		{
+			_detailsLabel.setText("Training plan starts on the " + planItems.get(planItems.size() - 1).getDate().toString());
+		}
 	}
 	
 	/**
@@ -317,6 +332,18 @@ public class CalanderContainer
 	private Panel createFooterPanel()
 	{
 		Panel footer = new HorizontalPanel();
+		/*
+		 * TODO Add icons legend
+		 */
+		
+		/*
+		 * TODO Add webOS Calender format buttons (List, or calender).
+		 */
+		
+		/*
+		 * TODO ENHANCEMENT Add progress line, showing start date and end date and current date, if on line
+		 * See: PlanProgressIndicator
+		 */
 		
 		_detailsLabel = new Label();
 		

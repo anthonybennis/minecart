@@ -300,9 +300,7 @@ public class PlanGenerator
 		}
 		
 		int number = planList.size();
-			
 	
-		
 		int daysLeftToDate = CalendarUtil.getDaysBetween(lastDaysDate, _raceDate.toDate());
 		
 		PlanItem planItem = null;
@@ -318,8 +316,11 @@ public class PlanGenerator
 			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
 		}
 		
+		/*
+		 * FYI - A plan item in String looks like this:
+		 * 44/15#10#2011#/1@Walk@1.0@%2@Run@1.0@%3@Walk@1.0@%/MIX/ /
+		 */
 		planList.add(planItem);
-		System.out.println("Created PlanItem: " + planItem.toString());
 		
 		return planList;
 	}
@@ -363,11 +364,12 @@ public class PlanGenerator
 		 */
 		if (distance == DISTANCE.FIVE_KM && experience == 0)
 		{
-			recommendedDays = 56; // Beginner 5KM: 8 weeks/56 days
+			recommendedDays = 63; // Beginner 5KM: 8 weeks/56 days
 		}
 		else if (distance == DISTANCE.TEN_KM && experience == 0)
 		{
 			// TODO AB Calculate recommended days
+			recommendedDays = 56;
 		}
 		else if (distance == DISTANCE.TWNETY_ONE_KM && experience == 0)
 		{
@@ -532,11 +534,30 @@ public class PlanGenerator
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);
 		
+		/*
+		 * Print out how many days per plan
+		 */
+		
+		/*
+		 * Beginner Plans
+		 */
 		PlanGenerator gen = new PlanGenerator(DistancePanelManager.DISTANCE.FIVE_KM, 0,runPlannerDate);
-		Date date = new Date();
-		gen.calculatePlansStartDate(DistancePanelManager.DISTANCE.FIVE_KM, runPlannerDate, 0);
-//		List<PlanItem> plan = gen.generatePlan();
-//		gen.savePlan(plan);
-//		gen.loadPlan();
+		List<PlanItem> plan = gen.generatePlan();
+		System.out.println("Beginner 5km Plan has: " + plan.size() + " days.");
+		
+		gen = new PlanGenerator(DistancePanelManager.DISTANCE.TEN_KM, 0,runPlannerDate);
+		plan = gen.generatePlan();
+		System.out.println("Beginner 10km Plan has: " + plan.size() + " days.");
+		
+		/*
+		 * Intermediate Plans
+		 */
+		gen = new PlanGenerator(DistancePanelManager.DISTANCE.FIVE_KM, 1,runPlannerDate);
+		plan = gen.generatePlan();
+		System.out.println("Intermediate 5km Plan has: " + plan.size() + " days.");
+		
+		gen = new PlanGenerator(DistancePanelManager.DISTANCE.TEN_KM, 1,runPlannerDate);
+		plan = gen.generatePlan();
+		System.out.println("Intermediate 10km Plan has: " + plan.size() + " days.");
 	}
 }

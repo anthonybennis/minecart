@@ -49,12 +49,6 @@ public class CreatePlanClickHandler implements TouchEndHandler, ClickHandler
 	 */
 	private void createPlan()
 	{
-		/*
-		 * TODO Temp, Until we get an Experience level
-		 */
-		Persistance.store(Persistance.EXPERIENCE_LEVEL, "0");
-		
-		
 		String distance = Persistance.get(Persistance.TARGET_DISTANCE);
 		String date = Persistance.get(Persistance.TARGET_DATE);
 		String experience = Persistance.get(Persistance.EXPERIENCE_LEVEL);

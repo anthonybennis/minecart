@@ -7,6 +7,8 @@ import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -64,10 +66,10 @@ public class RunPlanner implements EntryPoint
 		Image intermediateImage = new Image(Resources.INSTANCE.getIntermediateButtonImage());
 		Image intermediateGreyImage = new Image(Resources.INSTANCE.getIntermediateGreyButtonImage());
 		
-		ToggleButton beginnerButton = new ToggleButton(beginnerImage, beginnergGreyImage);
+		ToggleButton beginnerButton = new ToggleButton(beginnergGreyImage, beginnerImage);
 		beginnerButton.setStylePrimaryName("experienceButton");
 		
-		ToggleButton intermediateButton = new ToggleButton(intermediateImage, intermediateGreyImage);
+		ToggleButton intermediateButton = new ToggleButton(intermediateGreyImage, intermediateImage);
 		intermediateButton.setStylePrimaryName("experienceButton");
 		
 		beginnerButton.addClickHandler(new ExperienceButtonHandler(beginnerButton,intermediateButton));
@@ -75,10 +77,17 @@ public class RunPlanner implements EntryPoint
 		
 		String experienceLevel = Persistance.get(Persistance.EXPERIENCE_LEVEL);
 		
-		if (experienceLevel == null || experienceLevel.equals("0"))
+		if (experienceLevel == null) // Set Default Experience level.
+		{
+			experienceLevel = "0";
+			Persistance.store(Persistance.EXPERIENCE_LEVEL, experienceLevel); 
+		}
+		
+		if (experienceLevel.equals("0"))
 		{
 			beginnerButton.setValue(true); 
 			intermediateButton.setValue(false);
+			
 		}
 		else
 		{
@@ -87,9 +96,21 @@ public class RunPlanner implements EntryPoint
 		}
 		
 		/*
-		 * Heaer Logo
+		 * Header Logo
 		 */
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
+		runPlannerImage.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				/*
+				 * TODO Launch About Box
+				 * (And clear All option?)
+				 */
+				Persistance.clearAll();
+			}
+		});
+		
 		_calanderManager = new CalanderManager();
 		/*
 		 * Apply Changes Button

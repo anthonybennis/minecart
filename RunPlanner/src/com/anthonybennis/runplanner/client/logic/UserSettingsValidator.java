@@ -1,6 +1,9 @@
 package com.anthonybennis.runplanner.client.logic;
 
 import com.anthonybennis.runplanner.client.controls.MessageBox;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * 
@@ -54,16 +57,23 @@ public class UserSettingsValidator
 //				messageBoxMessage = experienceValueIsValid;
 //			}
 		}
+
+		/*
+		 * Test new Popup
+		 */
+
+
 		
-		if (messageBoxMessage != null)
-		{
-			MessageBox messageBox = new MessageBox();
-			messageBox.open(messageBoxMessage);
-		}
-		else
-		{
+		
+//		if (messageBoxMessage != null)
+//		{
+//			MessageBox messageBox = new MessageBox();
+//			messageBox.open(messageBoxMessage);
+//		}
+//		else
+//		{
 			isValid = true;
-		}
+//		}
 		
 		return isValid;
 	}

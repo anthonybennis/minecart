@@ -32,8 +32,6 @@ public class Persistance
 	 }
 	 
 	 /**
-	  * TODO AB need method to get all and individual calander entries.
-	  * 
 	  * @param key
 	  * @return
 	  */
@@ -47,5 +45,13 @@ public class Persistance
 		 }
 		 
 		 return value;
+	 }
+	 
+	 public static void clearAll()
+	 {
+		 if (STORE != null)
+		 {
+			 STORE.clear();
+		 }
 	 }
 }

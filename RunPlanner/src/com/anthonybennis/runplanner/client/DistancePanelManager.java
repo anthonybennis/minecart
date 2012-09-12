@@ -160,6 +160,7 @@ public class DistancePanelManager
 		else
 		{
 			distance = DISTANCE.FIVE_KM; // Default
+			Persistance.store(Persistance.TARGET_DISTANCE, distance.toString());
 		}
 		
 		return distance;
