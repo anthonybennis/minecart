@@ -442,7 +442,7 @@ public class PlanGenerator
 		Date startDate = new Date();
 		startDate.setDate(raceDate.getDate());
 		startDate.setMonth(raceDate.getMonth());
-		startDate.setYear(raceDate.getYear());
+		startDate.setYear(raceDate.getYear() - 1900);
 		
 		/*
 		 * For example: The plan is 8 weeks.
@@ -462,7 +462,10 @@ public class PlanGenerator
 		 * If not Monday... keep going forward until we hit a Monday.
 		 * All Plans assume they start on a Monday.
 		 */
+		System.err.println(" ");
+		System.err.println("Start Date is originally: " + startDate.getDate() + "," + startDate.getMonth()  + "," + startDate.getYear());
 		startDate = SuperDateUtil.getNextMonday(startDate);
+		System.err.println("Start Date is now changed so it starts on a Monday: " + startDate.getDate() + "," + startDate.getMonth()  + "," + startDate.getYear());
 		
 		return startDate;
 	}
