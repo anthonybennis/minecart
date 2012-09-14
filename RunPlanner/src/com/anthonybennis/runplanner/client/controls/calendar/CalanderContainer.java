@@ -181,7 +181,6 @@ public class CalanderContainer
 		Panel monthPanelWidget;
 		for (MonthPanel panel : monthPanels) 
 		{
-			System.out.println("Creating panel: " + panel.getMonth() + "," + panel.getYear());
 			/*
 			 * Use insert as panels are added after creation.
 			 */
@@ -253,7 +252,6 @@ public class CalanderContainer
 		{
 			month = planItem.getDate().getMonth();
 			year = planItem.getDate().getYear();
-			System.out.println("Creating panel for " + month + ", " + year);
 			
 			monthPanel = this.getMonthPanel(month, year);
 			
@@ -278,6 +276,7 @@ public class CalanderContainer
 	private MonthPanel createMonthPanel(int month, int year)
 	{
 		MonthPanel monthPanel = new MonthPanel(month, year);
+		System.err.println("Create month panel for: " + month + "," + year);
 		return monthPanel;
 	}
 	
