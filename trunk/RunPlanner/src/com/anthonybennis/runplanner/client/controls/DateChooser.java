@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * (Standard GWT DatePicker widget is too cumbersome)
  * 
  * @author abennis
- *
  */
 public class DateChooser 
 {
@@ -34,10 +33,10 @@ public class DateChooser
 	private UpDownControl _yearsControl;
 	private SuperDateUtil _date = new SuperDateUtil();
 	
-	public DateChooser()
-	{
-	}
-	
+	/**
+	 * 
+	 * @param dateReciever
+	 */
 	public void popup(final IDateReciever dateReciever)
 	{
 		final DialogBox dialogBox = new DialogBox();
@@ -71,6 +70,10 @@ public class DateChooser
 		});
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private HorizontalPanel createDatePicker()
 	{
 		HorizontalPanel datePickerPanel = new HorizontalPanel();
@@ -93,6 +96,12 @@ public class DateChooser
 		return datePickerPanel;
 	}
 	
+	/**
+	 * 
+	 * @param plusImage
+	 * @param minusImage
+	 * @return
+	 */
 	private Panel createDateControl(Image plusImage, Image minusImage)
 	{
 		_dateControl = new UpDownControl(plusImage, minusImage);
@@ -106,6 +115,12 @@ public class DateChooser
 		return _dateControl.createUpDownControl(dates);
 	}
 	
+	/**
+	 * 
+	 * @param plusImage
+	 * @param minusImage
+	 * @return
+	 */
 	private Panel createMonthControl(Image plusImage, Image minusImage)
 	{
 		_monthControl = new UpDownControl(plusImage, minusImage);
@@ -113,6 +128,12 @@ public class DateChooser
 		return _monthControl.createUpDownControl(months);
 	}
 	
+	/**
+	 * 
+	 * @param plusImage
+	 * @param minusImage
+	 * @return
+	 */
 	private Panel createYearPanel(Image plusImage, Image minusImage)
 	{
 		_yearsControl = new UpDownControl(plusImage, minusImage);
@@ -126,6 +147,11 @@ public class DateChooser
 		return _yearsControl.createUpDownControl(years);
 	}
 	
+	/**
+	 * 
+	 * @param box
+	 * @return
+	 */
 	private Button createCloseButton(final DialogBox box)
 	{
 		 Button closeButton = new Button("Close");
@@ -142,29 +168,33 @@ public class DateChooser
 		    return closeButton;
 	}
 	
+	/**
+	 * 
+	 */
 	private void loadLastSavedDate()
 	{
 		String stringDate = Persistance.get(Persistance.TARGET_DATE);
 		
+		/*
+		 * Date should never be null. 
+		 * On first loading RunPlanner, the DatePanelManager will create a default race date.
+		 * See DatePanelManager.loadUserTargetDateSettings for implementation.
+		 */
 		if (stringDate != null)
 		{
 			SuperDateUtil date = SuperDateUtil.convertStringToDate(stringDate);
-			_dateControl.setValue("" + date.getDay());
+			_dateControl.setValue("" + date.getDate());
 			_monthControl.setValue("" + date.getMonthName());
 			_yearsControl.setValue("" + date.getYear());
 		}
-		else
-		{
-			/*
-			 * Set default Date and store.
-			 */
-		}
-		
 	}
 	
+	/**
+	 * 
+	 */
 	private void setSelectedDate()
 	{
-		_date.setDay(_dateControl.getValue());
+		_date.setDate(_dateControl.getValue());
 		_date.setMonth(_monthControl.getValue());
 		_date.setYear(_yearsControl.getValue());
 	}
