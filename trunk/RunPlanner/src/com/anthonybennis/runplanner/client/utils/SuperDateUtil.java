@@ -234,8 +234,10 @@ public class SuperDateUtil
 	 * Month is base 0
 	 */
 	@SuppressWarnings("deprecation")
-	public static String getFirstDayOfTheMonth(int month, int year)
+	public static int getFirstDayOfTheMonth(int month, int year)
 	{
+		int weekDayIndex = -1;
+		
 		String firstDayOfMonth = "";
 		java.util.Date date = new java.util.Date();
 		date.setDate(1);
@@ -252,14 +254,14 @@ public class SuperDateUtil
 		{
 			if (weekDaysShort[i].equals(dayShortFormat))
 			{
-				String[] weekDaysLong = SuperDateUtil.geDayNames(false);
+				weekDayIndex = i;
+				String[] weekDaysLong = SuperDateUtil.geDayNames(true);
 				firstDayOfMonth = weekDaysLong[i];
 				break;
 			}
 		}
 		
-		
-		return firstDayOfMonth;
+		return weekDayIndex;
 	}
 	
 	/**
