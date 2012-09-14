@@ -48,7 +48,7 @@ public class MonthPanel
 		/*
 		 * Create GridPanel for cells.
 		 */
-		Grid dateCellsGrid = new Grid(7, 7); // TODO We should dynamically calculate number of rows.
+		Grid dateCellsGrid = new Grid(7, 7);
 		
 		
 		/*
@@ -58,8 +58,6 @@ public class MonthPanel
 		
 		/*
 		 * Add Cells to grid Panel
-		 * TODO Make sure we start the cells on the right
-		 * column for the right first day of the month
 		 */
 		int columnCounter = 0;
 		int rowCounter = 1;
@@ -165,7 +163,43 @@ public class MonthPanel
 	private void createDays(int month, int year)
 	{
 		int numberOfDaysInMonth = SuperDateUtil.daysInMonth(month, year);
-		String day = SuperDateUtil.getFirstDayOfTheMonth(month, year);
+		int weekDayIndex = SuperDateUtil.getFirstDayOfTheMonth(month, year);
+		weekDayIndex = weekDayIndex +  2;
+		
+		/*
+		 * Create empty cells for previous month
+		 * (Every month does not start on a Monday, so we need
+		 * to create the cells for the last month
+		 * 
+		 * TODO AB ENHANCEMENT - Makes these cells grey.
+		 */
+		Date lastMonthsDate;
+		int numberOfDaysInPreviousMonth = SuperDateUtil.daysInMonth((month - 1), year);
+		int lastDayDate = numberOfDaysInPreviousMonth;
+		lastDayDate = lastDayDate - (weekDayIndex - 1); // TODO Why the plus 1?
+		
+		/*
+		 * Debug
+		 */
+		System.err.println("The previous month has " + numberOfDaysInPreviousMonth + " days.");
+		System.err.println("Last months start date is: " + lastDayDate);
+		System.err.println("Goin to create " + lastDayDate + " days from the last month...");
+		
+		for (int i = 0; i < weekDayIndex; i++) // Last months days added in wrong order?
+		{
+			// Set date to this month panels date, so we have the right year
+			lastMonthsDate = new Date();
+			lastMonthsDate.setMonth(month);
+			lastMonthsDate.setYear(year);
+			lastMonthsDate.setDate(lastDayDate);
+			
+			lastMonthsDate.setMonth(lastMonthsDate.getMonth() - 1); // TODO Test this works in all scenarios.
+			
+			
+			_dayCells.add(new Cell(lastMonthsDate));
+			
+			lastDayDate = lastDayDate+1;
+		}
 		
 		Cell cell;
 		Date date;
