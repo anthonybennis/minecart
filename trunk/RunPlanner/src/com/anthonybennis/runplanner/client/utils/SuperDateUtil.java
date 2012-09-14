@@ -7,7 +7,7 @@ import com.google.gwt.i18n.client.LocaleInfo;
 public class SuperDateUtil 
 {
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
-	private int _day = -1;
+	private int _date = -1;
 	private int _month = -1;
 	private int _year = -1;
 	
@@ -23,27 +23,27 @@ public class SuperDateUtil
 	 * 
 	 * @return
 	 */
-	public int getDay() 
+	public int getDate() 
 	{
-		return _day;
+		return _date;
 	}
 	
 	/**
 	 * 
 	 * @param day
 	 */
-	public void setDay(int day) 
+	public void setDate(int day) 
 	{
-		this._day = day;
+		this._date = day;
 	}
 	
 	/**
 	 * 
 	 * @param day
 	 */
-	public void setDay(String day)
+	public void setDate(String day)
 	{
-		this._day = Integer.parseInt(day);
+		this._date = Integer.parseInt(day);
 	}
 	
 	/**
@@ -157,7 +157,7 @@ public class SuperDateUtil
 	 */
 	public String convertToString()
 	{
-		return this.getDay() + "," + this.getMonth() + "," + this.getYear();
+		return this.getDate() + "," + this.getMonth() + "," + this.getYear();
 	}
 	
 	/**
@@ -177,7 +177,7 @@ public class SuperDateUtil
 			dateInString = new String[]{"1","1","2013"};
 		}
 			
-		date.setDay(dateInString[0]);
+		date.setDate(dateInString[0]);
 		date.setMonth(Integer.parseInt(dateInString[1]));
 		date.setYear(dateInString[2]);
 		
@@ -294,7 +294,7 @@ public class SuperDateUtil
 		int daysToGo = 0;
 		
 		java.util.Date raceDate = new java.util.Date();
-		raceDate.setDate(_day);
+		raceDate.setDate(_date);
 		raceDate.setMonth(_month); // Java base is 0 for month
 		raceDate.setYear(_year - 1900);
 		
@@ -336,7 +336,7 @@ public class SuperDateUtil
 	public Date toDate()
 	{
 		Date date = new Date();
-		date.setDate(this.getDay());
+		date.setDate(this.getDate());
 		date.setMonth(this.getMonth());
 		date.setYear(this.getYear());
 		
