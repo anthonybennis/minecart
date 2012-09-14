@@ -283,6 +283,7 @@ public class PlanGenerator
 	 * @param sevenDayWalkRunMix
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private List<PlanItem> addPlanItemToMix(List<PlanItem> planList, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		PlanItem lastPlanItem = null;
@@ -297,6 +298,15 @@ public class PlanGenerator
 		else // First PlanItem of Plan.
 		{
 			lastDaysDate = this.calculatePlansStartDate(_distance, _raceDate, _experience);
+			
+			/*
+			 * Debug output.
+			 */
+			System.err.println(" ");
+			System.err.println("Program will start on the " + lastDaysDate.getDate() + ", " + lastDaysDate.getMonth() + "," + lastDaysDate.getYear());
+			System.err.println("Race date is " + _raceDate.getDate() + "," + _raceDate.getMonth() + "," + _raceDate.getYear());
+			System.err.println("Experience is level: " + _experience);
+			System.err.println("Number of days in plan: " + CalendarUtil.getDaysBetween(lastDaysDate, _raceDate.toDate()));
 		}
 		
 		int number = planList.size();
@@ -430,7 +440,7 @@ public class PlanGenerator
 	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, SuperDateUtil raceDate, int experience)
 	{
 		Date startDate = new Date();
-		startDate.setDate(raceDate.getDay());
+		startDate.setDate(raceDate.getDate());
 		startDate.setMonth(raceDate.getMonth());
 		startDate.setYear(raceDate.getYear());
 		
@@ -470,7 +480,6 @@ public class PlanGenerator
 		
 		for (PlanItem planItem : plan) 
 		{
-			System.out.println("Saving PlanItem: " + planItem.toString());
 			planAsString.append(planItem.toString());
 			planAsString.append(PLAN_SEPERATPOR);
 		}
@@ -530,7 +539,7 @@ public class PlanGenerator
 	public static void main(String[] args)
 	{
 		SuperDateUtil runPlannerDate = new SuperDateUtil();
-		runPlannerDate.setDay(1);
+		runPlannerDate.setDate(1);
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);
 		
