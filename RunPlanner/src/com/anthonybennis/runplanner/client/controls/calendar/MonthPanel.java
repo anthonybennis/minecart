@@ -135,7 +135,7 @@ public class MonthPanel
 	public void updateMonthNameLabel()
 	{
 		String monthName = SuperDateUtil.getMonthName(_month);
-		_monthNameLabel.setText(monthName + " " + this.getYear());
+		_monthNameLabel.setText(monthName + " " + (this.getYear() + 1900));
 	}
 	
 	/**
@@ -174,7 +174,10 @@ public class MonthPanel
 		 * TODO AB ENHANCEMENT - Makes these cells grey.
 		 */
 		Date lastMonthsDate;
-		int numberOfDaysInPreviousMonth = SuperDateUtil.daysInMonth((month - 1), year);
+		
+		int specialPreviousMonthIndex = (month == 0)?11:(month - 1);
+		System.out.println("Month is: " + specialPreviousMonthIndex);
+		int numberOfDaysInPreviousMonth = SuperDateUtil.daysInMonth(specialPreviousMonthIndex, year);
 		int lastDayDate = numberOfDaysInPreviousMonth;
 		lastDayDate = lastDayDate - (weekDayIndex - 1); // TODO Why the plus 1?
 		
