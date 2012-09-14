@@ -115,7 +115,7 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getTargetDay()
 	{
-		return "" + _raceDate.getDay();
+		return "" + _raceDate.getDate();
 	}
 	
 	private String getTargetYear()
@@ -142,11 +142,16 @@ public class DatePanelManager implements IDateReciever
 			Date date = new Date();
 			date.setDate(date.getDate() + 180); // Our fiest
 			
-			_raceDate.setDay(1);
+			_raceDate.setDate(1);
 			_raceDate.setMonth(date.getMonth());
 			int year = date.getYear();
 			year = date.getYear() + 1900;
 			_raceDate.setYear(year);
+			
+			/*
+			 * Persist default date.
+			 */
+			Persistance.store(Persistance.TARGET_DATE, _raceDate.convertToString());
 		}
 		else
 		{
