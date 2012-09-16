@@ -65,15 +65,15 @@ public class UserSettingsValidator
 
 		
 		
-//		if (messageBoxMessage != null)
-//		{
-//			MessageBox messageBox = new MessageBox();
-//			messageBox.open(messageBoxMessage);
-//		}
-//		else
-//		{
+		if (messageBoxMessage != null)
+		{
+			MessageBox messageBox = new MessageBox();
+			messageBox.open(messageBoxMessage);
+		}
+		else
+		{
 			isValid = true;
-//		}
+		}
 		
 		return isValid;
 	}

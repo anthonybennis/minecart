@@ -123,17 +123,9 @@ public class RunPlanner implements EntryPoint
 		applyChangesButton.setStylePrimaryName("largeTextButton");
 		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler(_calanderManager));
 		applyChangesButton.addClickHandler(new CreatePlanClickHandler(_calanderManager));
-		applyChangesButton.getElement().setAttribute("align", "center");
-		Label createPlanLabel = new Label("Click here to create Plan");
-		createPlanLabel.setStylePrimaryName("smallWhiteText");
-		VerticalPanel applyChangesPanel = new VerticalPanel();
-		applyChangesPanel.add(applyChangesButton);
-		applyChangesPanel.add(createPlanLabel);
-		
+
 		headerPanel.add(runPlannerImage);
-		headerPanel.add(applyChangesPanel);
-		headerPanel.setCellVerticalAlignment(applyChangesPanel, HasVerticalAlignment.ALIGN_MIDDLE);
-		headerPanel.setCellHorizontalAlignment(applyChangesPanel, HasHorizontalAlignment.ALIGN_RIGHT);
+		headerPanel.add(applyChangesButton);
 		headerPanel.setCellHorizontalAlignment(runPlannerImage, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		/*

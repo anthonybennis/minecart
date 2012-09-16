@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client.handlers;
 
+import com.anthonybennis.runplanner.client.Audio;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -23,7 +24,7 @@ public class ExperienceButtonHandler implements ClickHandler
 	@Override
 	public void onClick(ClickEvent event) 
 	{
-		
+		Audio.playButtonClick();
 		
 		if (_beginnerToggleButton == event.getSource())
 		{

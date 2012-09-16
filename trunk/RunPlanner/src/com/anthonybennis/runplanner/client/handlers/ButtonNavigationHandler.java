@@ -63,25 +63,8 @@ public class ButtonNavigationHandler implements ClickHandler
 		{
 			indexToShow = currentShownIndex + 1;
 			
-			if (!_leftButton.isEnabled())
-			{
-				_leftButton.setEnabled(true);
-			}
-			
-			if (indexToShow == (numberOfMonthPanels - 1)) // If we're at the last Month Panel.
-			{
-				/*
-				 * Disable button
-				 */
-				_rightButton.setEnabled(false);
-				
-			}
-			
 			Audio.playButtonClick();
 			_deckPanel.showWidget(indexToShow);
-			/*
-			 * TODO Test that the index matches.
-			 */
 			_monthPanels.get(indexToShow).updateMonthNameLabel();
 			
 		}
@@ -100,29 +83,9 @@ public class ButtonNavigationHandler implements ClickHandler
 		{
 			indexToShow = (currentShownIndex -1);
 			
-			if (!_rightButton.isEnabled())
-			{
-				_rightButton.setEnabled(true);
-			}
-			
-			if (indexToShow == 0) // If we're at the first Month Panel.
-			{
-				/*
-				 * Disable button
-				 */
-				_leftButton.setEnabled(false);
-				
-			}
-			
 			Audio.playButtonClick();
 			_deckPanel.showWidget(indexToShow);
-			
-			/*
-			 * TODO Test that the index matches.
-			 */
 			_monthPanels.get(indexToShow).updateMonthNameLabel();
 		}
-		
-		
 	}
 }

@@ -181,6 +181,7 @@ public class CalanderContainer
 		Panel monthPanelWidget;
 		for (MonthPanel panel : monthPanels) 
 		{
+			System.out.println("Creating panel: " + panel.getMonth() + "," + panel.getYear());
 			/*
 			 * Use insert as panels are added after creation.
 			 */
@@ -201,7 +202,8 @@ public class CalanderContainer
 		 */
 		if (monthPanels != null && monthPanels.size() > 0)
 		{
-			monthPanels.get(0).updateMonthNameLabel();
+			_monthNameLabel.setText("Debug: Number of month panels: " + monthPanels.size());
+//			monthPanels.get(0).updateMonthNameLabel();
 		}
 		
 		/*
@@ -225,7 +227,11 @@ public class CalanderContainer
 		 */
 		if (planItems != null && planItems.size() > 0)
 		{
-			_detailsLabel.setText("Training plan starts on the " + planItems.get(planItems.size() - 1).getDate().toString());
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("Start Date: " + planItems.get(0).getDate().toString());
+			stringBuilder.append(" ::: ");
+			stringBuilder.append("End Date: " + planItems.get(planItems.size() - 1).getDate().toString());
+			_detailsLabel.setText(stringBuilder.toString());
 		}
 	}
 	
@@ -331,6 +337,8 @@ public class CalanderContainer
 	private Panel createFooterPanel()
 	{
 		Panel footer = new HorizontalPanel();
+		_detailsLabel = new Label();
+		footer.setWidth("100%");
 		/*
 		 * TODO Add icons legend
 		 */
@@ -343,9 +351,8 @@ public class CalanderContainer
 		 * TODO ENHANCEMENT Add progress line, showing start date and end date and current date, if on line
 		 * See: PlanProgressIndicator
 		 */
-		
-		_detailsLabel = new Label();
-		
+		_detailsLabel.setStylePrimaryName("smallWhiteText");
+		footer.add(_detailsLabel);
 		
 		return footer;
 	}

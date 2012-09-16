@@ -146,7 +146,7 @@ public class MonthPanel
 	{
 		for (Cell cell: _dayCells) 
 		{
-			if (cell.doDatesMatch(planItem))
+			if (cell.doDatesMatch(planItem) && cell.showPlanItemDetails())
 			{
 				cell.setPlanItem(planItem);
 				break;
@@ -188,23 +188,30 @@ public class MonthPanel
 		System.err.println("Last months start date is: " + lastDayDate);
 		System.err.println("Goin to create " + lastDayDate + " days from the last month...");
 		
+		weekDayIndex = (weekDayIndex >= 7)?(weekDayIndex-7):weekDayIndex; // No point shown a full empty week from last month.
+		Cell cell;
 		for (int i = 0; i < weekDayIndex; i++) // Last months days added in wrong order?
 		{
 			// Set date to this month panels date, so we have the right year
 			lastMonthsDate = new Date();
-			lastMonthsDate.setMonth(month);
-			lastMonthsDate.setYear(year);
+			int previousMonthYear = year;
+			if (month == 0)
+			{
+				previousMonthYear = previousMonthYear -1;
+			}
+			
+			lastMonthsDate.setYear(previousMonthYear);
+			lastMonthsDate.setMonth(lastMonthsDate.getMonth() - 1);
 			lastMonthsDate.setDate(lastDayDate);
 			
-			lastMonthsDate.setMonth(lastMonthsDate.getMonth() - 1); // TODO Test this works in all scenarios.
-			
-			
-			_dayCells.add(new Cell(lastMonthsDate));
+			System.err.println("Creating disabled Cell: " + lastMonthsDate.toString());
+			cell = new Cell(lastMonthsDate, true);
+			_dayCells.add(cell);
 			
 			lastDayDate = lastDayDate+1;
 		}
 		
-		Cell cell;
+		
 		Date date;
 		for (int i = 0; i < numberOfDaysInMonth; i++) 
 		{
@@ -213,7 +220,7 @@ public class MonthPanel
 			date.setMonth(month);
 			date.setYear(year);
 			
-			cell = new Cell(date);
+			cell = new Cell(date, false);
 			
 			_dayCells.add(cell);
 		}
