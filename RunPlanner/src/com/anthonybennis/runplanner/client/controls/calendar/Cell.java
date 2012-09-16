@@ -23,15 +23,16 @@ public class Cell
 {
 	private PlanItem _planItem;
 	private Date _date;
+	private boolean  _greyBorder;
 	
 	/**
 	 * 
 	 * @param date
 	 */
-	public Cell(Date date)
+	public Cell(Date date, boolean greyBorder)
 	{
 		_date = date;
-	
+		_greyBorder = greyBorder;
 	}
 	
 	/**
@@ -151,9 +152,22 @@ public class Cell
 	 * 
 	 * @param planItem
 	 */
+	@SuppressWarnings("deprecation")
 	protected void setPlanItem(PlanItem planItem)
 	{
 		_planItem = planItem;
+		
+		if (_planItem != null && _planItem.getDate() != null)
+		{
+			_date.setDate(_planItem.getDate().getDate());
+			_date.setMonth(_planItem.getDate().getMonth());
+			_date.setYear(_planItem.getDate().getYear());
+		}
+	}
+	
+	protected boolean showPlanItemDetails()
+	{
+		return !_greyBorder;
 	}
 	
 	protected PlanItem getPlanItem()
@@ -183,7 +197,7 @@ public class Cell
 	protected Panel createPanel()
 	{
 		Panel mainCellPanel = new VerticalPanel();
-		mainCellPanel.setSize("120px", "100px"); // TODO AB Hard coded so all cells are the same. Can we do this more dynamically?
+		mainCellPanel.setSize("105px", "90px"); // TODO AB Hard coded so all cells are the same. Can we do this more dynamically?
 		mainCellPanel.setStylePrimaryName("cellPanel");
 		
 		if (_planItem != null)
@@ -205,6 +219,11 @@ public class Cell
 		return mainCellPanel;
 	}
 	
+	/**
+	 * 
+	 * @param parentPanel
+	 * @param planItem
+	 */
 	private void createCell(Panel parentPanel, PlanItem planItem)
 	{
 		if (_planItem != null) // Should never be null!
@@ -214,23 +233,9 @@ public class Cell
 			
 			parentPanel.add(headerPanel);
 			parentPanel.add(walkRunMixPanel);
-			
-			/*
-			 * Highlight Cell if today is = _date
-			 */
-			if (this.isToday())
-			{
-				headerPanel.getElement().getStyle().setBackgroundColor("yellow");
-			}
-			
-			/*
-			 * TODO Highlight Cell if today is start day
-			 */
-			
-			/*
-			 * TODO Highlight Cell if today is Race day
-			 */
 		}
+		
+		this.setCellStyle(parentPanel);
 	}
 	
 	/**
@@ -241,8 +246,36 @@ public class Cell
 	{
 		Label dateLabel = this.createDateLabel();
 		parentPanel.add(dateLabel);
+		this.setCellStyle(parentPanel);
 	}
 	
+	private void setCellStyle(Panel parentPanel)
+	{
+		/*
+		 * Highlight Cell if today is = _date
+		 */
+		if (this.isToday())
+		{
+			parentPanel.setStylePrimaryName("todaysCellPanel");
+		}
+		/*
+		 * The Cell is in a month panel of a different month?
+		 */
+		else if (_greyBorder)
+		{
+			System.err.println("A grey cell!");
+			parentPanel.setStylePrimaryName("greyedOutCellPanel");
+		}
+		
+		/*
+		 * TODO Highlight Cell if today is start day
+		 */
+		
+		/*
+		 * TODO Highlight Cell if today is Race day
+		 */
+		
+	}
 	
 	/**
 	 * 

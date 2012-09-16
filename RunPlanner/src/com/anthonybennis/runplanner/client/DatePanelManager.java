@@ -30,8 +30,8 @@ public class DatePanelManager implements IDateReciever
 	{
 		_canvas = Canvas.createIfSupported(); // We only release on Platforms that support this.
 		_canvas.addClickHandler(new DatePickerHandler(this));
-		_canvas.getCanvasElement().setWidth(205);
-		_canvas.getCanvasElement().setHeight(213);
+		_canvas.getCanvasElement().setWidth(164);
+		_canvas.getCanvasElement().setHeight(170);
 
 		this.update();
 	
@@ -47,32 +47,32 @@ public class DatePanelManager implements IDateReciever
 			/*
 			 * Draw Background Image
 			 */
-			context2d.clearRect(0, 0,205, 213); // Clear
+			context2d.clearRect(0, 0,164,170); // Clear
 			context2d.setGlobalAlpha(.6);
-			context2d.drawImage(_imageElement, 0, 0, 205,213);
+			context2d.drawImage(_imageElement, 0, 0, 164,170);
 			/*
 			 * Draw text
 			 */
-			context2d.setFont("bold 22px sans-serif");
+			context2d.setFont("bold 18px sans-serif");
 			context2d.setGlobalAlpha(1.0);
 			context2d.setFillStyle("white");
-			context2d.fillText(getDaysRemaining(),30, 40);
+			context2d.fillText(getDaysRemaining(),15, 30);
 			/*
 			 * Draw date
 			 */
 			context2d.setFont("bold 62px sans-serif");
 			String day = this.getTargetDay();
-			int xPos = (day.length() == 1)?85:65;
+			int xPos = (day.length() == 1)?65:45;
 			
-			context2d.fillText(day,xPos, 120);
+			context2d.fillText(day,xPos, 110);
 			
 			/*
 			 * Draw Month
 			 * TODO AB - ENHANCEMENT: Draw year?
 			 */
-			context2d.setFont("bold 22px sans-serif");
+			context2d.setFont("bold 18px sans-serif");
 			String monthAndYear = this.getMonthAndYear(); 
-			xPos = (monthAndYear.length() >11)?20:45;
+			xPos = (monthAndYear.length() >11)?10:45;
 			context2d.fillText(monthAndYear,xPos, 160);
 			
 			context2d.save();

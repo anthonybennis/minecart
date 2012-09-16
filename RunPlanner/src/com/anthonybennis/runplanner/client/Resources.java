@@ -106,4 +106,7 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/IntermediateGrey.png")
 	  ImageResource getIntermediateGreyButtonImage();
+	  
+	  @Source("images/CallHighlight.png")
+	  ImageResource getCellHighlightImage();
 }
