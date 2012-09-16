@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.anthonybennis.runplanner.client.DistancePanelManager;
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
+import com.anthonybennis.runplanner.client.controls.MessageBox;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
@@ -292,8 +293,15 @@ public class PlanGenerator
 		if (planList != null && planList.size() >0) 
 		{
 			lastPlanItem = planList.get(planList.size()-1);
-			lastDaysDate = lastPlanItem.getDate();
-			lastDaysDate = SuperDateUtil.advanceDateOneDay(lastDaysDate); 
+			
+			lastDaysDate = new Date(); // Always create new year or date references get mixed up. 
+			lastDaysDate.setDate(lastPlanItem.getDate().getDate());
+			lastDaysDate.setMonth(lastPlanItem.getDate().getMonth());
+			lastDaysDate.setYear(lastPlanItem.getDate().getYear());
+			
+			lastDaysDate = SuperDateUtil.advanceDateOneDay(lastDaysDate);
+			
+			
 		}
 		else // First PlanItem of Plan.
 		{
@@ -316,6 +324,7 @@ public class PlanGenerator
 		PlanItem planItem = null;
 		if (daysLeftToDate > 7)
 		{
+			
 			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
 		}
 		else

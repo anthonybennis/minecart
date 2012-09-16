@@ -3,6 +3,7 @@ package com.anthonybennis.runplanner.client.handlers;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.DistancePanelManager;
+import com.anthonybennis.runplanner.client.controls.MessageBox;
 import com.anthonybennis.runplanner.client.controls.calendar.CalanderManager;
 import com.anthonybennis.runplanner.client.logic.PlanGenerator;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
@@ -65,6 +66,7 @@ public class CreatePlanClickHandler implements TouchEndHandler, ClickHandler
 			SuperDateUtil runPlannerDate = SuperDateUtil.convertStringToDate(date);
 			PlanGenerator gen = new PlanGenerator(convertedDistance, Integer.parseInt(experience),runPlannerDate);
 			List<PlanItem> plan = gen.generatePlan();
+			
 			gen.savePlan(plan);
 			_calanderManager.update(plan);
 		}

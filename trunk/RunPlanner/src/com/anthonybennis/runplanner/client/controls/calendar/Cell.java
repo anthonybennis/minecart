@@ -3,7 +3,6 @@ package com.anthonybennis.runplanner.client.controls.calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.logic.Activity;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
@@ -88,27 +87,27 @@ public class Cell
 		{
 			case COMFORTABLE:
 			{	
-				image = this.createComfortablePACEImage();
+				image = CalendarImage.createComfortablePACEImage();
 				break;
 			}
 			case FAST:
 			{	
-				image = this.createFastPACEImage();
+				image = CalendarImage.createFastPACEImage();
 				break;
 			}
 			case MIX:
 			{	
-				image = this.createMixPACEImage();
+				image = CalendarImage.createMixPACEImage();
 				break;
 			}
 			case REST:
 			{	
-				image = this.createRestPACEImage();
+				image = CalendarImage.createRestPACEImage();
 				break;
 			}
 			case SLOW:
 			{	
-				image = this.createSlowPACEImage();
+				image = CalendarImage.createSlowPACEImage();
 				break;
 			}
 			default:
@@ -277,60 +276,12 @@ public class Cell
 		
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	private Image createFastPACEImage()
-	{
-		Image image = new Image(Resources.INSTANCE.getFastRunImage());		
-		return image;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private Image createSlowPACEImage()
-	{
-		Image image = new Image(Resources.INSTANCE.getWalkImage());		
-		return image;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private Image createComfortablePACEImage()
-	{
-		Image image = new Image(Resources.INSTANCE.getRunImage());		
-		return image;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private Image createMixPACEImage()
-	{
-		Image image = new Image(Resources.INSTANCE.getMixImage());		
-		return image;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	private Image createRestPACEImage()
-	{
-		Image image = new Image(Resources.INSTANCE.getSmallSleepImage());		
-		return image;
-	}
+
 	
 	private boolean isToday()
 	{
 		boolean isCellsDateTodaysDate = false;
-		Date date = new Date();
+		Date date = new Date();		
 		isCellsDateTodaysDate = SuperDateUtil.isSameDate(_date, date);
 		
 		return isCellsDateTodaysDate;
