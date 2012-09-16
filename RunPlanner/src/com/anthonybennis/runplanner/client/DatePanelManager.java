@@ -9,6 +9,7 @@ import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
  * 
@@ -140,7 +141,7 @@ public class DatePanelManager implements IDateReciever
 		if (userpersistedTargetDate == null)
 		{
 			Date date = new Date();
-			date.setDate(date.getDate() + 180); // Our fiest
+			CalendarUtil.addDaysToDate(date, 180);
 			
 			_raceDate.setDate(1);
 			_raceDate.setMonth(date.getMonth());

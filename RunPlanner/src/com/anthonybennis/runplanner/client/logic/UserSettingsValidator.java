@@ -58,13 +58,6 @@ public class UserSettingsValidator
 //			}
 		}
 
-		/*
-		 * Test new Popup
-		 */
-
-
-		
-		
 		if (messageBoxMessage != null)
 		{
 			MessageBox messageBox = new MessageBox();

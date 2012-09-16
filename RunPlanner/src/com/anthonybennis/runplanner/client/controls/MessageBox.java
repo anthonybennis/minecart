@@ -9,20 +9,20 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class MessageBox 
 {
+	
 	public MessageBox()
 	{
 		
 	}
 	
-	/*
-	 * TODO This message box does not have a back ground!
-	 */
 	public void open(String message)
 	{
 		final DecoratedPopupPanel simplePopup = new DecoratedPopupPanel(true);
-	    simplePopup.setWidth("150px");
+	    simplePopup.setWidth("450px");
 	    simplePopup.setWidget(new Label(message));
 	    simplePopup.center();
+	    simplePopup.setModal(true);
+	    
 	    simplePopup.show();
 	}
 	

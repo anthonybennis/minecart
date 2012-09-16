@@ -2,13 +2,18 @@ package com.anthonybennis.runplanner.client.controls.calendar;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.Resources;
+import com.anthonybennis.runplanner.client.controls.MessageBox;
 import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.utils.MonthPanelSorter;
+import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.user.client.ui.DeckPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -149,6 +154,7 @@ public class CalanderContainer
 	 * 
 	 * @param planItems
 	 */
+	@SuppressWarnings("deprecation")
 	protected void update(List<PlanItem> planItems)
 	{
 		/*
@@ -202,12 +208,11 @@ public class CalanderContainer
 		 */
 		if (monthPanels != null && monthPanels.size() > 0)
 		{
-			_monthNameLabel.setText("Debug: Number of month panels: " + monthPanels.size());
-//			monthPanels.get(0).updateMonthNameLabel();
+			monthPanels.get(0).updateMonthNameLabel();
 		}
 		
 		/*
-		 * Display today on Calander if today is in Plan
+		 * Display today on Calendar if today is in Plan
 		 * If not, display first month of plan.
 		 */
 		int indexOfMonthToShowByDefault = 0;
@@ -223,15 +228,15 @@ public class CalanderContainer
 		}
 		
 		/*
-		 * Footer info/ 
+		 * Footer info
 		 */
 		if (planItems != null && planItems.size() > 0)
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append("Start Date: " + planItems.get(0).getDate().toString());
-			stringBuilder.append(" ::: ");
-			stringBuilder.append("End Date: " + planItems.get(planItems.size() - 1).getDate().toString());
-			_detailsLabel.setText(stringBuilder.toString());
+			Date startDate = planItems.get(0).getDate();
+			String startMonthName = SuperDateUtil.getMonthName(startDate.getMonth());
+			int userReadableYear = startDate.getYear() + 1900;
+			String footerDescription = "Plan starts on " + startDate.getDate() + " " + startMonthName + ", " + userReadableYear;
+			_detailsLabel.setText(footerDescription);
 		}
 	}
 	
@@ -246,6 +251,7 @@ public class CalanderContainer
 	@SuppressWarnings("deprecation")
 	private List<MonthPanel> createAndPopulateMonthPanels(List<PlanItem> planItems)
 	{
+
 		/*
 		 * Create a cell for every Plan Item, and
 		 * add cell to month panel.
@@ -258,7 +264,7 @@ public class CalanderContainer
 		{
 			month = planItem.getDate().getMonth();
 			year = planItem.getDate().getYear();
-			
+
 			monthPanel = this.getMonthPanel(month, year);
 			
 			if (monthPanel == null)
@@ -267,8 +273,13 @@ public class CalanderContainer
 				_monthPanels.add(monthPanel);
 			}
 			
+			/*
+			 * TODO ENHANCEMENT: Show PlanItem in greyed out Cells too.
+			 */
 			monthPanel.addPlanItem(planItem);
 		}
+		
+	
 		
 		return _monthPanels;
 	}
@@ -326,6 +337,8 @@ public class CalanderContainer
 		{
 			if (amonthPanel.match(month, year))
 			{
+	
+				
 				monthPanel = amonthPanel;
 				break;
 			}
@@ -336,23 +349,61 @@ public class CalanderContainer
 	
 	private Panel createFooterPanel()
 	{
-		Panel footer = new HorizontalPanel();
-		_detailsLabel = new Label();
+		VerticalPanel footer = new VerticalPanel();
 		footer.setWidth("100%");
-		/*
-		 * TODO Add icons legend
-		 */
-		
-		/*
-		 * TODO Add webOS Calender format buttons (List, or calender).
-		 */
 		
 		/*
 		 * TODO ENHANCEMENT Add progress line, showing start date and end date and current date, if on line
 		 * See: PlanProgressIndicator
 		 */
+		_detailsLabel = new Label();
 		_detailsLabel.setStylePrimaryName("smallWhiteText");
 		footer.add(_detailsLabel);
+		/*
+		 * TODO Add icons legend
+		 */
+		HorizontalPanel iconLegends = new HorizontalPanel();
+		
+		Label comfortableLabel = new Label("Comfortable pace:");
+		comfortableLabel.setStylePrimaryName("smallWhiteText");
+		Image confortableImage = CalendarImage.createComfortablePACEImage();
+		Label fastLabel = new Label("Fast pace:");
+		fastLabel.setStylePrimaryName("smallWhiteText");
+		Image fast = CalendarImage.createFastPACEImage();
+		Label mixLabel = new Label("Mixed pace:");
+		mixLabel.setStylePrimaryName("smallWhiteText");
+		Image mix = CalendarImage.createMixPACEImage();
+		Label restLabel = new Label("Rest day:");
+		restLabel.setStylePrimaryName("smallWhiteText");
+		Image rest = CalendarImage.createRestPACEImage();
+		Label slowLabel = new Label("slow pace:");
+		slowLabel.setStylePrimaryName("smallWhiteText");
+		Image slow = CalendarImage.createSlowPACEImage();
+		
+		iconLegends.add(comfortableLabel);
+		iconLegends.add(confortableImage);
+		iconLegends.add(new Label("    "));
+		iconLegends.add(fastLabel);
+		iconLegends.add(fast);
+		iconLegends.add(new Label("    "));
+		iconLegends.add(mixLabel);
+		iconLegends.add(mix);
+		iconLegends.add(new Label("    "));
+		iconLegends.add(restLabel);
+		iconLegends.add(rest);
+		iconLegends.add(new Label("    "));
+		iconLegends.add(slowLabel);
+		iconLegends.add(slow);
+		iconLegends.add(new Label("    "));
+		
+		footer.add(iconLegends);
+		
+		/*
+		 * TODO ENHANCEMENT Add webOS Calender format buttons (List, or calender).
+		 */
+		
+		footer.setCellHorizontalAlignment(iconLegends, HasHorizontalAlignment.ALIGN_CENTER);
+		footer.setCellHorizontalAlignment(_detailsLabel, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		return footer;
 	}
