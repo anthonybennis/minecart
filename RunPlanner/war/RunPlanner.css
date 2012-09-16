@@ -110,7 +110,7 @@ h1 {
 
 .cellWalkRunMixLabel {
 	color: #FFFFFF;
-	font: normal 16px tahoma, arial, helvetica, sans-serif;
+	font: normal 14px tahoma, arial, helvetica, sans-serif;
 }
 
 .monthPanelHeader {
@@ -121,4 +121,20 @@ h1 {
 
 .cellIconImage{
 	horizontal-align: right;
+}
+
+.todaysCellPanel { 
+	background: url('images/CallHighlight.png'); 
+	margin: 0px;
+    height: 90px;
+    width: 105px;
+    border: 1px solid #F5D611;
+}
+
+.greyedOutCellPanel { 
+	margin: 0px;
+    height: 90px;
+    width: 105px;
+    border: 1px solid #B8B8B8;
+    opacity:0.2;
 }
