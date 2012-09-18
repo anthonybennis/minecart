@@ -3,6 +3,7 @@ package com.anthonybennis.runplanner.client.utils;
 import java.util.Date;
 
 import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
 
 public class SuperDateUtil 
@@ -313,6 +314,15 @@ public class SuperDateUtil
 			}
 		}
 		
+		if (GWT.isProdMode()) // Difference between Dev and script mode for Date.
+		{
+			weekDayIndex = weekDayIndex +  1; 
+		}
+		else
+		{
+			weekDayIndex = weekDayIndex +  2;
+		}
+		
 		return weekDayIndex;
 	}
 	
@@ -371,7 +381,15 @@ public class SuperDateUtil
 	@SuppressWarnings("deprecation")
 	public static Date getNextMonday(Date startDate)
 	{
-		int desiredDay = 1; // Monday
+		int desiredDay = 0; // Monday
+		
+		if (!GWT.isProdMode()) // Difference between Dev and script mode for Date.
+		{
+			/*
+			 * In dev mode, Monday index is 1.
+			 */
+			desiredDay = 1;
+		}
 		
 		int currDay = startDate.getDay(); 
 		int daysToJump = (7+desiredDay-currDay)%7;

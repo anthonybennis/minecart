@@ -187,7 +187,6 @@ public class CalanderContainer
 		Panel monthPanelWidget;
 		for (MonthPanel panel : monthPanels) 
 		{
-			System.out.println("Creating panel: " + panel.getMonth() + "," + panel.getYear());
 			/*
 			 * Use insert as panels are added after creation.
 			 */
