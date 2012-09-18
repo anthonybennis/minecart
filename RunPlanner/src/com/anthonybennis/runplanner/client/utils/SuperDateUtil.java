@@ -67,70 +67,6 @@ public class SuperDateUtil
 	}
 	
 	/**
-	 * @return
-	 */
-//	public static Date advanceDateOneDay(Date date)
-//	{
-//		CalendarUtil.addDaysToDate(date, 1);
-//		
-//		/*
-//		 * BUG!!!! - Only seems to occur in colmpiled, not dev mode. 
-//		 */
-////		if (day > date.getDate())
-////		{
-////			new MessageBox().open("Attempted to fix BUG");
-////			CalendarUtil.addDaysToDate(date, -2);	
-////		}
-//		
-//		/*
-//		 * Now progress month...
-//		 */
-////		Date advancedDate = new Date();
-////		int daysInMonth = SuperDateUtil.daysInMonth(date.getMonth(), date.getYear());
-////		advancedDate.setYear(date.getYear());
-////		advancedDate.setDate(date.getDate());
-////			
-////		if (date.getMonth() != 11)
-////		{
-////			advancedDate.setMonth(date.getMonth() + 1);
-////		}
-////		else
-////		{
-////			advancedDate.setMonth(0);
-////			advancedDate.setYear(date.getYear() + 1);
-////		}
-//		
-//		
-////		// Bug in Firefox. Month does not advance! Don't ever use: 
-////		// date.setDate(date.getDate() + 1);
-////		
-////		new MessageBox().open("** Current Date is : " + date.getDate() + ":" + date.getMonth() + ":" +  (date.getYear() + 1900));
-////		int monthBefore = date.getMonth();
-////		CalendarUtil.addDaysToDate(date, 1); // Recommended GWT approach.
-////		int monthAfter = date.getMonth();
-////		date.setDate(date.getDate() + 1);
-////		new MessageBox().open("** Advanced one day. Now it's: " + date.getDate() + ":" + date.getMonth() + ":" +  (date.getYear() + 1900));
-////		/*
-////		 * Bug fix for Firefox.
-////		 * Month does not advance, so we force it to advance if we're starting a new month....
-////		 */
-////		
-////		if (date.getDate() == 1 &&
-////				monthBefore == monthAfter)
-////		{
-////			CalendarUtil.addMonthsToDate(date, 1);
-////			new MessageBox().open("** Error detected. So we add one month : " + date.getDate() + ":" + date.getMonth() + ":" +  (date.getYear() + 1900));
-////			/*
-////			 * Advance year
-////			 */
-////		}
-//		
-////		new MessageBox().open("Advanced one day: " + date.getDate() + ":" + date.getMonth() + ":" +  (date.getYear() + 1900));
-//		
-//		return date;
-//	}
-	
-	/**
 	 * 
 	 * @param year
 	 */
@@ -381,16 +317,7 @@ public class SuperDateUtil
 	@SuppressWarnings("deprecation")
 	public static Date getNextMonday(Date startDate)
 	{
-		int desiredDay = 0; // Monday
-		
-		if (!GWT.isProdMode()) // Difference between Dev and script mode for Date.
-		{
-			/*
-			 * In dev mode, Monday index is 1.
-			 */
-			desiredDay = 1;
-		}
-		
+		int desiredDay = 1; // Monday
 		int currDay = startDate.getDay(); 
 		int daysToJump = (7+desiredDay-currDay)%7;
 		
