@@ -262,7 +262,6 @@ public class Cell
 		 */
 		else if (_greyBorder)
 		{
-			System.err.println("A grey cell!");
 			parentPanel.setStylePrimaryName("greyedOutCellPanel");
 		}
 		
