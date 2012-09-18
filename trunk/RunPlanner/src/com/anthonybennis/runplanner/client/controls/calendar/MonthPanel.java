@@ -164,7 +164,7 @@ public class MonthPanel
 	{
 		int numberOfDaysInMonth = SuperDateUtil.daysInMonth(month, year);
 		int weekDayIndex = SuperDateUtil.getFirstDayOfTheMonth(month, year);
-		weekDayIndex = weekDayIndex +  2;
+		weekDayIndex = weekDayIndex +  1;
 		
 		/*
 		 * Create empty cells for previous month

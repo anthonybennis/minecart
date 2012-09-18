@@ -183,7 +183,7 @@ public class Cell
 	{
 		boolean foundAMatch = false;
 		
-		Date planItemDate = planItem.getDate();
+		RunPlannerDate planItemDate = planItem.getDate();
 		foundAMatch = SuperDateUtil.isSameDate(_date, planItemDate); 
 		
 		return foundAMatch;

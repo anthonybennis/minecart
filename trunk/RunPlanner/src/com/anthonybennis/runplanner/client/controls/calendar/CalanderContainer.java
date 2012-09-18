@@ -232,7 +232,7 @@ public class CalanderContainer
 		 */
 		if (planItems != null && planItems.size() > 0)
 		{
-			Date startDate = planItems.get(0).getDate();
+			RunPlannerDate startDate = planItems.get(0).getDate();
 			String startMonthName = SuperDateUtil.getMonthName(startDate.getMonth());
 			int userReadableYear = startDate.getYear() + 1900;
 			String footerDescription = "Plan starts on " + startDate.getDate() + " " + startMonthName + ", " + userReadableYear;
