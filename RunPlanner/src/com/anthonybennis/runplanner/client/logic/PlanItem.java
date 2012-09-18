@@ -1,6 +1,6 @@
 package com.anthonybennis.runplanner.client.logic;
 
-import java.util.Date;
+import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
 
 /**
  * Bean representing a "day entry" of a training plan
@@ -13,7 +13,7 @@ public class PlanItem
 	protected final static String DATE_SEPERATOR = "#";
 	
 	private int _number;
-	private Date _date;
+	private RunPlannerDate _date;
 	private WalkRunMix _walkRunMix;
 	private String _comment;
 	private PACE _pace;
@@ -22,15 +22,13 @@ public class PlanItem
 	 * Constructor
 	 */
 	@SuppressWarnings("deprecation")
-	public PlanItem(int number, Date date, WalkRunMix walkRunMix, PACE pace, String comment)
+	public PlanItem(int number, RunPlannerDate date, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		_number = number;
 		
 		// I need to create a new date as pass by reference means all PlanItems reference the same Date object.
-		_date = new Date();
-		_date.setDate(date.getDate());
-		_date.setMonth(date.getMonth());
-		_date.setYear(date.getYear());
+
+		_date = date;
 		_walkRunMix = walkRunMix;
 		_pace = pace;
 		_comment = comment;
@@ -58,7 +56,7 @@ public class PlanItem
 	 * 
 	 * @return
 	 */
-	public Date getDate()
+	public RunPlannerDate getDate()
 	{
 		return _date;
 	}
@@ -122,7 +120,7 @@ public class PlanItem
 		String[] planItemSplitIntoParts = planItemAsString.split(SEPERATOR);
 		
 		int number = Integer.parseInt(planItemSplitIntoParts[0]);
-		Date date = convertStringToDate(planItemSplitIntoParts[1]);
+		RunPlannerDate date = convertStringToDate(planItemSplitIntoParts[1]);
 		WalkRunMix walkRunMix = WalkRunMix.convertStringToWalkRunMix(planItemSplitIntoParts[2]);
 		PACE pace = convertStringToPace(planItemSplitIntoParts[3]);
 		String comment = planItemSplitIntoParts[4];
@@ -135,7 +133,7 @@ public class PlanItem
 	 */
 	public static void main(String[] args) 
 	{
-		PlanItem planItem = new PlanItem(1,new Date(),new WalkRunMix(1,2,1),PACE.COMFORTABLE, "");
+		PlanItem planItem = new PlanItem(1,new RunPlannerDate(),new WalkRunMix(1,2,1),PACE.COMFORTABLE, "");
 		String plas = planItem.toString();
 		String[] planItemSplitIntoParts = plas.split(SEPERATOR);
 		
@@ -153,9 +151,10 @@ public class PlanItem
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	private static Date convertStringToDate(String date)
+	private static RunPlannerDate convertStringToDate(String date)
 	{
-		Date planItemDate = new Date();
+		RunPlannerDate planItemDate = new RunPlannerDate();
+		
 		String[] dateSplit = date.split(DATE_SEPERATOR);
 		
 		planItemDate.setDate(Integer.parseInt(dateSplit[0]));
@@ -206,7 +205,7 @@ public class PlanItem
 	 * 
 	 */
 	@SuppressWarnings("deprecation")
-	private String convertDateToString(Date date)
+	private String convertDateToString(RunPlannerDate date)
 	{
 		StringBuilder dateAsString = new StringBuilder();
 		dateAsString.append(date.getDate());

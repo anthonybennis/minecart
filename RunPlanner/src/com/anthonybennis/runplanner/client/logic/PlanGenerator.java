@@ -6,10 +6,15 @@ import java.util.List;
 
 import com.anthonybennis.runplanner.client.DistancePanelManager;
 import com.anthonybennis.runplanner.client.DistancePanelManager.DISTANCE;
-import com.anthonybennis.runplanner.client.controls.MessageBox;
+import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 /**
@@ -45,6 +50,8 @@ public class PlanGenerator
 	private DistancePanelManager.DISTANCE _distance;
 	private int _experience; 
 	private SuperDateUtil _raceDate;
+	private ArrayList<RunPlannerDate> _dates;
+	private RunPlannerDate _date;
 	
 	/**
 	 * Constructor
@@ -55,6 +62,9 @@ public class PlanGenerator
 		_distance = distance;
 		_experience = experience;
 		_raceDate = raceDate;
+		
+		// Debug:
+		_dates = new ArrayList<RunPlannerDate>();
 	}
 	
 	/**
@@ -190,6 +200,8 @@ public class PlanGenerator
 		this.addPlanItemToMix(planList, new WalkRunMix(), PACE.REST, ""); // Saturday
 		this.addPlanItemToMix(planList, new WalkRunMix(5), PACE.FAST, ""); // RACE DAY 
 		
+//		this.showDebugDialogBox(_dates);
+		
 		return planList;
 	}
 	
@@ -287,52 +299,48 @@ public class PlanGenerator
 	@SuppressWarnings("deprecation")
 	private List<PlanItem> addPlanItemToMix(List<PlanItem> planList, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
-		PlanItem lastPlanItem = null;
-		Date lastDaysDate = null;
-		
+		PlanItem lastPlanItem = null;		
+		RunPlannerDate date;
 		if (planList != null && planList.size() >0) 
 		{
 			lastPlanItem = planList.get(planList.size()-1);
-			
-			lastDaysDate = new Date(); // Always create new year or date references get mixed up. 
-			lastDaysDate.setDate(lastPlanItem.getDate().getDate());
-			lastDaysDate.setMonth(lastPlanItem.getDate().getMonth());
-			lastDaysDate.setYear(lastPlanItem.getDate().getYear());
-			
-			lastDaysDate = SuperDateUtil.advanceDateOneDay(lastDaysDate);
-			
-			
+			date = RunPlannerDate.advanceOneDay(lastPlanItem.getDate());
 		}
 		else // First PlanItem of Plan.
 		{
-			lastDaysDate = this.calculatePlansStartDate(_distance, _raceDate, _experience);
+			Date startDate = this.calculatePlansStartDate(_distance, _raceDate, _experience);
 			
 			/*
 			 * Debug output.
 			 */
+			date = new RunPlannerDate(startDate.getDate(), startDate.getMonth(), startDate.getYear());
+			
 			System.err.println(" ");
-			System.err.println("Program will start on the " + lastDaysDate.getDate() + ", " + lastDaysDate.getMonth() + "," + lastDaysDate.getYear());
+			System.err.println("Program will start on the " + date.getDate() + ", " + date.getMonth() + "," + date.getYear());
 			System.err.println("Race date is " + _raceDate.getDate() + "," + _raceDate.getMonth() + "," + _raceDate.getYear());
 			System.err.println("Experience is level: " + _experience);
-			System.err.println("Number of days in plan: " + CalendarUtil.getDaysBetween(lastDaysDate, _raceDate.toDate()));
+			
 		}
 		
 		int number = planList.size();
 	
-		int daysLeftToDate = CalendarUtil.getDaysBetween(lastDaysDate, _raceDate.toDate());
+		
+		
+		Date convertedDate = RunPlannerDate.convert(date);
+		int daysLeftToDate = CalendarUtil.getDaysBetween(convertedDate, _raceDate.toDate());
 		
 		PlanItem planItem = null;
 		if (daysLeftToDate > 7)
 		{
 			
-			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
+			planItem = new PlanItem(number,date, walkRunMix, pace, comment);
 		}
 		else
 		{
 			/*
 			 * TODO Generate Last week program dynamically, or from preset.
 			 */
-			planItem = new PlanItem(number,lastDaysDate, walkRunMix, pace, comment);
+			planItem = new PlanItem(number,date, walkRunMix, pace, comment);
 		}
 		
 		/*
@@ -580,5 +588,37 @@ public class PlanGenerator
 		gen = new PlanGenerator(DistancePanelManager.DISTANCE.TEN_KM, 1,runPlannerDate);
 		plan = gen.generatePlan();
 		System.out.println("Intermediate 10km Plan has: " + plan.size() + " days.");
+	}
+	
+	private void showDebugDialogBox(List<RunPlannerDate> dateList)
+	{
+		   //
+	    // Create a DialogBox with a button to close it
+		DialogBox dialogbox = new DialogBox(false);
+		dialogbox.setSize("300px", "500px");
+		dialogbox.setModal(true);
+		VerticalPanel DialogBoxContents = new VerticalPanel();
+	    dialogbox.setText("DialogBox");
+	    
+	    
+	    ListBox lb = new ListBox();
+	   
+	    lb.setVisibleItemCount(dateList.size());
+	    
+	    for (RunPlannerDate date : dateList) 
+	    {
+	    	 lb.addItem(date.getDate() + ":" + date.getMonth() + ":" + (date.getYear() + 1900));
+		}
+	    
+	    
+	    DialogBoxContents.add(lb);
+	    Button button = new Button("Close");
+	    SimplePanel holder = new SimplePanel();
+	    holder.add(button);
+	    
+	    DialogBoxContents.add(holder);
+	    dialogbox.setWidget(DialogBoxContents);
+	    
+	    dialogbox.show();
 	}
 }
