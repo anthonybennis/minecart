@@ -112,4 +112,7 @@ public interface Resources extends ClientBundle
 	  
 	  @Source("images/CallHighlight.png")
 	  ImageResource getCellHighlightImage();
+	  
+	  @Source("images/Summary.png")
+	  ImageResource getSummaryImage();
 }

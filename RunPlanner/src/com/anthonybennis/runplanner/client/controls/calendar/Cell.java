@@ -8,6 +8,8 @@ import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.logic.PlanItem.PACE;
 import com.anthonybennis.runplanner.client.logic.WalkRunMix;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -28,7 +30,7 @@ public class Cell
 	 * Note: This values are also defined in the CSS
 	 */
 	private final String CELL_WIDTH = "105px";
-	private final String CELL_HEIGHT = "88px";
+	private final String CELL_HEIGHT = "85px";
 	
 	
 	/**
@@ -131,16 +133,15 @@ public class Cell
 	 */
 	private Panel createWalkRunMixPanel()
 	{
-		Panel walkRunMixDetailsPanel = new VerticalPanel(); // TODO Consider FlowPanel?
+		VerticalPanel walkRunMixDetailsPanel = new VerticalPanel(); // TODO Consider FlowPanel?
+		walkRunMixDetailsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		walkRunMixDetailsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		walkRunMixDetailsPanel.setSize("100%", "100%");
 		
 		WalkRunMix walkRunMix = _planItem.getWalkRunMix();
 		
 		List<Activity> activitiesList = walkRunMix.getActivityList();
 		
-		/*
-		 * TODO Make this appear nice if there's only one activity.
-		 */
 		Label activityLabel;
 		for (Activity activity : activitiesList) 
 		{

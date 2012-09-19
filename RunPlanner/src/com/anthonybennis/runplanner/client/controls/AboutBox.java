@@ -74,38 +74,22 @@ public class AboutBox
 		/*
 		 * TODO ENHANCEMENT Show "About Label" or RunPlanner Logo?
 		 */
-		Label aboutLabel = new Label("Run Planner");
+		Label aboutLabel = new Label("About Run Planner");
 		aboutLabel.setStylePrimaryName("largeWhiteText");
 		mainPanel.add(aboutLabel);
 		mainPanel.setCellHorizontalAlignment(aboutLabel, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		/*
 		 * Show current Plan information
+		 * TODO Move to Summary dialog
 		 */
-		DecoratorPanel planSummaryPanel = new DecoratorPanel();
-		planSummaryPanel.setTitle("Plan summary");
-		planSummaryPanel.setStylePrimaryName("smallWhiteText");
-		
-		Label startDateLabel = new Label("Start Date:");
-		startDateLabel.setStylePrimaryName("smallWhiteText");
-		Label raceDateLabel = new Label("End Date:");
-		raceDateLabel.setStylePrimaryName("smallWhiteText");
-		Label durationLabel = new Label("Plan duration Date:");
-		durationLabel.setStylePrimaryName("smallWhiteText");
-		
-		VerticalPanel summaryContentsPanel = new VerticalPanel();
-		summaryContentsPanel.add(startDateLabel);
-		summaryContentsPanel.add(raceDateLabel);
-		summaryContentsPanel.add(durationLabel);
-		planSummaryPanel.add(summaryContentsPanel);
-		mainPanel.setCellHorizontalAlignment(planSummaryPanel, HasHorizontalAlignment.ALIGN_CENTER);
-		mainPanel.add(planSummaryPanel);
+
 		
 		
 		/*
 		 * Copy Right Notice
 		 */
-		HTML copyRightNoticeHTML = new HTML("<p> &copy; 2004 Anthony Bennis</p>");
+		HTML copyRightNoticeHTML = new HTML("<p> &copy; 2012 Anthony Bennis</p>");
 		copyRightNoticeHTML.setStylePrimaryName("smallWhiteText");
 		mainPanel.add(copyRightNoticeHTML);
 		mainPanel.setCellHorizontalAlignment(copyRightNoticeHTML, HasHorizontalAlignment.ALIGN_CENTER);
