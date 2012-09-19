@@ -1,5 +1,6 @@
 package com.anthonybennis.runplanner.client;
 
+import com.anthonybennis.runplanner.client.controls.AboutBox;
 import com.anthonybennis.runplanner.client.controls.calendar.CalanderManager;
 import com.anthonybennis.runplanner.client.handlers.CreatePlanClickHandler;
 import com.anthonybennis.runplanner.client.handlers.ExperienceButtonHandler;
@@ -33,6 +34,7 @@ public class RunPlanner implements EntryPoint
 	public void onModuleLoad() 
 	{
 		Audio.playButtonClickSilently(); // Load into memory.
+		ImageLoader.loadAllResourceImages(); // Load all images, to avoid dynamic load "flicker"
 		
 		/*
 		 * ROOT
@@ -55,6 +57,7 @@ public class RunPlanner implements EntryPoint
 		headerPanel.setSpacing(10);
 		headerPanel.setWidth("98%");
 		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
 		/*
 		 * Advanced/Beginner Toggle Buttons.
@@ -97,17 +100,19 @@ public class RunPlanner implements EntryPoint
 		
 		/*
 		 * Header Logo
+		 * TODO Create Down Image for header PushButton...
 		 */
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
-		runPlannerImage.addClickHandler(new ClickHandler() {
+		Image runPlannerDownImage = new Image(Resources.INSTANCE.getTitleLogoDownImage());
+		PushButton headerButton = new PushButton(runPlannerImage,runPlannerDownImage);
+		headerButton.setStylePrimaryName("headerLogoButton");
+		headerButton.addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				/*
-				 * TODO Launch About Box
-				 * (And clear All option?)
-				 */
-				Persistance.clearAll();
+				Audio.playButtonClick();
+				AboutBox aboutBox = new AboutBox();
+				aboutBox.show();
 			}
 		});
 		
@@ -124,9 +129,9 @@ public class RunPlanner implements EntryPoint
 		applyChangesButton.addTouchEndHandler(new CreatePlanClickHandler(_calanderManager));
 		applyChangesButton.addClickHandler(new CreatePlanClickHandler(_calanderManager));
 
-		headerPanel.add(runPlannerImage);
+		headerPanel.add(headerButton);
 		headerPanel.add(applyChangesButton);
-		headerPanel.setCellHorizontalAlignment(runPlannerImage, HasHorizontalAlignment.ALIGN_CENTER);
+		headerPanel.setCellHorizontalAlignment(headerButton, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		/*
 		 * Date and Distance container

@@ -56,7 +56,7 @@ public class CalanderContainer
 		 * Header Panel
 		 */
 		HorizontalPanel headerPanel = new HorizontalPanel();
-		headerPanel.setWidth("97%");
+		headerPanel.setWidth("100%");
 		/*
 		 * Left Button
 		 */
@@ -66,8 +66,8 @@ public class CalanderContainer
 		_leftButton.getElement().getStyle().setOpacity(0.5);
 		_leftButton.setVisible(false);
 		_leftButton.setStylePrimaryName("monthNavButton");
-		_leftButton.getElement().setAttribute("align", "left");
 		headerPanel.add(_leftButton);
+		headerPanel.setCellHorizontalAlignment(_leftButton, HasHorizontalAlignment.ALIGN_LEFT);
 		/*
 		 * Month name panel
 		 */
@@ -85,8 +85,9 @@ public class CalanderContainer
 		_rightButton.getElement().getStyle().setOpacity(0.5);
 		_rightButton.setVisible(false);
 		_rightButton.setStylePrimaryName("monthNavButton");
-		_rightButton.getElement().setAttribute("align", "right");
 		headerPanel.add(_rightButton);
+		headerPanel.setCellHorizontalAlignment(_rightButton, HasHorizontalAlignment.ALIGN_RIGHT);
+		
 		
 		/*
 		 * Deck panel (Month Panel container)
@@ -349,12 +350,13 @@ public class CalanderContainer
 		/*
 		 * TODO ENHANCEMENT Add progress line, showing start date and end date and current date, if on line
 		 * See: PlanProgressIndicator
+		 * 
+		 * TODO Move Plan details to "About Box"
 		 */
 		_detailsLabel = new Label();
 		_detailsLabel.setStylePrimaryName("smallWhiteText");
-		footer.add(_detailsLabel);
 		/*
-		 * TODO Add icons legend
+		 * Add icons legend
 		 */
 		HorizontalPanel iconLegends = new HorizontalPanel();
 		

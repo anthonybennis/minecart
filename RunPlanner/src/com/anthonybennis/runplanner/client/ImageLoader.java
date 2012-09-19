@@ -95,4 +95,24 @@ public class ImageLoader
 		image.setVisible(false);
 		RootPanel.get().add(image);
 	}
+	
+	/*
+	 * TODO Test that this methods removes "flicker" when
+	 * pressing button with image for first time.
+	 */
+	public static void loadAllResourceImages()
+	{
+		Resources.INSTANCE.get5kmEnabledButtonImage();
+		Resources.INSTANCE.get5kmDisabledButtonImage();
+		Resources.INSTANCE.get10kmDisabledButtonImage();
+		Resources.INSTANCE.get10kmEnabledButtonImage();
+		Resources.INSTANCE.get21kmEnabledButtonImage();
+		Resources.INSTANCE.get2kmDisabledButtonImage();
+		Resources.INSTANCE.get42kmEnabledButtonImage();
+		Resources.INSTANCE.get42kmDisabledButtonImage();
+		Resources.INSTANCE.getBeginnerButtonImage();
+		Resources.INSTANCE.getBeginnerGreyButtonImage();
+		Resources.INSTANCE.getIntermediateButtonImage();
+		Resources.INSTANCE.getIntermediateGreyButtonImage();
+	}
 }
