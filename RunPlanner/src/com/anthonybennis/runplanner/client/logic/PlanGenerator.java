@@ -49,22 +49,17 @@ public class PlanGenerator
 	private static final String PLAN_SEPERATPOR = "€";
 	private DistancePanelManager.DISTANCE _distance;
 	private int _experience; 
-	private SuperDateUtil _raceDate;
-	private ArrayList<RunPlannerDate> _dates;
-	private RunPlannerDate _date;
+	private RunPlannerDate _raceDate;
 	
 	/**
 	 * Constructor
 	 * @param raceDate
 	 */
-	public PlanGenerator(DistancePanelManager.DISTANCE distance, int experience, SuperDateUtil raceDate)
+	public PlanGenerator(DistancePanelManager.DISTANCE distance, int experience, RunPlannerDate raceDate)
 	{
 		_distance = distance;
 		_experience = experience;
 		_raceDate = raceDate;
-		
-		// Debug:
-		_dates = new ArrayList<RunPlannerDate>();
 	}
 	
 	/**
@@ -327,7 +322,8 @@ public class PlanGenerator
 		
 		
 		Date convertedDate = RunPlannerDate.convert(date);
-		int daysLeftToDate = CalendarUtil.getDaysBetween(convertedDate, _raceDate.toDate());
+		Date convertedRaceDate = RunPlannerDate.convert(_raceDate);
+		int daysLeftToDate = CalendarUtil.getDaysBetween(convertedDate, convertedRaceDate);
 		
 		PlanItem planItem = null;
 		if (daysLeftToDate > 7)
@@ -363,12 +359,12 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	public static boolean isThereSuffecientTimeToPlan(DistancePanelManager.DISTANCE distance, SuperDateUtil endDate, int experience)
+	public static boolean isThereSuffecientTimeToPlan(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
 	{
 		/*
 		 * Calculate time to race
 		 */
-		int daysUntilRace = endDate.calculateNumberOfDaysFromToday();
+		int daysUntilRace = SuperDateUtil.calculateNumberOfDaysFromDate(endDate); 
 		int recommendedDays = PlanGenerator.getRecommendedDaysNeeded(distance, endDate, experience);
 		
 		return recommendedDays >= daysUntilRace;
@@ -382,7 +378,7 @@ public class PlanGenerator
 	 * @param experience
 	 * @return
 	 */
-	private static int getRecommendedDaysNeeded(DistancePanelManager.DISTANCE distance, SuperDateUtil endDate, int experience)
+	private static int getRecommendedDaysNeeded(DistancePanelManager.DISTANCE distance, RunPlannerDate endDate, int experience)
 	{
 		int recommendedDays = 365;
 		
@@ -454,7 +450,7 @@ public class PlanGenerator
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, SuperDateUtil raceDate, int experience)
+	private Date calculatePlansStartDate(DistancePanelManager.DISTANCE distance, RunPlannerDate raceDate, int experience)
 	{
 		Date startDate = new Date();
 		startDate.setDate(raceDate.getDate());
@@ -486,8 +482,6 @@ public class PlanGenerator
 		
 		return startDate;
 	}
-
-
 	
 	/**
 	 * 
@@ -558,7 +552,7 @@ public class PlanGenerator
 	 */
 	public static void main(String[] args)
 	{
-		SuperDateUtil runPlannerDate = new SuperDateUtil();
+		RunPlannerDate runPlannerDate = new RunPlannerDate();
 		runPlannerDate.setDate(1);
 		runPlannerDate.setMonth(9);
 		runPlannerDate.setYear(2012);
@@ -590,6 +584,11 @@ public class PlanGenerator
 		System.out.println("Intermediate 10km Plan has: " + plan.size() + " days.");
 	}
 	
+	/**
+	 * For debug use only. 
+	 * 
+	 * @param dateList
+	 */
 	private void showDebugDialogBox(List<RunPlannerDate> dateList)
 	{
 		   //

@@ -4,6 +4,7 @@ package com.anthonybennis.runplanner.client.controls;
 
 import com.anthonybennis.runplanner.client.IDateReciever;
 import com.anthonybennis.runplanner.client.Resources;
+import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.dom.client.Style.Unit;
@@ -31,7 +32,7 @@ public class DateChooser
 	private UpDownControl _dateControl;
 	private UpDownControl _monthControl;
 	private UpDownControl _yearsControl;
-	private SuperDateUtil _date = new SuperDateUtil();
+	private RunPlannerDate _date = new RunPlannerDate();
 	
 	/**
 	 * 
@@ -182,9 +183,9 @@ public class DateChooser
 		 */
 		if (stringDate != null)
 		{
-			SuperDateUtil date = SuperDateUtil.convertStringToDate(stringDate);
+			RunPlannerDate date = SuperDateUtil.convertStringToDate(stringDate);
 			_dateControl.setValue("" + date.getDate());
-			_monthControl.setValue("" + date.getMonthName());
+			_monthControl.setValue("" + SuperDateUtil.getMonthName(date.getMonth()));
 			_yearsControl.setValue("" + date.getYear());
 		}
 	}

@@ -3,12 +3,10 @@ package com.anthonybennis.runplanner.client.handlers;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.Audio;
-import com.anthonybennis.runplanner.client.controls.MessageBox;
 import com.anthonybennis.runplanner.client.controls.calendar.MonthPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.PushButton;
 
 /**
  * Handler for navigating the Calander widget.
@@ -18,20 +16,16 @@ public class ButtonNavigationHandler implements ClickHandler
 {
 	private DeckPanel _deckPanel;
 	private boolean _moveForward;
-	private PushButton _leftButton;
-	private PushButton _rightButton;
 	private List<MonthPanel> _monthPanels;
 	
 	/**
 	 * 
 	 */
-	public ButtonNavigationHandler(DeckPanel deckPanel, List<MonthPanel> monthPanels, boolean moveForward, PushButton leftButton, PushButton rightButton)
+	public ButtonNavigationHandler(DeckPanel deckPanel, List<MonthPanel> monthPanels, boolean moveForward)
 	{
 		_moveForward = moveForward;
 		_monthPanels = monthPanels;
 		_deckPanel = deckPanel;	
-		_leftButton = leftButton;
-		_rightButton = rightButton;
 	}
 	
 	@Override

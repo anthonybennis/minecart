@@ -159,50 +159,40 @@ public class MonthPanel
 	 * @param month
 	 * @param year
 	 */
-	@SuppressWarnings("deprecation")
 	private void createDays(int month, int year)
 	{
 		int numberOfDaysInMonth = SuperDateUtil.daysInMonth(month, year);
 		int weekDayIndex = SuperDateUtil.getFirstDayOfTheMonth(month, year);
-		
 		
 		/*
 		 * Create empty cells for previous month
 		 * (Every month does not start on a Monday, so we need
 		 * to create the cells for the last month
 		 */
-		Date lastMonthsDate;
-		
 		int specialPreviousMonthIndex = (month == 0)?11:(month - 1);
-		System.out.println("Month is: " + specialPreviousMonthIndex);
 		int numberOfDaysInPreviousMonth = SuperDateUtil.daysInMonth(specialPreviousMonthIndex, year);
 		int lastDayDate = numberOfDaysInPreviousMonth;
-		
-		
-		/*
-		 * Debug
-		 */
-		System.err.println("The previous month has " + numberOfDaysInPreviousMonth + " days.");
-		System.err.println("Last months start date is: " + lastDayDate);
-		System.err.println("Goin to create " + lastDayDate + " days from the last month...");
 		
 		weekDayIndex = (weekDayIndex >= 7)?(weekDayIndex-7):weekDayIndex; // No point shown a full empty week from last month.
 		lastDayDate = lastDayDate - (weekDayIndex - 1); 
 		Cell cell;
-		
-		
+		RunPlannerDate lastMonthsDate;
 		for (int i = 0; i < weekDayIndex; i++) // Last months days added in wrong order?
 		{
 			// Set date to this month panels date, so we have the right year
-			lastMonthsDate = new Date();
+			lastMonthsDate = new RunPlannerDate();
 			int previousMonthYear = year;
 			if (month == 0)
 			{
 				previousMonthYear = previousMonthYear -1;
+				lastMonthsDate.setMonth(11);
+			}
+			else
+			{
+				lastMonthsDate.setMonth(lastMonthsDate.getMonth() - 1);	
 			}
 			
 			lastMonthsDate.setYear(previousMonthYear);
-			lastMonthsDate.setMonth(lastMonthsDate.getMonth() - 1);
 			lastMonthsDate.setDate(lastDayDate);
 			
 			System.err.println("Creating disabled Cell: " + lastMonthsDate.toString());
@@ -214,10 +204,10 @@ public class MonthPanel
 		}
 		
 		
-		Date date;
+		RunPlannerDate date;
 		for (int i = 0; i < numberOfDaysInMonth; i++) 
 		{
-			date = new Date();
+			date = new RunPlannerDate();
 			date.setDate(i + 1);
 			date.setMonth(month);
 			date.setYear(year);

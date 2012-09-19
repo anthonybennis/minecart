@@ -2,17 +2,14 @@ package com.anthonybennis.runplanner.client.controls.calendar;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import com.anthonybennis.runplanner.client.Resources;
-import com.anthonybennis.runplanner.client.controls.MessageBox;
 import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.utils.MonthPanelSorter;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -122,8 +119,8 @@ public class CalanderContainer
 		 */
 	
 		 // TODO Do I need to add Touch Listener too?
-		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,false, _leftButton, _rightButton));
-		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,true, _leftButton, _rightButton));
+		_leftButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,false));
+		_rightButton.addClickHandler(new ButtonNavigationHandler(_deckPanel, _monthPanels,true));
 		
 		return mainPanel;
 	}
@@ -154,7 +151,6 @@ public class CalanderContainer
 	 * 
 	 * @param planItems
 	 */
-	@SuppressWarnings("deprecation")
 	protected void update(List<PlanItem> planItems)
 	{
 		/*
@@ -247,7 +243,6 @@ public class CalanderContainer
 	 * @param planItems
 	 * @return Panel[] all the Month Panels.
 	 */
-	@SuppressWarnings("deprecation")
 	private List<MonthPanel> createAndPopulateMonthPanels(List<PlanItem> planItems)
 	{
 
@@ -379,6 +374,9 @@ public class CalanderContainer
 		slowLabel.setStylePrimaryName("smallWhiteText");
 		Image slow = CalendarImage.createSlowPACEImage();
 		
+		iconLegends.add(slowLabel);
+		iconLegends.add(slow);
+		iconLegends.add(new Label("    "));
 		iconLegends.add(comfortableLabel);
 		iconLegends.add(confortableImage);
 		iconLegends.add(new Label("    "));
@@ -390,19 +388,16 @@ public class CalanderContainer
 		iconLegends.add(new Label("    "));
 		iconLegends.add(restLabel);
 		iconLegends.add(rest);
-		iconLegends.add(new Label("    "));
-		iconLegends.add(slowLabel);
-		iconLegends.add(slow);
-		iconLegends.add(new Label("    "));
+		
+		
 		
 		footer.add(iconLegends);
 		
 		/*
 		 * TODO ENHANCEMENT Add webOS Calender format buttons (List, or calender).
 		 */
-		
 		footer.setCellHorizontalAlignment(iconLegends, HasHorizontalAlignment.ALIGN_CENTER);
-		footer.setCellHorizontalAlignment(_detailsLabel, HasHorizontalAlignment.ALIGN_CENTER);
+//		footer.setCellHorizontalAlignment(_detailsLabel, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		return footer;
 	}
