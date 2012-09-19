@@ -79,6 +79,16 @@ h1 {
         outline-width: 0px;
 }
 
+.summaryButton{
+        margin: 0px;
+        height: 165px;
+        width: 52px;
+        background-color:rgba(255,0,0,0.0);
+        border: 0px solid #3079ED;
+        outline-color: #000000;
+        outline-width: 0px;
+}
+
 .dialogVPanel {
   margin: 5px;
 }
@@ -136,14 +146,14 @@ h1 {
 .todaysCellPanel { 
 	background: url('images/CallHighlight.png'); 
 	margin: 0px;
-    height: 88px;
+    height: 85px;
     width: 105px;
     border: 1px solid #F5D611;
 }
 
 .greyedOutCellPanel { 
 	margin: 0px;
-    height: 90px;
+    height: 85px;
     width: 105px;
     border: 1px solid #B8B8B8;
     opacity:0.2;

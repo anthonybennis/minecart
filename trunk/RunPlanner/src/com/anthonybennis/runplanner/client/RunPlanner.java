@@ -10,6 +10,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -55,8 +56,7 @@ public class RunPlanner implements EntryPoint
 		 */
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setSpacing(10);
-		headerPanel.setWidth("98%");
-		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		headerPanel.setWidth("784px");
 		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
 		
 		/*
@@ -100,7 +100,6 @@ public class RunPlanner implements EntryPoint
 		
 		/*
 		 * Header Logo
-		 * TODO Create Down Image for header PushButton...
 		 */
 		Image runPlannerImage = new Image(Resources.INSTANCE.getTitleLogoImage());
 		Image runPlannerDownImage = new Image(Resources.INSTANCE.getTitleLogoDownImage());
@@ -116,6 +115,8 @@ public class RunPlanner implements EntryPoint
 			}
 		});
 		
+		
+		
 		_calanderManager = new CalanderManager();
 		/*
 		 * Apply Changes Button
@@ -130,8 +131,12 @@ public class RunPlanner implements EntryPoint
 		applyChangesButton.addClickHandler(new CreatePlanClickHandler(_calanderManager));
 
 		headerPanel.add(headerButton);
-		headerPanel.add(applyChangesButton);
 		headerPanel.setCellHorizontalAlignment(headerButton, HasHorizontalAlignment.ALIGN_CENTER);
+		headerPanel.setCellVerticalAlignment(headerButton, HasVerticalAlignment.ALIGN_TOP);
+		
+		headerPanel.add(applyChangesButton);
+		headerPanel.setCellHorizontalAlignment(applyChangesButton, HasHorizontalAlignment.ALIGN_RIGHT);
+		headerPanel.setCellVerticalAlignment(applyChangesButton, HasVerticalAlignment.ALIGN_TOP);
 		
 		/*
 		 * Date and Distance container
@@ -165,6 +170,43 @@ public class RunPlanner implements EntryPoint
 		Panel headerAndCalanderPanel = new VerticalPanel();
 		headerAndCalanderPanel.add(headerPanel);
 		headerAndCalanderPanel.add(calanderPanel);
+		
+		/*
+		 * Summary Button
+		 */
+		Image summaryImage = new Image(Resources.INSTANCE.getSummaryImage());
+		PushButton pushButton = new PushButton(summaryImage);
+		pushButton.setStylePrimaryName("summaryButton");
+		pushButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			/*
+			 * TODO Launch Summary Dialog
+			 */
+				Audio.playButtonClick();
+//				DecoratorPanel planSummaryPanel = new DecoratorPanel();
+//				planSummaryPanel.setTitle("Plan summary");
+//				planSummaryPanel.setStylePrimaryName("smallWhiteText");
+//				
+//				Label startDateLabel = new Label("Start Date:");
+//				startDateLabel.setStylePrimaryName("smallWhiteText");
+//				Label raceDateLabel = new Label("End Date:");
+//				raceDateLabel.setStylePrimaryName("smallWhiteText");
+//				Label durationLabel = new Label("Plan duration Date:");
+//				durationLabel.setStylePrimaryName("smallWhiteText");
+//				
+//				VerticalPanel summaryContentsPanel = new VerticalPanel();
+//				summaryContentsPanel.add(startDateLabel);
+//				summaryContentsPanel.add(raceDateLabel);
+//				summaryContentsPanel.add(durationLabel);
+//				planSummaryPanel.add(summaryContentsPanel);
+//				mainPanel.setCellHorizontalAlignment(planSummaryPanel, HasHorizontalAlignment.ALIGN_CENTER);
+//				mainPanel.add(planSummaryPanel);
+				
+			}
+		});
+		
 		
 		/*
 		 * Experience, Distance Buttons and Date Buttons

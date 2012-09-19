@@ -198,12 +198,18 @@ public class MonthPanel
 			System.err.println("Creating disabled Cell: " + lastMonthsDate.toString());
 			cell = new Cell(lastMonthsDate, true);
 			
+			/*
+			 * TODO Enhancement Set Plan Item on these Cells.
+			 */
+			
 			_dayCells.add(cell);
 			
 			lastDayDate = lastDayDate+1;
 		}
 		
-		
+		/*
+		 * Create cells for current Month Panel.
+		 */
 		RunPlannerDate date;
 		for (int i = 0; i < numberOfDaysInMonth; i++) 
 		{

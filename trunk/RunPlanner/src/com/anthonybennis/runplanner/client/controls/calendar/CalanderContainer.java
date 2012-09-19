@@ -8,7 +8,7 @@ import com.anthonybennis.runplanner.client.Resources;
 import com.anthonybennis.runplanner.client.handlers.ButtonNavigationHandler;
 import com.anthonybennis.runplanner.client.logic.PlanItem;
 import com.anthonybennis.runplanner.client.utils.MonthPanelSorter;
-import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -31,8 +31,8 @@ public class CalanderContainer
 	private HorizontalPanel _mainCalanderPanel;
 	private PushButton _leftButton;
 	private PushButton _rightButton;
-	private Label _detailsLabel;
 	private Label _monthNameLabel;
+	private VerticalPanel _footer;
 
 	/**
 	 * Creates the main containers for the Calander widget.
@@ -56,7 +56,13 @@ public class CalanderContainer
 		 * Header Panel
 		 */
 		HorizontalPanel headerPanel = new HorizontalPanel();
-		headerPanel.setWidth("100%");
+		String width = "100%";
+		if (Window.getClientWidth() < 1030) 
+		{
+			width = "95%";
+		}
+		headerPanel.setWidth(width);
+		
 		/*
 		 * Left Button
 		 */
@@ -86,7 +92,6 @@ public class CalanderContainer
 		_rightButton.setVisible(false);
 		_rightButton.setStylePrimaryName("monthNavButton");
 		headerPanel.add(_rightButton);
-		headerPanel.setCellHorizontalAlignment(_rightButton, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		
 		/*
@@ -164,6 +169,7 @@ public class CalanderContainer
 		 */
 		_leftButton.setVisible(true);
 		_rightButton.setVisible(true);
+		_footer.setVisible(true);
 		
 		
 		/*
@@ -221,18 +227,6 @@ public class CalanderContainer
 			}
 			
 			_deckPanel.showWidget(indexOfMonthToShowByDefault);
-		}
-		
-		/*
-		 * Footer info
-		 */
-		if (planItems != null && planItems.size() > 0)
-		{
-			RunPlannerDate startDate = planItems.get(0).getDate();
-			String startMonthName = SuperDateUtil.getMonthName(startDate.getMonth());
-			int userReadableYear = startDate.getYear() + 1900;
-			String footerDescription = "Plan starts on " + startDate.getDate() + " " + startMonthName + ", " + userReadableYear;
-			_detailsLabel.setText(footerDescription);
 		}
 	}
 	
@@ -344,17 +338,9 @@ public class CalanderContainer
 	
 	private Panel createFooterPanel()
 	{
-		VerticalPanel footer = new VerticalPanel();
-		footer.setWidth("100%");
-		
-		/*
-		 * TODO ENHANCEMENT Add progress line, showing start date and end date and current date, if on line
-		 * See: PlanProgressIndicator
-		 * 
-		 * TODO Move Plan details to "About Box"
-		 */
-		_detailsLabel = new Label();
-		_detailsLabel.setStylePrimaryName("smallWhiteText");
+		_footer = new VerticalPanel();
+		_footer.setWidth("100%");
+		_footer.setVisible(false);
 		/*
 		 * Add icons legend
 		 */
@@ -393,14 +379,13 @@ public class CalanderContainer
 		
 		
 		
-		footer.add(iconLegends);
+		_footer.add(iconLegends);
 		
 		/*
 		 * TODO ENHANCEMENT Add webOS Calender format buttons (List, or calender).
 		 */
-		footer.setCellHorizontalAlignment(iconLegends, HasHorizontalAlignment.ALIGN_CENTER);
-//		footer.setCellHorizontalAlignment(_detailsLabel, HasHorizontalAlignment.ALIGN_CENTER);
+		_footer.setCellHorizontalAlignment(iconLegends, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		return footer;
+		return _footer;
 	}
 }
