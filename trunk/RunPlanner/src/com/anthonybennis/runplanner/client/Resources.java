@@ -36,7 +36,10 @@ public interface Resources extends ClientBundle
 	  ImageResource getNoAudioButton();
 	  
 	  @Source("images/RunPlannerGold.png")
-	  ImageResource getTitleLogoImage();	 
+	  ImageResource getTitleLogoImage();
+	  
+	  @Source("images/RunPlannerGoldDown.png")
+	  ImageResource getTitleLogoDownImage();
 	  
 	  @Source("images/Close.png")
 	  ImageResource getCloseAppButtonImage();
