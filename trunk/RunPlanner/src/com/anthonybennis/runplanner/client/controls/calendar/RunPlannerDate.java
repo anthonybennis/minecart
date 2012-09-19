@@ -4,49 +4,88 @@ import java.util.Date;
 
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
 
+/**
+ * A class to represent dates in RunPlanner.
+ * GWT Date implementation does not work in all Browsers.
+ * @author abennis
+ */
 public class RunPlannerDate 
 {
 	private int _date;
 	private int _month;
 	private int _year;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param date 1 -> 31
+	 * @param month 0 -> 11
+	 * @param year Note, this is in Java Date form (e.g. 2012 is represented as 112).
+	 */
 	public RunPlannerDate(int date, int month, int year)
 	{
 		_date = date;
 		_month = month;
 		_year = year;
 	}
-	
+
+	/**
+	 * Basic Constructor.
+	 */
 	public RunPlannerDate()
 	{
 		
 	}
 	
+	/**
+	 * Returns the date.
+	 * @return
+	 */
 	public int getDate() 
 	{
 		return _date;
 	}
 	
+	/**
+	 * 
+	 * @param date
+	 */
 	public void setDate(int date) 
 	{
 		this._date = date;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMonth() 
 	{
 		return _month;
 	}
 	
+	/**
+	 * 
+	 * @param month
+	 */
 	public void setMonth(int month) 
 	{
 		this._month = month;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getYear() 
 	{
 		return _year;
 	}
 	
+	/**
+	 * 
+	 * @param year
+	 */
 	public void setYear(int year) 
 	{
 		this._year = year;
@@ -60,9 +99,7 @@ public class RunPlannerDate
 	public static RunPlannerDate advanceOneDay(RunPlannerDate date)
 	{
 		RunPlannerDate newDate = new RunPlannerDate(date.getDate(), date.getMonth(), date.getYear());
-		/*
-		 * Now progress month...
-		 */
+
 		int daysInMonth = SuperDateUtil.daysInMonth(newDate.getMonth(), newDate.getYear());
 			
 		if (newDate.getDate() < daysInMonth) 
@@ -86,6 +123,7 @@ public class RunPlannerDate
 		
 		return newDate;
 	}
+
 	
 	@SuppressWarnings("deprecation")
 	public static Date convert(RunPlannerDate runplannerDate)
@@ -96,5 +134,50 @@ public class RunPlannerDate
 		date.setYear(runplannerDate.getYear());
 		
 		return date;
+	}
+	
+	/**
+	 * 
+	 * @param monthName
+	 */
+	public void setMonth(String monthName)
+	{
+		String[] monthNames = SuperDateUtil.getMonthNames();
+		
+		for (int i = 0; i < monthNames.length; i++) 
+		{
+			if (monthNames[i].equals(monthName))
+			{
+				_month = i +1; // Base 1 for month, so Jan is 1, Feb is 2 etc...
+				break;
+			}	
+		}
+	}
+	
+	/**
+	 * 
+	 * @param year
+	 */
+	public void setYear(String year)
+	{
+		this._year = Integer.parseInt(year);
+	}
+	
+	/**
+	 * 
+	 * @param day
+	 */
+	public void setDate(String day)
+	{
+		this._date = Integer.parseInt(day);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String toString()
+	{
+		return this.getDate() + "," + this.getMonth() + "," + this.getYear();
 	}
 }

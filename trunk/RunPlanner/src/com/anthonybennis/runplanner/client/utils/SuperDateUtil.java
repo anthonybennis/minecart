@@ -6,83 +6,13 @@ import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
 
+/**
+ * A collection of Utilities for dealing with Dates in GWT.
+ * @author abennis
+ */
 public class SuperDateUtil 
 {
 	public static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
-	private int _date = -1;
-	private int _month = -1;
-	private int _year = -1;
-	
-	/**
-	 * 
-	 */
-	public SuperDateUtil()
-	{
-		
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int getDate() 
-	{
-		return _date;
-	}
-	
-	/**
-	 * 
-	 * @param day
-	 */
-	public void setDate(int day) 
-	{
-		this._date = day;
-	}
-	
-	/**
-	 * 
-	 * @param day
-	 */
-	public void setDate(String day)
-	{
-		this._date = Integer.parseInt(day);
-	}
-	
-	/**
-	 * 
-	 * @param monthName
-	 */
-	public void setMonth(String monthName)
-	{
-		String[] monthNames = SuperDateUtil.getMonthNames();
-		
-		for (int i = 0; i < monthNames.length; i++) 
-		{
-			if (monthNames[i].equals(monthName))
-			{
-				_month = i +1; // Base 1 for month, so Jan is 1, Feb is 2 etc...
-				break;
-			}	
-		}
-	}
-	
-	/**
-	 * 
-	 * @param year
-	 */
-	public void setYear(String year)
-	{
-		this._year = Integer.parseInt(year);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public String getMonthName() 
-	{
-		return SuperDateUtil.getMonthName(_month);
-	}
 	
 	/**
 	 * 
@@ -106,57 +36,14 @@ public class SuperDateUtil
 		return monthName;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getMonth() 
-	{
-		return _month;
-	}
-	
-	/**
-	 * 
-	 * @param month
-	 */
-	public void setMonth(int month) 
-	{
-		this._month = month;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getYear() 
-	{
-		return _year;
-	}
-	
-	/**
-	 * 
-	 * @param year
-	 */
-	public void setYear(int year) 
-	{
-		this._year = year;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public String convertToString()
-	{
-		return this.getDate() + "," + this.getMonth() + "," + this.getYear();
-	}
+
 	
 	/**
 	 * 
 	 */
-	public static SuperDateUtil convertStringToDate(String dateInStringFormat)
+	public static RunPlannerDate convertStringToDate(String dateInStringFormat)
 	{
-		SuperDateUtil date = new SuperDateUtil();
+		RunPlannerDate date = new RunPlannerDate();
 		String[] dateInString;
 		
 		if (dateInStringFormat != null)
@@ -168,10 +55,13 @@ public class SuperDateUtil
 			dateInString = new String[]{"1","1","2013"};
 		}
 			
-		date.setDate(dateInString[0]);
-		date.setMonth(Integer.parseInt(dateInString[1]));
-		date.setYear(dateInString[2]);
-		
+		String dateString = dateInString[0];
+		String monthString = dateInString[1];
+		String yearString = dateInString[2]; 
+				
+		date.setDate(Integer.parseInt(dateString));
+		date.setMonth(Integer.parseInt(monthString));
+		date.setYear(Integer.parseInt(yearString));
 		
 		return date;
 	}
@@ -289,14 +179,14 @@ public class SuperDateUtil
 	 * @return
 	 */
 	@SuppressWarnings("deprecation")
-	public int calculateNumberOfDaysFromToday()
+	public static int calculateNumberOfDaysFromDate(RunPlannerDate date)
 	{
 		int daysToGo = 0;
 		
 		java.util.Date raceDate = new java.util.Date();
-		raceDate.setDate(_date);
-		raceDate.setMonth(_month); // Java base is 0 for month
-		raceDate.setYear(_year - 1900);
+		raceDate.setDate(date.getDate());
+		raceDate.setMonth(date.getMonth()); // Java base is 0 for month
+		raceDate.setYear(date.getYear() - 1900);
 		
 		java.util.Date todaysDate = new java.util.Date();
 	    
@@ -327,20 +217,6 @@ public class SuperDateUtil
 		return nextMonday;
 	}
 	
-	/**
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("deprecation")
-	public Date toDate()
-	{
-		Date date = new Date();
-		date.setDate(this.getDate());
-		date.setMonth(this.getMonth());
-		date.setYear(this.getYear());
-		
-		return date;
-	}
 	
 	/**
 	 * Compares a date by day/month/year, ignoring
@@ -367,6 +243,33 @@ public class SuperDateUtil
 		return datesMatch;
 	}
 	
+	/**
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
+	public static boolean isSameDate(RunPlannerDate date1, RunPlannerDate date2)
+	{
+		boolean datesMatch = false;
+		
+		if(date1 != null && date2 != null
+				&& date1.getDate() == date2.getDate()
+				&& date1.getMonth() == date2.getMonth()
+				&& date1.getYear() == date2.getYear())
+		{
+			datesMatch = true;
+		}
+
+		return datesMatch;
+	}
+	
+	/**
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	public static boolean isSameDate(Date date1, RunPlannerDate date2)
 	{
@@ -379,8 +282,7 @@ public class SuperDateUtil
 		{
 			datesMatch = true;
 		}
-		
-		
+
 		return datesMatch;
 	}
 }

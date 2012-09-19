@@ -21,14 +21,21 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class Cell
 {
 	private PlanItem _planItem;
-	private Date _date;
+	private RunPlannerDate _date;
 	private boolean  _greyBorder;
+	
+	/*
+	 * Note: This values are also defined in the CSS
+	 */
+	private final String CELL_WIDTH = "105px";
+	private final String CELL_HEIGHT = "88px";
+	
 	
 	/**
 	 * 
 	 * @param date
 	 */
-	public Cell(Date date, boolean greyBorder)
+	public Cell(RunPlannerDate date, boolean greyBorder)
 	{
 		_date = date;
 		_greyBorder = greyBorder;
@@ -62,7 +69,6 @@ public class Cell
 		return headerPanel;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private Label createDateLabel()
 	{
 		Label dateLabel = new Label();
@@ -151,7 +157,6 @@ public class Cell
 	 * 
 	 * @param planItem
 	 */
-	@SuppressWarnings("deprecation")
 	protected void setPlanItem(PlanItem planItem)
 	{
 		_planItem = planItem;
@@ -196,7 +201,7 @@ public class Cell
 	protected Panel createPanel()
 	{
 		Panel mainCellPanel = new VerticalPanel();
-		mainCellPanel.setSize("105px", "90px"); // TODO AB Hard coded so all cells are the same. Can we do this more dynamically?
+		mainCellPanel.setSize(CELL_WIDTH, CELL_HEIGHT);
 		mainCellPanel.setStylePrimaryName("cellPanel");
 		
 		if (_planItem != null)
@@ -271,17 +276,19 @@ public class Cell
 		
 		/*
 		 * TODO Highlight Cell if today is Race day
-		 */
-		
+		 */	
 	}
 	
-
-	
+	/**
+	 * 
+	 * @return
+	 */
 	private boolean isToday()
 	{
 		boolean isCellsDateTodaysDate = false;
 		Date date = new Date();		
-		isCellsDateTodaysDate = SuperDateUtil.isSameDate(_date, date);
+		
+		isCellsDateTodaysDate = SuperDateUtil.isSameDate(date,_date);
 		
 		return isCellsDateTodaysDate;
 	}

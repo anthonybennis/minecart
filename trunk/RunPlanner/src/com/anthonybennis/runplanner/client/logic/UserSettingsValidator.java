@@ -1,9 +1,6 @@
 package com.anthonybennis.runplanner.client.logic;
 
 import com.anthonybennis.runplanner.client.controls.MessageBox;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 
 /**
  * 
@@ -46,17 +43,6 @@ public class UserSettingsValidator
 		{
 			messageBoxMessage = experienceValueIsValid;
 		}
-		else
-		{
-			/*
-			 * Convert String values to Units and validate toegther.
-			 */
-			// TODO Validate that race date is acceptable - there's enough time.
-//			if (PlanGenerator.isThereSuffecientTimeToPlan(distance, _r, experience))
-//			{
-//				messageBoxMessage = experienceValueIsValid;
-//			}
-		}
 
 		if (messageBoxMessage != null)
 		{
@@ -97,9 +83,19 @@ public class UserSettingsValidator
 	{
 		String errorMessage = NO_ERROR;
 		
+		/*
+		 * Validate for null
+		 */
 		if (raceDate == null)
 		{
 			errorMessage = "Please specify the date of the race you wish to plan for.";
+		}
+		/*
+		 * Validate for sufficient time.
+		 */
+		else
+		{
+			
 		}
 		
 		return errorMessage;

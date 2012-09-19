@@ -21,13 +21,9 @@ public class PlanItem
 	/**
 	 * Constructor
 	 */
-	@SuppressWarnings("deprecation")
 	public PlanItem(int number, RunPlannerDate date, WalkRunMix walkRunMix, PACE pace, String comment)
 	{
 		_number = number;
-		
-		// I need to create a new date as pass by reference means all PlanItems reference the same Date object.
-
 		_date = date;
 		_walkRunMix = walkRunMix;
 		_pace = pace;
@@ -107,7 +103,7 @@ public class PlanItem
 		planStringBuilder.append(_comment);
 		planStringBuilder.append(SEPERATOR);
 		
-		return planStringBuilder.toString(); // Convert Plan Item to String reperesentation. 
+		return planStringBuilder.toString(); // Convert Plan Item to String representation. 
 	}
 	
 	/**
@@ -150,7 +146,6 @@ public class PlanItem
 	 * TODO AB Refactor to RunplannerDate (PlanItem.java)
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	private static RunPlannerDate convertStringToDate(String date)
 	{
 		RunPlannerDate planItemDate = new RunPlannerDate();
@@ -201,10 +196,7 @@ public class PlanItem
 	 * 
 	 * @param date
 	 * @return
-	 * 
-	 * 
 	 */
-	@SuppressWarnings("deprecation")
 	private String convertDateToString(RunPlannerDate date)
 	{
 		StringBuilder dateAsString = new StringBuilder();

@@ -2,6 +2,7 @@ package com.anthonybennis.runplanner.client;
 
 import java.util.Date;
 
+import com.anthonybennis.runplanner.client.controls.calendar.RunPlannerDate;
 import com.anthonybennis.runplanner.client.handlers.DatePickerHandler;
 import com.anthonybennis.runplanner.client.storage.Persistance;
 import com.anthonybennis.runplanner.client.utils.SuperDateUtil;
@@ -19,7 +20,7 @@ public class DatePanelManager implements IDateReciever
 {
 	private ImageElement _imageElement;
 	private Canvas _canvas;
-	private SuperDateUtil _raceDate = new SuperDateUtil();
+	private RunPlannerDate _raceDate = new RunPlannerDate();
 
 	public DatePanelManager()
 	{
@@ -103,7 +104,7 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getDaysRemaining()
 	{
-		int numberOfDays = _raceDate.calculateNumberOfDaysFromToday(); 
+		int numberOfDays = SuperDateUtil.calculateNumberOfDaysFromDate(_raceDate); 
 		String daysToGo = numberOfDays + " days to go";
 		
 		return daysToGo;
@@ -111,7 +112,7 @@ public class DatePanelManager implements IDateReciever
 	
 	private String getTargetMonth()
 	{
-		return _raceDate.getMonthName();
+		return SuperDateUtil.getMonthName(_raceDate.getMonth());
 	}
 	
 	private String getTargetDay()
@@ -152,7 +153,7 @@ public class DatePanelManager implements IDateReciever
 			/*
 			 * Persist default date.
 			 */
-			Persistance.store(Persistance.TARGET_DATE, _raceDate.convertToString());
+			Persistance.store(Persistance.TARGET_DATE, _raceDate.toString());
 		}
 		else
 		{
@@ -161,7 +162,7 @@ public class DatePanelManager implements IDateReciever
 	}
 
 	@Override
-	public void setDate(SuperDateUtil date) 
+	public void setDate(RunPlannerDate date) 
 	{
 		_raceDate = date;
 		date.setMonth(date.getMonth() - 1); // Store date month with base 0
@@ -169,7 +170,7 @@ public class DatePanelManager implements IDateReciever
 		 * Persist Target Date
 		 */
 		String key = Persistance.TARGET_DATE;
-		Persistance.store(key, date.convertToString());
+		Persistance.store(key, date.toString());
 		/*
 		 * Update UI.
 		 *
