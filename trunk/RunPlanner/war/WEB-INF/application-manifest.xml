@@ -13,7 +13,7 @@
 
   <!-- Administrators and users will be sent to this URL for application support -->
   <Support>
-    <Link rel="support" href="http://www.yoursite.com/support" />
+    <Link rel="support" href="http://www.anthonybennis.com/support" />
   </Support>
 
   <!-- Show this link in Google's universal navigation for all users -->
