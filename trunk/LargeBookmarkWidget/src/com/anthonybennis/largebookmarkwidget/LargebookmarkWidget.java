@@ -20,20 +20,17 @@ public class LargebookmarkWidget extends AppWidgetProvider
 	public static String OPEN_WEBPAGE_ACTION = "OPEN";
 	
 	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) 
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
 	{
 		Toast.makeText(context, "onUpdate: "+ appWidgetIds, Toast.LENGTH_SHORT).show();
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
-		
+		Toast.makeText(context, "There are " + appWidgetIds.length + " widgets to update.", Toast.LENGTH_SHORT).show();
 		for (int id : appWidgetIds) 
 		{
-			Toast.makeText(context, "onUpdate called for Widget id "+ id + ". Adding click listener.", Toast.LENGTH_LONG).show();
 			LargebookmarkWidget.addClickListenerAndUpdateWidget(views, context, appWidgetManager, id);
 		}
-		
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 	
 	/**
@@ -73,9 +70,8 @@ public class LargebookmarkWidget extends AppWidgetProvider
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		super.onReceive(context, intent);
-		
 		Toast.makeText(context, "OnRecieve called.", Toast.LENGTH_SHORT).show();
+		super.onReceive(context, intent);
 		
 		Bundle extras = intent.getExtras();
 		if (extras != null) 
