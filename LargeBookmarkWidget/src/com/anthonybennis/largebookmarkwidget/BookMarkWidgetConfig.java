@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Browser;
@@ -54,31 +55,35 @@ public class BookMarkWidgetConfig extends Activity
 	             Intent resultValue = new Intent();
 				 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, _appWidgetId);
 				 Object selectedBookmark = browserListView.getItemAtPosition(position);
-				 Toast.makeText(getApplicationContext(), "selectedBookmark is" + selectedBookmark, Toast.LENGTH_LONG).show();
+				 Context context = getApplicationContext();
+				 
 				 if (selectedBookmark instanceof String)
 				 {
 					 String selectedURL = (String)selectedBookmark;
-					 Toast.makeText(getApplicationContext(), "Settings Extras::::: " + selectedURL, Toast.LENGTH_LONG).show();
-					 resultValue.putExtra(CONSTANTS.URL, selectedURL);
-					 resultValue.putExtra(CONSTANTS.TITLE, "A bookmark title");
+					 String bookmarkTitle = getBookmarkTitle(selectedURL);
+					 /*
+					  * Persist user settings
+					  */
+					 SharedPreferences preferences = getSharedPreferences(CONSTANTS.SHARED_PREFERENCE, 0);
+					 SharedPreferences.Editor editor = preferences.edit();
+					 editor.putString(CONSTANTS.URL + _appWidgetId, selectedURL);
+					 editor.putString(CONSTANTS.TITLE + _appWidgetId, bookmarkTitle);
+					 editor.commit();
+					 
 					 setResult(RESULT_OK, resultValue);
 					 
 					 /*
 			          * Update widget
 			          */
-					 Context context = getApplicationContext();
-					 Toast.makeText(context, "Coinfiguration complete. Update widget " + _appWidgetId + " with bookmark: " + selectedURL, Toast.LENGTH_LONG).show();
-					 
+					 Toast.makeText(context, "About to UPDATE after CONFIG for widget: " + id, Toast.LENGTH_SHORT).show();
 					 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
-					 AppWidgetManager.getInstance(context).updateAppWidget(_appWidgetId, views);
+					 LargebookmarkWidget.addClickListenerAndUpdateWidget(views, context, AppWidgetManager.getInstance(context), _appWidgetId);
 				 }
+				 
 				 finish();
 	         }
 	   });
 	  
-	     /*
-	      * Not sure what this is about or if it's needed?
-	      */
 	     Intent intent = getIntent(); 
 	     Bundle extras = intent.getExtras();
 	     
@@ -97,8 +102,8 @@ public class BookMarkWidgetConfig extends Activity
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Gets Bookmarks from native Browser.
+	 * @return String[] array of bookmark URLs.
 	 */
 	private String[] getBookmarks()
 	{
@@ -129,5 +134,23 @@ public class BookMarkWidgetConfig extends Activity
 		    bookmarks = keys.toArray(bookmarks);
 		    
 		    return bookmarks;
+	}
+	
+	/**
+	 * Returns the title of a given Bookmark URL
+	 * @return String (Browser bookmark title).
+	 */
+	private String getBookmarkTitle(String urlKey)
+	{
+		String title = "";
+		
+		Object bookmarkTitle = _bookmarksList.get(urlKey);
+		
+		if (bookmarkTitle instanceof String)
+		{
+			title = (String)bookmarkTitle;
+		}
+		
+		return title;
 	}
 }
