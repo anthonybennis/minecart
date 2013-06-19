@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * Configuration Activity for LargeBookmarkWidget
@@ -75,7 +74,6 @@ public class BookMarkWidgetConfig extends Activity
 					 /*
 			          * Update widget
 			          */
-//					 Toast.makeText(context, "About to UPDATE after CONFIG for widget: " + _appWidgetId, Toast.LENGTH_SHORT).show();
 					 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
 					 LargebookmarkWidget.addClickListenerAndUpdateWidget(views, context, AppWidgetManager.getInstance(context), _appWidgetId);
 				 }

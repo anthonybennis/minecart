@@ -24,7 +24,7 @@
         </receiver>
         
          <activity android:name=".BookMarkWidgetConfig"
-               android:label="Widget Setup">
+               android:label="Bookmarks">
          <intent-filter>
              <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
          </intent-filter>

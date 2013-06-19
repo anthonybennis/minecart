@@ -5,7 +5,7 @@
     android:updatePeriodMillis="86400000"
 	android:initialLayout="@layout/main"
 	android:configure="com.anthonybennis.largebookmarkwidget.BookMarkWidgetConfig"
-	android:resizeMode="horizontal|vertical"
+	android:previewImage="@drawable/previewimage"
 	android:installLocation="auto"
 />
 

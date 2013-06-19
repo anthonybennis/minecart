@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * LargebookmarkWidget
@@ -17,6 +16,8 @@ import android.widget.Toast;
  */
 public class LargebookmarkWidget extends AppWidgetProvider 
 {
+	private static final int MAX_URL_LENGTH = 60;
+	private static final int MAX_TITLE_LENGTH = 30;
 	private static final String ACTION =  "OPEN_WEB_PAGE";
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
@@ -37,12 +38,9 @@ public class LargebookmarkWidget extends AppWidgetProvider
 	 * @param id
 	 */
 	public static void addClickListenerAndUpdateWidget(RemoteViews views, Context context, AppWidgetManager appWidgetManager, int id)
-	{
-		Toast.makeText(context, "addClickListenerAndUpdateWidget: "+ id, Toast.LENGTH_SHORT).show();
-		
+	{		
 		LargebookmarkWidget.addClickListenerToWidget(context, views, id);
 		LargebookmarkWidget.setWidgetTextFromPreferences(views, context, id);
-			
 	}
 	
 	/**
@@ -125,13 +123,86 @@ public class LargebookmarkWidget extends AppWidgetProvider
 			views = new RemoteViews(context.getPackageName(), R.layout.main);
 		}
 		
-		/*
-		 * TODO AB - Truncate the text so it fits nicely on the widget.
-		 */
-		views.setTextViewText(R.id.url_textview, bookmarkAndTitle[0]);
-		views.setTextViewText(R.id.widget_textview, bookmarkAndTitle[1]);
+		String titleText = bookmarkAndTitle[CONSTANTS.BOOKMARK_TITLE_INDEX];
+		String utlText = bookmarkAndTitle[CONSTANTS.BOOKMARK_URL_INDEX];
+		titleText = makeTitleTextPretty(titleText);
+		utlText = makeURLTextPretty(utlText, titleText);
+		
+		views.setTextViewText(R.id.widget_textview, titleText);
+		views.setTextViewText(R.id.url_textview, utlText);
 		
 		AppWidgetManager.getInstance(context).updateAppWidget(widgetID, views);
+	}
+	
+	/**
+	 * 
+	 * @param titleText
+	 * @return
+	 */
+	private static String makeTitleTextPretty(String titleText)
+	{
+		String prettyText = titleText;
+		
+		if (titleText.length() > MAX_TITLE_LENGTH)
+		{
+			/*
+			 * Trim off www and .com, if it has any.
+			 */
+			prettyText = trimText(titleText, MAX_TITLE_LENGTH);
+		}
+		
+		return prettyText;
+	}
+	
+	/**
+	 * 
+	 * @param urlText
+	 * @return
+	 */
+	private static String makeURLTextPretty(String urlText, String titleText)
+	{
+		String prettyText = urlText;
+		
+		if (urlText.length() > MAX_URL_LENGTH)
+		{
+			// Trim off www and .com if needed.
+			prettyText = trimText(urlText, MAX_URL_LENGTH);
+		}
+		
+		if (titleText.equals(urlText))
+		{
+			prettyText = ""; // No need to show duplicate information.
+		}
+		
+		return prettyText;
+	}
+	
+	/**
+	 * Removes http://www. and .com (if removeSuffix is true)
+	 * @param originalText
+	 * @param removeSuffix - If true, .com will be removed. If false, we'll try keep it if maxLenth can be reached.
+	 */
+	private static String trimText(String originalText,int maxLength)
+	{
+		String trimmedText = originalText;
+		
+		String longPrefix = "http://www.";
+		String longSafePrefix = "https://www.";
+		String shortPrefix = "www.";
+		
+		trimmedText = originalText.replaceAll(longSafePrefix, "");
+		trimmedText = trimmedText.replaceAll(longPrefix, "");
+		trimmedText = trimmedText.replaceAll(shortPrefix, "");
+
+			
+		if (trimmedText.length() > maxLength)
+		{
+			trimmedText = trimmedText.substring(0,(maxLength - 3));
+			trimmedText = trimmedText + "...";
+		}
+		
+		
+		return trimmedText;
 	}
 	
 	/**
