@@ -17,16 +17,12 @@ import android.widget.Toast;
  */
 public class LargebookmarkWidget extends AppWidgetProvider 
 {
-	public static String OPEN_WEBPAGE_ACTION = "OPEN";
-	
+	private static final String ACTION =  "OPEN_WEB_PAGE";
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
-	{
-		Toast.makeText(context, "onUpdate: "+ appWidgetIds, Toast.LENGTH_SHORT).show();
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		
+	{			
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
-		Toast.makeText(context, "There are " + appWidgetIds.length + " widgets to update.", Toast.LENGTH_SHORT).show();
+
 		for (int id : appWidgetIds) 
 		{
 			LargebookmarkWidget.addClickListenerAndUpdateWidget(views, context, appWidgetManager, id);
@@ -45,7 +41,7 @@ public class LargebookmarkWidget extends AppWidgetProvider
 		Toast.makeText(context, "addClickListenerAndUpdateWidget: "+ id, Toast.LENGTH_SHORT).show();
 		
 		LargebookmarkWidget.addClickListenerToWidget(context, views, id);
-		LargebookmarkWidget.setWidgetTextFromPreferences(context, id);
+		LargebookmarkWidget.setWidgetTextFromPreferences(views, context, id);
 			
 	}
 	
@@ -59,26 +55,21 @@ public class LargebookmarkWidget extends AppWidgetProvider
 	private static void addClickListenerToWidget(Context context, RemoteViews views, int id)
 	{
 		Intent clickIntent = new Intent(context, LargebookmarkWidget.class);
-		clickIntent.setAction(OPEN_WEBPAGE_ACTION);
+		clickIntent.setAction(ACTION);
 		clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clickIntent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		views.setOnClickPendingIntent(R.id.widgetLayout, pendingIntent);
-		
-		Toast.makeText(context, "Click Listener added to " + id, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) 
 	{
-		Toast.makeText(context, "OnRecieve called.", Toast.LENGTH_SHORT).show();
-		super.onReceive(context, intent);
-		
 		Bundle extras = intent.getExtras();
 		if (extras != null) 
 		{
 			int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			
-			if (intent.getAction().equals(OPEN_WEBPAGE_ACTION)) 
+			if (intent.getAction().equals(ACTION)) 
 			{
 				/*
 				 * Launch web page.
@@ -98,7 +89,8 @@ public class LargebookmarkWidget extends AppWidgetProvider
 			} 
 			else 
 			{
-				LargebookmarkWidget.setWidgetTextFromPreferences(context, widgetId);
+				LargebookmarkWidget.setWidgetTextFromPreferences(null, context, widgetId);
+				super.onReceive(context, intent);
 			}
 		}
 	}
@@ -124,10 +116,14 @@ public class LargebookmarkWidget extends AppWidgetProvider
 	 * @param context
 	 * @param widgetID
 	 */
-	private static void setWidgetTextFromPreferences(Context context, int widgetID)
+	private static void setWidgetTextFromPreferences(RemoteViews views, Context context, int widgetID)
 	{
 		String[] bookmarkAndTitle = LargebookmarkWidget.getBookmarkURLAndTitleForWidget(context, widgetID);
-		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
+		
+		if (views == null)
+		{
+			views = new RemoteViews(context.getPackageName(), R.layout.main);
+		}
 		
 		/*
 		 * TODO AB - Truncate the text so it fits nicely on the widget.

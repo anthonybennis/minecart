@@ -75,7 +75,7 @@ public class BookMarkWidgetConfig extends Activity
 					 /*
 			          * Update widget
 			          */
-					 Toast.makeText(context, "About to UPDATE after CONFIG for widget: " + _appWidgetId, Toast.LENGTH_SHORT).show();
+//					 Toast.makeText(context, "About to UPDATE after CONFIG for widget: " + _appWidgetId, Toast.LENGTH_SHORT).show();
 					 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
 					 LargebookmarkWidget.addClickListenerAndUpdateWidget(views, context, AppWidgetManager.getInstance(context), _appWidgetId);
 				 }
