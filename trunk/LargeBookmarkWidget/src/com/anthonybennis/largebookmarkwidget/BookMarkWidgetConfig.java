@@ -2,7 +2,6 @@ package com.anthonybennis.largebookmarkwidget;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -10,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Configuration Activity for LargeBookmarkWidget
@@ -42,7 +43,7 @@ public class BookMarkWidgetConfig extends Activity
 	     * Populate ListView with Bookmark URLs 
 	     */
 	    final ListView browserListView = (ListView)findViewById(R.id.browser_list_view);
-	    String[] bookmarkURLs = this.getBookmarks();
+	    String[] bookmarkURLs = this.getAllBookmarks();
 	    ArrayAdapter<String> bookmarkAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, bookmarkURLs);
 	    
 	    browserListView.setAdapter(bookmarkAdapter);
@@ -60,6 +61,7 @@ public class BookMarkWidgetConfig extends Activity
 				 {
 					 String selectedURL = (String)selectedBookmark;
 					 String bookmarkTitle = getBookmarkTitle(selectedURL);
+
 					 /*
 					  * Persist user settings
 					  */
@@ -100,38 +102,80 @@ public class BookMarkWidgetConfig extends Activity
 	}
 	
 	/**
-	 * Gets Bookmarks from native Browser.
-	 * @return String[] array of bookmark URLs.
+	 * Gets all bookmarks from all browsers.
+	 * TODO AB - Add support for Firefox and Opera browsers.
+	 *  
+	 * @return String[] - All bookmarks.
 	 */
-	private String[] getBookmarks()
+	private String[] getAllBookmarks()
 	{
-		String[] bookmarks = new String[0];
+		String[] defaultBrowserBookmarks = this.getDefaultBrowserBookmars();
+//		String[] chromeBrowserBookmarks = this.getChromeBookmarks();
 		
-		  String[] proj = new String[] { Browser.BookmarkColumns.TITLE, Browser.BookmarkColumns.URL };
-		    String sel = Browser.BookmarkColumns.BOOKMARK + " = 0"; // 0 = history, 1 = bookmark
-		    Cursor mCur = this.managedQuery(Browser.BOOKMARKS_URI, proj, sel, null, null);
-		    this.startManagingCursor(mCur);
-		    mCur.moveToFirst();
-
-		    String title = "";
-		    String url = "";
-
-		    if (mCur.moveToFirst() && mCur.getCount() > 0) 
-		    {
-		        while (mCur.isAfterLast() == false) 
-		        {
-		            title = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.TITLE));
-		            url = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.URL));
-		            _bookmarksList.put(url,title);
-		            mCur.moveToNext();
-		        }
-		    }
-		    
-		    Set<String> keys = _bookmarksList.keySet();
-		    bookmarks = new String[_bookmarksList.size()];
-		    bookmarks = keys.toArray(bookmarks);
-		    
-		    return bookmarks;
+		/*
+		 * Add two arrays together.
+		 */
+//		 String[] result = Arrays.copyOf(defaultBrowserBookmarks, defaultBrowserBookmarks.length + chromeBrowserBookmarks.length);
+//		 System.arraycopy(chromeBrowserBookmarks, 0, result, defaultBrowserBookmarks.length, chromeBrowserBookmarks.length);
+		
+		return defaultBrowserBookmarks;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private String[] getDefaultBrowserBookmars()
+	{
+		return this.getBookmarks(Browser.BOOKMARKS_URI);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private String[] getChromeBookmarks()
+	{
+		Uri uriCustom = Uri.parse("content://com.android.browser/bookmarks");
+		return  this.getBookmarks(uriCustom);
+	}
+	
+	private String[] getBookmarks(Uri uriCustom)
+	{
+		String[] chromebookmarks = new String[0];
+		
+		String[] proj = new String[] { Browser.BookmarkColumns.TITLE,Browser.BookmarkColumns.URL };
+		Toast.makeText(this.getApplicationContext(), "Proj[0] = " + proj[0], Toast.LENGTH_LONG).show();
+		Toast.makeText(this.getApplicationContext(), "Proj[1] = " + proj[1], Toast.LENGTH_LONG).show();
+		
+		String sel = Browser.BookmarkColumns.BOOKMARK + " = 1"; // 0 = history, 1 = bookmark
+		Toast.makeText(this.getApplicationContext(), "sel: " + sel, Toast.LENGTH_LONG).show();
+		
+		Cursor mCur = getContentResolver().query(uriCustom, proj, sel, null, null);
+		
+		if (mCur != null)
+		{
+			mCur.moveToFirst();
+			
+			String title = "";
+			String url = "";
+	
+			if (mCur.moveToFirst() && mCur.getCount() > 0) 
+			{
+			    boolean cont = true;
+			    while (mCur.isAfterLast() == false && cont) 
+			    {
+			        title = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.TITLE));
+			        url = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.URL));
+					
+			        _bookmarksList.put(url,title);
+			        
+			        mCur.moveToNext();
+			    }
+			}
+		}
+		
+		return chromebookmarks;
 	}
 	
 	/**
