@@ -1,6 +1,9 @@
 package com.anthonybennis.largebookmarkwidget;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -18,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * Configuration Activity for LargeBookmarkWidget
@@ -109,72 +111,75 @@ public class BookMarkWidgetConfig extends Activity
 	 */
 	private String[] getAllBookmarks()
 	{
-		String[] defaultBrowserBookmarks = this.getDefaultBrowserBookmars();
-//		String[] chromeBrowserBookmarks = this.getChromeBookmarks();
+		String filter = Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " NOT NULL ";
+		String[] defaultBrowserBookmarks = this.getDefaultBrowserBookmars(filter);
+		String[] chromeBrowserBookmarks = this.getChromeBookmarks(filter);
 		
 		/*
 		 * Add two arrays together.
 		 */
-//		 String[] result = Arrays.copyOf(defaultBrowserBookmarks, defaultBrowserBookmarks.length + chromeBrowserBookmarks.length);
-//		 System.arraycopy(chromeBrowserBookmarks, 0, result, defaultBrowserBookmarks.length, chromeBrowserBookmarks.length);
+		 String[] result = Arrays.copyOf(defaultBrowserBookmarks, defaultBrowserBookmarks.length + chromeBrowserBookmarks.length);
+		 System.arraycopy(chromeBrowserBookmarks, 0, result, defaultBrowserBookmarks.length, chromeBrowserBookmarks.length);
 		
-		return defaultBrowserBookmarks;
+		return result;
 	}
 	
 	/**
-	 * 
+	 * Get default Android bookmarks
 	 * @return
 	 */
-	private String[] getDefaultBrowserBookmars()
+	private String[] getDefaultBrowserBookmars(String filter)
 	{
-		return this.getBookmarks(Browser.BOOKMARKS_URI);
+		 Uri browserBookMarks = android.provider.Browser.BOOKMARKS_URI;
+	     Cursor cursor = this.getContentResolver().query(browserBookMarks, null, filter, null, null);
+		
+		return  this.getBookmarks(cursor);
 	}
 	
 	/**
-	 * 
+	 * Get Google Chrome Bookmarks
 	 * @return
 	 */
-	private String[] getChromeBookmarks()
+	private String[] getChromeBookmarks(String filter)
 	{
-		Uri uriCustom = Uri.parse("content://com.android.browser/bookmarks");
-		return  this.getBookmarks(uriCustom);
+		Uri chromeBookMarks = Uri.parse("content://com.google.android.apps.chrome.browser/bookmarks");
+	    Cursor cursor = this.getContentResolver().query(chromeBookMarks,null, filter, null, null);
+		
+		return  this.getBookmarks(cursor);
 	}
 	
-	private String[] getBookmarks(Uri uriCustom)
+	/*
+	 * Get bookmarls for a given DB Cursor.
+	 */
+	private String[] getBookmarks(Cursor cursor)
 	{
 		String[] chromebookmarks = new String[0];
+		List<String> bookmarkTitleList = new ArrayList<String>();
 		
-		String[] proj = new String[] { Browser.BookmarkColumns.TITLE,Browser.BookmarkColumns.URL };
-		Toast.makeText(this.getApplicationContext(), "Proj[0] = " + proj[0], Toast.LENGTH_LONG).show();
-		Toast.makeText(this.getApplicationContext(), "Proj[1] = " + proj[1], Toast.LENGTH_LONG).show();
-		
-		String sel = Browser.BookmarkColumns.BOOKMARK + " = 1"; // 0 = history, 1 = bookmark
-		Toast.makeText(this.getApplicationContext(), "sel: " + sel, Toast.LENGTH_LONG).show();
-		
-		Cursor mCur = getContentResolver().query(uriCustom, proj, sel, null, null);
-		
-		if (mCur != null)
+		if (cursor != null)
 		{
-			mCur.moveToFirst();
+			cursor.moveToFirst();
 			
 			String title = "";
 			String url = "";
 	
-			if (mCur.moveToFirst() && mCur.getCount() > 0) 
+			if (cursor.moveToFirst() && cursor.getCount() > 0) 
 			{
 			    boolean cont = true;
-			    while (mCur.isAfterLast() == false && cont) 
+			    while (cursor.isAfterLast() == false && cont) 
 			    {
-			        title = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.TITLE));
-			        url = mCur.getString(mCur.getColumnIndex(Browser.BookmarkColumns.URL));
+			        title = cursor.getString(cursor.getColumnIndex(Browser.BookmarkColumns.TITLE));
+			        url = cursor.getString(cursor.getColumnIndex(Browser.BookmarkColumns.URL));
 					
-			        _bookmarksList.put(url,title);
+			        _bookmarksList.put(title,url);
+			        bookmarkTitleList.add(title);
 			        
-			        mCur.moveToNext();
+			        cursor.moveToNext();
 			    }
 			}
 		}
 		
+		chromebookmarks = (String[])bookmarkTitleList.toArray(chromebookmarks);
 		return chromebookmarks;
 	}
 	

@@ -128,8 +128,8 @@ public class LargebookmarkWidget extends AppWidgetProvider
 		titleText = makeTitleTextPretty(titleText);
 		utlText = makeURLTextPretty(utlText, titleText);
 		
-		views.setTextViewText(R.id.widget_textview, titleText);
-		views.setTextViewText(R.id.url_textview, utlText);
+		views.setTextViewText(R.id.widget_textview, utlText);
+		views.setTextViewText(R.id.url_textview, titleText);
 		
 		AppWidgetManager.getInstance(context).updateAppWidget(widgetID, views);
 	}
@@ -217,8 +217,9 @@ public class LargebookmarkWidget extends AppWidgetProvider
 		 String[] bookmarkAndTitle = new String[2];
 		 
 		 SharedPreferences settings = context.getSharedPreferences(CONSTANTS.SHARED_PREFERENCE, 0);
-		 bookmarkAndTitle[CONSTANTS.BOOKMARK_URL_INDEX] = settings.getString(CONSTANTS.URL + widgetID, "http://www.google.com");
 		 bookmarkAndTitle[CONSTANTS.BOOKMARK_TITLE_INDEX] = settings.getString(CONSTANTS.TITLE + widgetID, "Google");
+		 bookmarkAndTitle[CONSTANTS.BOOKMARK_URL_INDEX] = settings.getString(CONSTANTS.URL + widgetID, "http://www.google.com");
+		 
 		 
 		 return bookmarkAndTitle;
 	}
