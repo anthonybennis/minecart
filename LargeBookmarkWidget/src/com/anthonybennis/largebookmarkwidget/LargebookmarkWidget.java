@@ -73,7 +73,7 @@ public class LargebookmarkWidget extends AppWidgetProvider
 				 * Launch web page.
 				 */
 				String[] urlAndTitle = LargebookmarkWidget.getBookmarkURLAndTitleForWidget(context, widgetId);
-				String bookmarkUrl = urlAndTitle[CONSTANTS.BOOKMARK_URL_INDEX];
+				String bookmarkUrl = urlAndTitle[0];
 
 				if (bookmarkUrl != null) 
 				{
@@ -123,12 +123,13 @@ public class LargebookmarkWidget extends AppWidgetProvider
 			views = new RemoteViews(context.getPackageName(), R.layout.main);
 		}
 		
-		String titleText = bookmarkAndTitle[CONSTANTS.BOOKMARK_TITLE_INDEX];
-		String utlText = bookmarkAndTitle[CONSTANTS.BOOKMARK_URL_INDEX];
-		titleText = makeTitleTextPretty(titleText);
-		utlText = makeURLTextPretty(utlText, titleText);
+		String titleText = bookmarkAndTitle[0];
+		String urlText = bookmarkAndTitle[1];
 		
-		views.setTextViewText(R.id.widget_textview, utlText);
+		titleText = makeTitleTextPretty(titleText);
+		urlText = makeURLTextPretty(urlText, titleText);
+		
+		views.setTextViewText(R.id.widget_textview, urlText);
 		views.setTextViewText(R.id.url_textview, titleText);
 		
 		AppWidgetManager.getInstance(context).updateAppWidget(widgetID, views);
@@ -217,8 +218,8 @@ public class LargebookmarkWidget extends AppWidgetProvider
 		 String[] bookmarkAndTitle = new String[2];
 		 
 		 SharedPreferences settings = context.getSharedPreferences(CONSTANTS.SHARED_PREFERENCE, 0);
-		 bookmarkAndTitle[CONSTANTS.BOOKMARK_TITLE_INDEX] = settings.getString(CONSTANTS.TITLE + widgetID, "Google");
-		 bookmarkAndTitle[CONSTANTS.BOOKMARK_URL_INDEX] = settings.getString(CONSTANTS.URL + widgetID, "http://www.google.com");
+		 bookmarkAndTitle[0] = settings.getString(CONSTANTS.TITLE + widgetID, "Google");
+		 bookmarkAndTitle[1] = settings.getString(CONSTANTS.URL + widgetID, "http://www.google.com");
 		 
 		 
 		 return bookmarkAndTitle;
