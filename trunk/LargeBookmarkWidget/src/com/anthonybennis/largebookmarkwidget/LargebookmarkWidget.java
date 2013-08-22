@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * LargebookmarkWidget
@@ -16,8 +17,8 @@ import android.widget.RemoteViews;
  */
 public class LargebookmarkWidget extends AppWidgetProvider 
 {
-	private static final int MAX_URL_LENGTH = 60;
-	private static final int MAX_TITLE_LENGTH = 30;
+	private static final int MAX_URL_LENGTH = 25;// actually used for title
+	private static final int MAX_TITLE_LENGTH = 40; // actually used for url
 	private static final String ACTION =  "OPEN_WEB_PAGE";
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
@@ -126,6 +127,9 @@ public class LargebookmarkWidget extends AppWidgetProvider
 		String titleText = bookmarkAndTitle[0];
 		String urlText = bookmarkAndTitle[1];
 		
+		
+		Toast.makeText(context, "Title: " + titleText, Toast.LENGTH_LONG);
+		Toast.makeText(context, "Url: " + urlText, Toast.LENGTH_LONG);
 		titleText = makeTitleTextPretty(titleText);
 		urlText = makeURLTextPretty(urlText, titleText);
 		

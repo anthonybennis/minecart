@@ -14,8 +14,8 @@
         android:text="@string/widget_text"
         android:layout_gravity="center"
         android:layout_marginTop="5dip"
-        android:padding="10dip"
-        android:textSize="18sp"
+        android:padding="5dip"
+        android:textSize="17sp"
         android:textColor="@android:color/white"/>
     
  <TextView
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="www.anthonybennis.com"
-        android:layout_marginTop="5dip"
+        android:layout_marginTop="2dip"
         android:layout_marginLeft="5dip"
         android:textSize="12sp"
         android:textColor="@android:color/white"/>
