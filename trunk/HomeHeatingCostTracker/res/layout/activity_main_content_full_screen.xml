@@ -48,7 +48,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Start"/>
+                android:text="Start"
+                android:onClick="startCalculatingCosts"/>
             
            <Button
                 android:id="@+id/stop_button"
@@ -56,7 +57,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Stop"/>
+                android:text="Stop"
+                android:onClick="stopCalculatingCosts"/>
 
         </LinearLayout>
     </FrameLayout>
