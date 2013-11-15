@@ -2,8 +2,10 @@ package com.anthonybennis.homeheatingcosttracker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,14 +25,26 @@ public class CostView extends View
     private static final int ONE_MINUTE = 120;
     private static final int SECOND_LINE_LENGTH = 20;
     private static final int COST_TEXT_LENGTH = 60;
+    private static long _startTime = -1;
     private Paint _paint = new Paint();
     
+    /**
+     * Constructor 1
+     * 
+     * @param context
+     * @param set
+     */
     public CostView(Context context, AttributeSet set)
     {
         super(context, set);
         this.setBackgroundColor(Color.BLACK);
     }
     
+    /**
+     * Constructor 2
+     * 
+     * @param context
+     */
     public CostView(Context context)
     {
         super(context);
@@ -43,22 +57,30 @@ public class CostView extends View
         super.onDraw(canvas);
         _paint.setAntiAlias(true);
         
-        
         float centerX = canvas.getWidth()/2;
-        float centerY = canvas.getHeight()/2;
+    	float centerY = canvas.getHeight()/2;
+    	int width = canvas.getWidth();
+    	int height = canvas.getHeight();
+    	
+    	// Handle phone orientation
+    	int orientation = Utils.getScreenOrientation(this.getContext());
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+         	width = height; // Radius of circles is calculated by width
+        }
+
         
         /*
          * Background
          */
         _paint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), _paint);
-        
+        canvas.drawRect(0, 0, canvas.getWidth(), height, _paint);
         
         /*
          * Outer Circle (Gray)
          */
         _paint.setColor(Color.DKGRAY);
-        float outerCircleRadius = (canvas.getWidth()/2) - THIN_MARGIN;
+        float outerCircleRadius = (width/2) - THIN_MARGIN;
 //        _paint.setShadowLayer(outerCircleRadius, 6.0f, 60.0f, Color.BLACK);
         canvas.drawCircle(centerX, centerY, outerCircleRadius, _paint);
         
@@ -79,26 +101,55 @@ public class CostView extends View
         
         /*
          * Draw minute dashes around blue circle
-         * TODO AB Animate this per second
          */
-        this.paintLinesAroundEdgeOfCircle(canvas, innerContentCircleRadius, centerX, centerY);
+        if (_startTime != -1)
+        {
+        	this.paintLinesAroundEdgeOfCircle(canvas, innerContentCircleRadius, centerX, centerY);	
+        }
+        
         
         /*
          * Draw oil cost
          */
         _paint.setColor(Color.WHITE);
         _paint.setTextSize(48);
-        // TODO AB: Calculate cost based on time app running and cost of oil.
-        // TODO € symbol should be changeable in settings.
-        canvas.drawText("€4.58", (centerX - COST_TEXT_LENGTH), centerY + 15, _paint);
+        String currentCost = CostCalculartor.calculateCost(_startTime);
+        if (_startTime != -1)
+        {
+        	currentCost = CostCalculartor.calculateCost(_startTime);
+        }
+        else
+        {
+        	currentCost = "€0.00";
+        }
+        
+        canvas.drawText(currentCost, (centerX - COST_TEXT_LENGTH), centerY + 15, _paint);
         
         /*
          * Draw Duration
          */
-        this.paintTextOnCurve("1 hour - 5 minutes", canvas, innerCircleRadius, centerX, centerY);
+        this.paintDurationOnCurve(canvas, innerCircleRadius, centerX, centerY);
     }
     
-    private void paintTextOnCurve(String text, Canvas canvas, float circleRadius, float x, float y)
+    /**
+     * Start time (From when Heating is turned on, for example).
+     * @param startTime
+     */
+    protected void setStartTime(long startTime)
+    {
+    	_startTime = startTime;
+    }
+    
+    /**
+     * Paint Text On Curve
+     * 
+     * @param text
+     * @param canvas
+     * @param circleRadius
+     * @param x
+     * @param y
+     */
+    private void paintDurationOnCurve(Canvas canvas, float circleRadius, float x, float y)
     {
         Path circle = new Path();
         circle.addCircle(x, y, circleRadius, Direction.CW);
@@ -106,12 +157,42 @@ public class CostView extends View
         _paint.setStyle(Paint.Style.FILL_AND_STROKE);
         _paint.setColor(Color.RED);
         _paint.setTextSize(20f);
-          
-        canvas.drawTextOnPath("Time is " + System.currentTimeMillis(), circle, 60f, 20f, _paint); 
+        
+        long hours = 0;
+        long minutes = 0;
+        long seconds = 0;
+        
+        if (_startTime != -1)
+        {
+	        long duration = System.currentTimeMillis() - _startTime;
+	        
+	        hours = TimeUnit.MILLISECONDS.toHours(duration);
+	        duration -= TimeUnit.HOURS.toMillis(hours);
+	        minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+	        duration -= TimeUnit.MINUTES.toMillis(minutes);
+	        seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+        }
+
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(hours);
+        sb.append(" hrs ");
+        sb.append(minutes);
+        sb.append(" min ");
+        sb.append(seconds);
+        sb.append(" sec");
+
+        String durationAsString = sb.toString();
+        
+        /*
+         * 875f - Start position of text (on circle).
+         * 30f - Horizontal position of text
+         */
+        canvas.drawTextOnPath(durationAsString, circle, 875f, 30f, _paint); 
     }
     
     /**
-     * Draws a white line for every second in a minute. 
+     * Draws a white line for every second in a minute.
+     *  
      * @param canvas
      * @param radius
      * @param cx
@@ -131,7 +212,11 @@ public class CostView extends View
         int secondCounter = 0;
         seconds = seconds*4; // we've two ticks per second
         
-        for (double a=0,aMax=(2*Math.PI),aStep=(Math.PI/ONE_MINUTE); a<aMax; a+=aStep)
+        
+//        for (int i = 0; i < array.length; i++) {
+		
+        // for (double a=0,aMax=(2*Math.PI),aStep=(Math.PI/ONE_MINUTE); a<aMax; a+=aStep)
+        for (double aMax=(2*Math.PI), a=0,aStep=(Math.PI/ONE_MINUTE); a<aMax; a-=aStep)
         {
         	secondCounter++;
         	
@@ -152,7 +237,5 @@ public class CostView extends View
         		break;
         	}
         }
-        
     }
-    
 }

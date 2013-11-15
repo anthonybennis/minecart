@@ -1,8 +1,5 @@
 package com.anthonybennis.homeheatingcosttracker;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -58,12 +55,12 @@ public class MainContentFullScreenActivity extends Activity {
 		setContentView(R.layout.activity_main_content_full_screen);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
-		View contentView = findViewById(R.id.fullscreen_content);
+		_contentView = (CostView)findViewById(R.id.fullscreen_content);
 		
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
+		mSystemUiHider = SystemUiHider.getInstance(this, _contentView,
 				HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider
@@ -107,7 +104,7 @@ public class MainContentFullScreenActivity extends Activity {
 				});
 
 		// Set up the user interaction to manually show or hide the system UI.
-		contentView.setOnClickListener(new View.OnClickListener() {
+		_contentView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (TOGGLE_ON_CLICK) {
@@ -123,10 +120,14 @@ public class MainContentFullScreenActivity extends Activity {
 		// while interacting with the UI.
 		findViewById(R.id.dummy_button).setOnTouchListener(
 				mDelayHideTouchListener);
-		
-		_runnable.setView(contentView);
+	
+		/*
+		 * Set up Runnable that updates every second.
+		 * (Runnable will start when start button is pressed)
+		 */
+		_runnable.setView(_contentView);
 		_runnable.setHandler(_timerHandler);
-		_timerHandler.postDelayed(_runnable, 100);
+	
 	}
 
 	@Override
@@ -146,7 +147,8 @@ public class MainContentFullScreenActivity extends Activity {
 	 * system UI. This is to prevent the jarring behavior of controls going away
 	 * while interacting with activity UI.
 	 */
-	View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
+	View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() 
+	{
 		@Override
 		public boolean onTouch(View view, MotionEvent motionEvent) {
 			if (AUTO_HIDE) {
@@ -164,12 +166,36 @@ public class MainContentFullScreenActivity extends Activity {
 		}
 	};
 
+	private CostView _contentView;
+
 	/**
 	 * Schedules a call to hide() in [delay] milliseconds, canceling any
 	 * previously scheduled calls.
 	 */
-	private void delayedHide(int delayMillis) {
+	private void delayedHide(int delayMillis) 
+	{
 		mHideHandler.removeCallbacks(mHideRunnable);
 		mHideHandler.postDelayed(mHideRunnable, delayMillis);
-	}	
+	}
+	 
+	/**
+	 * Starts calculating
+	 * @param view
+	 */
+	public void startCalculatingCosts(View view)
+	{
+		long startTime = System.currentTimeMillis();
+//		startTime = startTime - 99900000;
+		_contentView.setStartTime(startTime);
+		_timerHandler.postDelayed(_runnable, 100);
+	}
+	
+	/**
+	 * Starts calculating
+	 * @param view
+	 */
+	public void stopCalculatingCosts(View view)
+	{
+		_timerHandler.removeCallbacks(_runnable);
+	}
 }

@@ -14,6 +14,9 @@ public class SecondUpdateRunnable implements Runnable
 	private View _view;
 	private Handler _handler;
 	
+	/**
+	 * Constructor.
+	 */
 	public SecondUpdateRunnable()
 	{
 	}
