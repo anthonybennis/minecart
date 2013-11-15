@@ -184,10 +184,14 @@ public class CostView extends View
         String durationAsString = sb.toString();
         
         /*
-         * 875f - Start position of text (on circle).
+         * hOffset - Start position of text (on circle).
          * 30f - Horizontal position of text
          */
-        canvas.drawTextOnPath(durationAsString, circle, 875f, 30f, _paint); 
+        double hoffsetD = (1.5f*Math.PI*circleRadius);
+        Double d = Double.valueOf(hoffsetD);
+        float hOffset =  d.floatValue();
+        hOffset = hOffset - 60;
+        canvas.drawTextOnPath(durationAsString, circle, hOffset , 30f, _paint); 
     }
     
     /**
