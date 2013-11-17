@@ -6,11 +6,13 @@ import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -27,6 +29,9 @@ public class CostView extends View
     private static final int COST_TEXT_LENGTH = 60;
     private static long _startTime = -1;
     private Paint _paint = new Paint();
+	private Bitmap _backgroundImage;
+	private Rect _sourceRect;
+	private Rect _dstRect;
     
     /**
      * Constructor 1
@@ -61,30 +66,40 @@ public class CostView extends View
     	float centerY = canvas.getHeight()/2;
     	int width = canvas.getWidth();
     	int height = canvas.getHeight();
-    	
+    	int circleRadius = width;
     	// Handle phone orientation
     	int orientation = Utils.getScreenOrientation(this.getContext());
         if (orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
-         	width = height; // Radius of circles is calculated by width
+        	circleRadius = height;
         }
 
         
         /*
          * Background
          */
-        _paint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, canvas.getWidth(), height, _paint);
+//        _paint.setColor(Color.WHITE);
+//        canvas.drawRect(0, 0, canvas.getWidth(), height, _paint);
+        
+        // TODO Ab - does this work when flipped
+        if (_backgroundImage == null)
+        {
+        	_backgroundImage = Utils.loadAndScaleImage(getResources(), R.drawable.background, width, height);
+        	_sourceRect = new Rect(0,0,width,height);
+            _dstRect = new Rect(0,0, width, height);
+        }
+        
+        canvas.drawBitmap(_backgroundImage, _sourceRect, _dstRect, _paint);
         
         /*
          * Outer Circle (Gray)
          */
         _paint.setColor(Color.DKGRAY);
-        float outerCircleRadius = (width/2) - THIN_MARGIN;
-//        _paint.setShadowLayer(outerCircleRadius, 6.0f, 60.0f, Color.BLACK);
+        float outerCircleRadius = (circleRadius/2) - THIN_MARGIN;
         canvas.drawCircle(centerX, centerY, outerCircleRadius, _paint);
         
-        _paint.clearShadowLayer();
+        
+        
         /*
          * Inner Circle (Black)
          */
@@ -184,7 +199,9 @@ public class CostView extends View
         String durationAsString = sb.toString();
         
         /*
-         * hOffset - Start position of text (on circle).
+
+        * #
+        * hOffset - Start position of text (on circle).
          * 30f - Horizontal position of text
          */
         double hoffsetD = (1.5f*Math.PI*circleRadius);
@@ -215,11 +232,7 @@ public class CostView extends View
         int seconds = todaysDate.getSeconds();
         int secondCounter = 0;
         seconds = seconds*4; // we've two ticks per second
-        
-        
-//        for (int i = 0; i < array.length; i++) {
-		
-        // for (double a=0,aMax=(2*Math.PI),aStep=(Math.PI/ONE_MINUTE); a<aMax; a+=aStep)
+
         for (double aMax=(2*Math.PI), a=0,aStep=(Math.PI/ONE_MINUTE); a<aMax; a-=aStep)
         {
         	secondCounter++;
