@@ -25,7 +25,7 @@ public class MainContentFullScreenActivity extends Activity
 
 		setContentView(R.layout.activity_main_content_full_screen);
 
-		final View controlsView = findViewById(R.id.fullscreen_content_controls);
+//		findViewById(R.id.fullscreen_content_controls);
 		_contentView = (CostView)findViewById(R.id.fullscreen_content);
 	
 		/*
@@ -48,7 +48,6 @@ public class MainContentFullScreenActivity extends Activity
 	public void startCalculatingCosts(View view)
 	{
 		long startTime = System.currentTimeMillis();
-		startTime= startTime - 1960000;
 		_contentView.setStartTime(startTime);
 		_timerHandler.postDelayed(_runnable, 1000);
 	}
