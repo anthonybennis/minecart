@@ -20,7 +20,7 @@ public class CostCalculartor
 		DecimalFormat decimalFormat;
 		double oilBurnTime = 0.65; // TODO - Increase for bad BERs
 		double oilPerHour100PerCent = 2.27; // Litres
-		double oilCostPerLitre = 0.81;// Euro  TODO -(Get current price from settings)
+		double oilCostPerLitre = 0.85;// Euro  TODO -(Get current price from settings)
 		double oilUsed =  (oilPerHour100PerCent*oilBurnTime); // For example, €1.20 per hour.
 		double hourlyOilCost = (oilUsed*oilCostPerLitre);
 		double secondOilCost = (hourlyOilCost/3600);
