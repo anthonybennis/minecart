@@ -2,6 +2,9 @@ package com.anthonybennis.homeheatingcosttracker;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -33,5 +36,22 @@ public class Utils
 	    }
 	    
 	    return orientation;
+	}
+	
+	/**
+	 * 
+	 * @param r
+	 * @param imageID
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public static Bitmap loadAndScaleImage(Resources r, int imageID, int width, int height)
+	{
+		Bitmap image = BitmapFactory.decodeResource(r, imageID);
+		Bitmap scaledImage = Bitmap.createScaledBitmap(image, width, height, true);
+		image.recycle();
+		
+		return scaledImage;
 	}
 }
