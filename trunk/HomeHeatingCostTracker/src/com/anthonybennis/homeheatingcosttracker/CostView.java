@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,7 +21,8 @@ import android.view.View;
  */
 public class CostView extends View 
 {
-    private static final int LARGE_MARGIN = 80;
+    private static final String ICE_CREAM_SANDWHICH_BLUE = "#ff33b5e5";
+	private static final int LARGE_MARGIN = 80;
     private static final int THIN_MARGIN = 20;
     private static final int ONE_MINUTE = 120;
     private static final int SECOND_LINE_LENGTH = 20;
@@ -42,7 +42,6 @@ public class CostView extends View
     public CostView(Context context, AttributeSet set)
     {
         super(context, set);
-        this.setBackgroundColor(Color.BLACK);
     }
     
     /**
@@ -53,7 +52,6 @@ public class CostView extends View
     public CostView(Context context)
     {
         super(context);
-        this.setBackgroundColor(Color.BLACK);
     }
 
     @Override
@@ -66,22 +64,17 @@ public class CostView extends View
     	float centerY = canvas.getHeight()/2;
     	int width = canvas.getWidth();
     	int height = canvas.getHeight();
-    	int circleRadius = width;
-    	// Handle phone orientation
-    	int orientation = Utils.getScreenOrientation(this.getContext());
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+    	
+    	// Handle Landscape orientation (Flip width and height)
+        if (width > height)
         {
-        	circleRadius = height;
+        	width = height;
+        	height = canvas.getWidth();
         }
 
-        
         /*
-         * Background
+         * Background Image
          */
-//        _paint.setColor(Color.WHITE);
-//        canvas.drawRect(0, 0, canvas.getWidth(), height, _paint);
-        
-        // TODO Ab - does this work when flipped
         if (_backgroundImage == null)
         {
         	_backgroundImage = Utils.loadAndScaleImage(getResources(), R.drawable.background, width, height);
@@ -95,7 +88,7 @@ public class CostView extends View
          * Outer Circle (Gray)
          */
         _paint.setColor(Color.DKGRAY);
-        float outerCircleRadius = (circleRadius/2) - THIN_MARGIN;
+        float outerCircleRadius = (width/2) - THIN_MARGIN;
         canvas.drawCircle(centerX, centerY, outerCircleRadius, _paint);
         
         
@@ -110,7 +103,7 @@ public class CostView extends View
         /*
          * Inner Circle (Blue)
          */
-        _paint.setColor(Color.BLUE);
+        _paint.setColor(Color.parseColor(ICE_CREAM_SANDWHICH_BLUE));
         float innerContentCircleRadius = innerCircleRadius - LARGE_MARGIN;
         canvas.drawCircle(centerX, centerY, innerContentCircleRadius, _paint);
         
@@ -138,6 +131,7 @@ public class CostView extends View
         	currentCost = "€0.00";
         }
         
+        // TODO AB Scale Text for larger Displays.
         canvas.drawText(currentCost, (centerX - COST_TEXT_LENGTH), centerY + 15, _paint);
         
         /*
@@ -171,7 +165,7 @@ public class CostView extends View
         
         _paint.setStyle(Paint.Style.FILL_AND_STROKE);
         _paint.setColor(Color.RED);
-        _paint.setTextSize(20f);
+        _paint.setTextSize(25f);
         
         long hours = 0;
         long minutes = 0;
@@ -207,7 +201,7 @@ public class CostView extends View
         double hoffsetD = (1.5f*Math.PI*circleRadius);
         Double d = Double.valueOf(hoffsetD);
         float hOffset =  d.floatValue();
-        hOffset = hOffset - 60;
+        hOffset = hOffset - 90;
         canvas.drawTextOnPath(durationAsString, circle, hOffset , 30f, _paint); 
     }
     

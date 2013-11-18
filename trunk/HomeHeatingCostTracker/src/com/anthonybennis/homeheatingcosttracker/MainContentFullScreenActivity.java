@@ -1,8 +1,12 @@
 package com.anthonybennis.homeheatingcosttracker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.anthonybennis.homeheatingcosttracker.util.SystemUiHider;
@@ -15,7 +19,7 @@ import com.anthonybennis.homeheatingcosttracker.util.SystemUiHider;
  */
 public class MainContentFullScreenActivity extends Activity 
 {
-	
+	private CostView _contentView;
 	private final Handler _timerHandler = new Handler();
 	private final SecondUpdateRunnable _runnable = new SecondUpdateRunnable();
 
@@ -24,8 +28,6 @@ public class MainContentFullScreenActivity extends Activity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main_content_full_screen);
-
-//		findViewById(R.id.fullscreen_content_controls);
 		_contentView = (CostView)findViewById(R.id.fullscreen_content);
 	
 		/*
@@ -36,10 +38,6 @@ public class MainContentFullScreenActivity extends Activity
 		_runnable.setHandler(_timerHandler);
 	
 	}
-
-
-
-	private CostView _contentView;
 
 	/**
 	 * Starts calculating
@@ -59,5 +57,44 @@ public class MainContentFullScreenActivity extends Activity
 	public void stopCalculatingCosts(View view)
 	{
 		_timerHandler.removeCallbacks(_runnable);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		// Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.menu_main_activity, menu);
+		
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		switch (item.getItemId()) 
+		{
+			case R.id.action_settings:
+			{
+				this.openSettings();
+				break;
+			}
+			default:
+			{
+				// Do nothing if we don't know what menu item was clicked.
+				break;
+			}
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * 
+	 */
+	private void openSettings()
+	{
+		Intent intent = new Intent(this, SettingsActivity.class);
+	    startActivity(intent);
 	}
 }
