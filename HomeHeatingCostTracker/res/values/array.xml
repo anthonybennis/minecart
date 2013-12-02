@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="eneryrating">
+        <item >Good Insulation</item>
+        <item >Average insulation</item>
+        <item >Poor Insulation</item>
+    </string-array>
+    <integer-array name="eneryratingvalues">
+        <item >0</item>
+        <item >1</item>
+        <item >2</item>
+    </integer-array>
+</resources>

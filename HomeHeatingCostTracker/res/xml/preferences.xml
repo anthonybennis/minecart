@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-
+    <EditTextPreference 
+        android:key="costperlitre"
+        android:title="Oil cost per litre"
+        android:summary="Cost of oil/keroscene per litre."
+        android:inputType="number|numberDecimal"
+        android:maxLength="6"
+        android:defaultValue="1.20"/>
+    <EditTextPreference 
+        android:key="currency" 
+        android:title="Currency"
+        android:summary="Symbol for currency."
+        android:inputType="text"
+        android:maxLength="1"
+        android:defaultValue="€"/>
+     <ListPreference
+        android:key="houseinsulation"
+        android:title="House Energy Effeciency"
+        android:dialogTitle="House Energy Effeciency"
+        android:entries="@array/eneryrating"
+        android:entryValues="@array/eneryrating"
+        android:defaultValue="Average insulation" />
+     <EditTextPreference 
+        android:key="housesize" 
+        android:title="House Size"
+        android:summary="Size of house in square feet"
+        android:inputType="number|numberDecimal"
+        android:defaultValue="1,200"/>
 </PreferenceScreen>
