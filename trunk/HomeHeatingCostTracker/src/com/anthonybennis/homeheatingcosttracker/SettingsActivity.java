@@ -7,7 +7,7 @@ import android.os.Bundle;
  * 
  * @author abennis
  */
-public class SettingsActivity extends Activity 
+public class SettingsActivity extends Activity
 {
 	
 	 @Override
