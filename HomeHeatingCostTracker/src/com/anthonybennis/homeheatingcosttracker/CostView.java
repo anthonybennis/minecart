@@ -63,12 +63,14 @@ public class CostView extends View
     	float centerY = canvas.getHeight()/2;
     	int width = canvas.getWidth();
     	int height = canvas.getHeight();
+    	int backgroundImageWidth = width*2;
     	
     	// Handle Landscape orientation (Flip width and height)
         if (width > height)
         {
-        	width = height;
+        	width = canvas.getHeight();
         	height = canvas.getWidth();
+        	backgroundImageWidth = width;
         }
 
         /*
@@ -77,8 +79,8 @@ public class CostView extends View
         if (_backgroundImage == null)
         {
         	_backgroundImage = Utils.loadAndScaleImage(getResources(), R.drawable.background, width, height);
-        	_sourceRect = new Rect(0,0,width,height);
-            _dstRect = new Rect(0,0, width, height);
+        	_sourceRect = new Rect(0,0,_backgroundImage.getWidth(),_backgroundImage.getHeight());
+            _dstRect = new Rect(0,0, backgroundImageWidth, height);
         }
         
         canvas.drawBitmap(_backgroundImage, _sourceRect, _dstRect, _paint);
