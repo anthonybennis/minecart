@@ -122,14 +122,11 @@ public class CostView extends View
          */
         _paint.setColor(Color.WHITE);
         _paint.setTextSize(48);
-        String currentCost = CostCalculartor.calculateCost(startTime);
-        if (startTime != -1)
+        String currentCost = CostCalculartor.calculateCost(startTime, this.getContext());
+        
+        if (startTime == -1)
         {
-        	currentCost = CostCalculartor.calculateCost(startTime);
-        }
-        else
-        {
-        	currentCost = "€0.00";
+        	currentCost = CostCalculartor.getCurrencySymbol(getContext()) + "0.00";
         }
         
         // TODO AB Scale Text for larger Displays.
@@ -248,14 +245,7 @@ public class CostView extends View
      */
     private long getStartTime()
     {
-    	long startTime = -1;
-    	
-    	String startTimeString = PreferencesUtil.loadPreference(PreferencesUtil.START_TIME, this.getContext());
-    	if (!startTimeString.equals(""))
-    	{
-    		startTime = Long.parseLong(startTimeString);
-    	}
-    	
+    	long startTime = PreferencesUtil.loadPreferenceAsLong(PreferencesUtil.START_TIME, this.getContext());
     	return startTime;
     }
 }
