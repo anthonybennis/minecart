@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ public class MainContentFullScreenActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		setContentView(R.layout.activity_main_content_full_screen);
 		_contentView = (CostView)findViewById(R.id.fullscreen_content);
 	
