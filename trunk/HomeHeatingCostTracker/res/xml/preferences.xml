@@ -6,7 +6,7 @@
         android:summary="Cost of oil/keroscene per litre."
         android:inputType="number|numberDecimal"
         android:maxLength="6"
-        android:defaultValue="1.20"/>
+        android:defaultValue="0.85"/>
     <EditTextPreference 
         android:key="currency" 
         android:title="Currency"
