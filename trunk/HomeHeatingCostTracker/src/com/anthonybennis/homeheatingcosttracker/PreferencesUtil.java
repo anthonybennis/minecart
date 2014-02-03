@@ -13,6 +13,9 @@ import android.preference.PreferenceManager;
 public class PreferencesUtil 
 {
 	public static final String START_TIME = "StartTime";
+	public static final String COST_PER_LITRE = "costperlitre";
+	public static final String BER = "houseinsulation";
+	public static final String CURRENCY_SYMBOL = "currency";
 	
 	/**
 	 * Util method for loading Preferences.
@@ -24,10 +27,47 @@ public class PreferencesUtil
 	{
 		Activity activity = (Activity)context;
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
-		boolean vontains = preferences.contains("housesize");
 		String preference = preferences.getString(preferenceKey, ""); // Default String is empty.
 		
 		return preference;
+	}
+	
+	/**
+	 * 
+	 * @param preferenceKey
+	 * @param context
+	 * @return
+	 */
+	public static long loadPreferenceAsLong(String preferenceKey, Context context)
+	{
+    	long longPreference = -1;
+    	
+    	String preferenceAsString = PreferencesUtil.loadPreference(preferenceKey, context);
+    	if (!preferenceAsString.equals(""))
+    	{
+    		longPreference = Long.parseLong(preferenceAsString);
+    	}
+    	
+    	return longPreference;
+	}
+	
+	/**
+	 * 
+	 * @param preferenceKey
+	 * @param context
+	 * @return
+	 */
+	public static double loadPreferenceAsDoubleg(String preferenceKey, Context context)
+	{
+    	double doublePreference = -1;
+    	
+    	String preferenceAsString = PreferencesUtil.loadPreference(preferenceKey, context);
+    	if (!preferenceAsString.equals(""))
+    	{
+    		doublePreference = Double.parseDouble(preferenceAsString);
+    	}
+    	
+    	return doublePreference;
 	}
 	
 	/**
