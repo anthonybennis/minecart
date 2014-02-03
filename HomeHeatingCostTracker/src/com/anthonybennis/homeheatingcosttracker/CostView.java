@@ -27,7 +27,6 @@ public class CostView extends View
     private static final int ONE_MINUTE = 120;
     private static final int SECOND_LINE_LENGTH = 20;
     private static final int COST_TEXT_LENGTH = 60;
-    private static long _startTime = -1;
     private Paint _paint = new Paint();
 	private Bitmap _backgroundImage;
 	private Rect _sourceRect;
@@ -110,7 +109,9 @@ public class CostView extends View
         /*
          * Draw minute dashes around blue circle
          */
-        if (_startTime != -1)
+        long startTime = this.getStartTime();
+        
+        if (startTime != -1)
         {
         	this.paintLinesAroundEdgeOfCircle(canvas, innerContentCircleRadius, centerX, centerY);	
         }
@@ -121,10 +122,10 @@ public class CostView extends View
          */
         _paint.setColor(Color.WHITE);
         _paint.setTextSize(48);
-        String currentCost = CostCalculartor.calculateCost(_startTime);
-        if (_startTime != -1)
+        String currentCost = CostCalculartor.calculateCost(startTime);
+        if (startTime != -1)
         {
-        	currentCost = CostCalculartor.calculateCost(_startTime);
+        	currentCost = CostCalculartor.calculateCost(startTime);
         }
         else
         {
@@ -137,16 +138,7 @@ public class CostView extends View
         /*
          * Draw Duration
          */
-        this.paintDurationOnCurve(canvas, innerCircleRadius, centerX, centerY);
-    }
-    
-    /**
-     * Start time (From when Heating is turned on, for example).
-     * @param startTime
-     */
-    protected void setStartTime(long startTime)
-    {
-    	_startTime = startTime;
+        this.paintDurationOnCurve(canvas, innerCircleRadius, startTime, centerX, centerY);
     }
     
     /**
@@ -158,7 +150,7 @@ public class CostView extends View
      * @param x
      * @param y
      */
-    private void paintDurationOnCurve(Canvas canvas, float circleRadius, float x, float y)
+    private void paintDurationOnCurve(Canvas canvas, float circleRadius, long startTime, float x, float y)
     {
         Path circle = new Path();
         circle.addCircle(x, y, circleRadius, Direction.CW);
@@ -171,9 +163,9 @@ public class CostView extends View
         long minutes = 0;
         long seconds = 0;
         
-        if (_startTime != -1)
+        if (startTime != -1)
         {
-	        long duration = System.currentTimeMillis() - _startTime;
+	        long duration = System.currentTimeMillis() - startTime;
 	        
 	        hours = TimeUnit.MILLISECONDS.toHours(duration);
 	        duration -= TimeUnit.HOURS.toMillis(hours);
@@ -248,5 +240,22 @@ public class CostView extends View
         		break;
         	}
         }
+    }
+    
+    /*
+     * We store Start time in preferences, as App can be killed
+     * at any time.
+     */
+    private long getStartTime()
+    {
+    	long startTime = -1;
+    	
+    	String startTimeString = PreferencesUtil.loadPreference(PreferencesUtil.START_TIME, this.getContext());
+    	if (!startTimeString.equals(""))
+    	{
+    		startTime = Long.parseLong(startTimeString);
+    	}
+    	
+    	return startTime;
     }
 }
