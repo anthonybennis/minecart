@@ -14,13 +14,26 @@ public class SettingsActivity extends Activity
 	 public void onCreate(Bundle savedInstanceState)
 	 {
 	      super.onCreate(savedInstanceState);
+	      this.getActionBar().setDisplayHomeAsUpEnabled(true);
 	      getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
 	 }
 	 
-	
-	  protected void onStart()
-	  {
-	        super.onStart();
-	        this.getActionBar().setDisplayHomeAsUpEnabled(true);
-	  }
+//	 @Override
+//	 public boolean onOptionsItemSelected(MenuItem item) 
+//	 {
+//		 /*
+//		  * Allows the user to exit the SettingsActivity and Navigate back to
+//		  * home by pressing the app icon on the ActionBar.
+//		  */
+//	     switch (item.getItemId()) 
+//	     {
+//		     // Respond to the action bar's Up/Home button
+//		     case android.R.id.home:
+//		     {
+//		    	 navigateUpToFromChild(this, )
+//		         return true;
+//		     }
+//	     }
+//	     return super.onOptionsItemSelected(item);
+//	 }
 }
