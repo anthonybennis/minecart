@@ -46,7 +46,8 @@ public class MainContentFullScreenActivity extends Activity
 	public void startCalculatingCosts(View view)
 	{
 		long startTime = System.currentTimeMillis();
-		_contentView.setStartTime(startTime);
+		PreferencesUtil.savePreference(PreferencesUtil.START_TIME, String.valueOf(startTime), this);
+		
 		_timerHandler.postDelayed(_runnable, 1000);
 	}
 	
@@ -56,6 +57,7 @@ public class MainContentFullScreenActivity extends Activity
 	 */
 	public void stopCalculatingCosts(View view)
 	{
+		PreferencesUtil.savePreference(PreferencesUtil.START_TIME, "", this); // RESET Start Time
 		_timerHandler.removeCallbacks(_runnable);
 	}
 
@@ -97,4 +99,13 @@ public class MainContentFullScreenActivity extends Activity
 		Intent intent = new Intent(this, SettingsActivity.class);
 	    startActivity(intent);
 	}
+
+	@Override
+	protected void onResume() 
+	{
+		_timerHandler.postDelayed(_runnable, 1000);
+		super.onResume();
+	}
+	
+	
 }
