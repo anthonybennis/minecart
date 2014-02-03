@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,8 +12,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
 
 /**
@@ -70,7 +73,16 @@ public class CostView extends View
         {
         	width = canvas.getHeight();
         	height = canvas.getWidth();
-        	backgroundImageWidth = width;
+        	
+        	/*
+        	 * Calculate Background Image width
+        	 */
+        	Activity activity = (Activity)this.getContext();
+        	Display display = activity.getWindowManager().getDefaultDisplay();
+        	Point size = new Point();
+        	display.getSize(size);
+        	backgroundImageWidth = size.x;
+
         }
 
         /*
