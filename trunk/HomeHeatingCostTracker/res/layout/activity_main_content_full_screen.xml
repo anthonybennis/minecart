@@ -6,11 +6,8 @@
     tools:context=".MainContentFullScreenActivity" >
 
     <!--
-         The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc.
+         The primary full-screen view.
     -->
-
     <com.anthonybennis.homeheatingcosttracker.CostView
         android:id="@+id/fullscreen_content"
         android:layout_width="fill_parent"
