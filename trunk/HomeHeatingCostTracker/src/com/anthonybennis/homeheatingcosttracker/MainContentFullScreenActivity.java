@@ -83,6 +83,11 @@ public class MainContentFullScreenActivity extends Activity
 				this.openSettings();
 				break;
 			}
+			case R.id.calc_action_settings:
+			{
+				this.openCalculator();
+				break;
+			}
 			default:
 			{
 				// Do nothing if we don't know what menu item was clicked.
@@ -99,6 +104,15 @@ public class MainContentFullScreenActivity extends Activity
 	private void openSettings()
 	{
 		Intent intent = new Intent(this, SettingsActivity.class);
+	    startActivity(intent);
+	}
+	
+	/**
+	 * 
+	 */
+	private void openCalculator()
+	{
+		Intent intent = new Intent(this, CalculatorActivity.class);
 	    startActivity(intent);
 	}
 
